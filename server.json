@@ -1,8 +1,8 @@
 {
-    "name": "MeteoBridgeTPL",
+    "name": "MeteoBridgeAuth",
     "docs": "https://github.com/VE7GEL/",
     "type": "python3",
-    "executable": "template-poly.py",
+    "executable": "meteobridgeauth.py",
     "install": "install.sh",
     "install_cloud": "install_cloud.sh",
     "description": "MeteoBridge Template Node Server",
@@ -13,12 +13,12 @@
     "profile_version": "2.0.6",
     "credits": [
         {
-            "title": "MeteoBridgeTPL: a NodeServer for MeteoBridge Template Integration",
+            "title": "MeteoBridgeAuth: a NodeServer for MeteoBridge Template Integration",
             "author": "Gordon Larsen",
             "version": "1.0.0",
             "date": "January 8, 2020",
-            "source": "https://github.com/Einstein42/udi-poly-template-python",
-            "license": "https://raw.githubusercontent.com/Einstein42/udi-poly-template-python/master/LICENSE"
+            "source": "https://github.com/ve7gel/MeteoBridgeAuth",
+            "license": ""https://github.com/ve7gel/MeteoBridgeAuth/blob/master/LICENSE"
         }
     ]
 }
