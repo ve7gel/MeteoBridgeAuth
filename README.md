@@ -1,14 +1,12 @@
-# MyNodeServer
+# MeteoBridgeAuth
+Nodeserver to acquire data using templates from Meteobridge weather server.  Requires authorization thus entry of username and password.
 
 #### Installation
 
-Here is how you install this poly.
+TBD
 
 #### Requirements
 
-Here is what is required to run this poly.
+TBD
 
-## Using this Template
 
-To use this template as the start of your nodeserver, just hit the + in the upper
-right corner of github select Import Repository and give the path to this repo as the source.
