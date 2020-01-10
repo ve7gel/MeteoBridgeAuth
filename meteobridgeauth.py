@@ -20,7 +20,7 @@ You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as ne
 """
 
 
-class MBTemplateController(polyinterface.Controller):
+class MBAuthController(polyinterface.Controller):
     """
     The Controller Class is the primary node from an ISY perspective. It is a Superclass
     of polyinterface.Node so all methods from polyinterface.Node are available to this
@@ -55,9 +55,9 @@ class MBTemplateController(polyinterface.Controller):
         Super runs all the parent class necessities. You do NOT have
         to override the __init__ method, but if you do, you MUST call super.
         """
-        super(MBTemplateController, self).__init__(polyglot)
+        super(MBAuthController, self).__init__(polyglot)
         self.hb = 0
-        self.name = 'MeteoBridgeTPL Controller'
+        self.name = 'MeteoBridgeAuth Controller'
         self.poly.onConfig(self.process_config)
 
     def start(self):
@@ -150,7 +150,7 @@ class MBTemplateController(polyinterface.Controller):
         """
         self.removeNoticesAll()
         self.addNotice('Hey there')
-        self.addNotice('Hello Friends! (without key)')
+        self.addNotice('MeteoBridge IP')
         default_user = "YourUserName"
         default_password = "YourPassword"
         if 'user' in self.polyConfig['customParams']:
@@ -312,7 +312,7 @@ class TemplateNode(polyinterface.Node):
 
 if __name__ == "__main__":
     try:
-        polyglot = polyinterface.Interface('MBTemplateController')
+        polyglot = polyinterface.Interface('MBAuthController')
         """
         Instantiates the Interface to Polyglot.
         The name doesn't really matter unless you are starting it from the
@@ -323,7 +323,7 @@ if __name__ == "__main__":
         """
         Starts MQTT and connects to Polyglot.
         """
-        control = MBTemplateController(polyglot)
+        control = MBAuthController(polyglot)
         """
         Creates the Controller Node and passes in the Interface
         """
