@@ -1,0 +1,24 @@
+{
+    "name": "MeteoBridgeTPL",
+    "docs": "https://github.com/VE7GEL/",
+    "type": "python3",
+    "executable": "template-poly.py",
+    "install": "install.sh",
+    "install_cloud": "install_cloud.sh",
+    "description": "MeteoBridge Template Node Server",
+    "notice": "",
+    "shortPoll": "15",
+    "longPoll": "30",
+    "testMode": false,
+    "profile_version": "2.0.6",
+    "credits": [
+        {
+            "title": "MeteoBridgeTPL: a NodeServer for MeteoBridge Template Integration",
+            "author": "Gordon Larsen",
+            "version": "1.0.0",
+            "date": "January 8, 2020",
+            "source": "https://github.com/Einstein42/udi-poly-template-python",
+            "license": "https://raw.githubusercontent.com/Einstein42/udi-poly-template-python/master/LICENSE"
+        }
+    ]
+}
