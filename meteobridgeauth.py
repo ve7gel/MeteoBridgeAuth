@@ -149,8 +149,6 @@ class MBAuthController(polyinterface.Controller):
         This is an example if using custom Params for user and password and an example with a Dictionary
         """
         self.removeNoticesAll()
-        self.addNotice('Hey there')
-        self.addNotice('MeteoBridge IP')
         default_user = "YourUserName"
         default_password = "YourPassword"
         if 'user' in self.polyConfig['customParams']:
