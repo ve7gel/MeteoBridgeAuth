@@ -323,7 +323,7 @@ class MBAuthController(polyinterface.Controller):
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
-    hint = 0xffffff
+    hint = 0x0b00
     units = 'metric'
     drivers = [ ]
 
