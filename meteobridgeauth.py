@@ -6,6 +6,8 @@ by Einstein.42 (James Milne) milne.james@gmail.com
 Based on MeteoBridge nodeserver (meteobridgepoly) authored by Bob Paauwe
 Customized to use template queries from MeteoBridge by Gordon Larsen
 """
+import urllib
+
 try:
     import polyinterface
 except ImportError:
@@ -17,6 +19,7 @@ import datetime
 import threading
 import math
 import urllib3
+import urllib.request
 import requests
 import write_profile
 import uom
@@ -72,6 +75,37 @@ class MBAuthController(polyinterface.Controller):
         if self.ip == "":
             return
 
+        top_level_url = "http://meteobridge.internal.home/"
+
+        # create a password manager
+        password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+
+        # Add the username and password.
+        password_mgr.add_password(None, top_level_url, username, password)
+        handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+
+        url = top_level_url + "cgi-bin/template.cgi?template="
+
+        values = "[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-latitude]%20" \
+             "[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20" \
+             "[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20" \
+             "[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]"
+
+        # create "opener" (OpenerDirector instance)
+        opener = urllib.request.build_opener(handler)
+
+        # use the opener to fetch a URL
+        u = opener.open(url + values)
+
+        LOGGER.debug(url + values)
+        LOGGER.debug(u.read())
+
+    # try:
+    #    u = urllib.request.urlopen(request)
+
+    # except urllib.error.HTTPError as e:
+    #    print(e)
+    #    print(e.headers)
     def query(self, command=None):
         self.check_params()
         for node in self.nodes:
