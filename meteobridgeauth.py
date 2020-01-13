@@ -105,17 +105,6 @@ class MBAuthController(polyinterface.Controller):
                 if self.ip == "":
                     self.addNotice("IP address of the MeteoBridge device is required.")
 
-    def heartbeat(self, init=False):
-        LOGGER.debug('heartbeat: init={}'.format(init))
-        if init is not False:
-            self.hb = init
-        LOGGER.debug('heartbeat: hb={}'.format(self.hb))
-        if self.hb == 0:
-            self.reportCmd("DON", 2)
-            self.hb = 1
-        else:
-            self.reportCmd("DOF", 2)
-
     def check_params(self):
         self.set_configuration(self.polyConfig)
         self.setup_nodedefs(self.units)
@@ -126,6 +115,8 @@ class MBAuthController(polyinterface.Controller):
         self.addCustomParam({
             'IPAddress': self.ip,
             'Units': self.units,
+            'Pasword': self.password,
+            'Username': self.username
         })
 
         self.myConfig = self.polyConfig['customParams']
