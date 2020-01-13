@@ -241,7 +241,7 @@ class MBWeather(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        super(TemplateNode, self).__init__(controller, primary, address, name)
+        super(MBWeather, self).__init__(controller, primary, address, name)
 
     def start(self):
         """
