@@ -58,6 +58,19 @@ class MBAuthController(polyinterface.Controller):
         super(MBAuthController, self).__init__(polyglot)
         self.hb = 0
         self.name = 'MeteoBridgeAuth Controller'
+        self.address = 'mbweather'
+        self.primary = self.address
+        self.ip = ""
+        self.units = ""
+        self.temperature_list = {}
+        self.humidity_list = {}
+        self.pressure_list = {}
+        self.wind_list = {}
+        self.rain_list = {}
+        self.light_list = {}
+        self.lightning_list = {}
+        self.myConfig = {}  # custom parameters
+
         self.poly.onConfig(self.process_config)
 
     def start(self):
@@ -72,10 +85,9 @@ class MBAuthController(polyinterface.Controller):
         # This grabs the server.json data and checks profile_version is up to date
         # serverdata = self.poly.get_server_data()
         LOGGER.info('Started MeteoBridge Template NodeServer')
-        self.heartbeat(0)
         self.check_params()
         self.discover()
-        self.poly.add_custom_config_docs("<b>And this is some custom config data</b>")
+        LOGGER.info('MeteoBridge Template Node Server Started.')
 
     def shortPoll(self):
         """
@@ -128,10 +140,21 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.debug('NodeServer stopped.')
 
     def process_config(self, config):
-        # this seems to get called twice for every change, why?
-        # What does config represent?
-        LOGGER.info("process_config: Enter config={}".format(config));
-        LOGGER.info("process_config: Exit");
+        if 'customParams' in config:
+            if config['customParams'] != self.myConfig:
+                # Configuration has changed, we need to handle it
+                LOGGER.info('New configuration, updating configuration')
+                self.set_configuration(config)
+                self.setup_nodedefs(self.units)
+                self.discover()
+                self.myConfig = config['customParams']
+
+                # Remove all existing notices
+                self.removeNoticesAll()
+
+                # Add notices about missing configuration
+                if self.ip == "":
+                    self.addNotice("IP address of the MeteoBridge device is required.")
 
     def heartbeat(self, init=False):
         LOGGER.debug('heartbeat: init={}'.format(init))
