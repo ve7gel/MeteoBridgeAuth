@@ -171,10 +171,8 @@ class MBAuthController(polyinterface.Controller):
 
         # Add a notice if they need to change the user/password from the default.
         if self.user == default_user or self.password == default_password:
-            # This doesn't pass a key to test the old way.
-            self.addNotice('Please set proper user and password in configuration page, and restart this nodeserver')
-        # This one passes a key to test the new way.
-        self.addNotice('This is a test', 'test')
+            # This one passes a key to test the new way.
+            self.addNotice('This is a test', 'test')
 
     def remove_notice_test(self, command):
         LOGGER.info('remove_notice_test: notices={}'.format(self.poly.config['notices']))
