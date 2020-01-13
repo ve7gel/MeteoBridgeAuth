@@ -113,7 +113,7 @@ class MBAuthController(polyinterface.Controller):
         Do discovery here. Does not have to be called discovery. Called from example
         controller start method and from DISCOVER command recieved from ISY as an exmaple.
         """
-        self.addNode(TemplateNode(self, self.address, 'templateaddr', 'Template Node Name'))
+        self.addNode(MBWeather(self, self.address, 'mbweather', 'Weather'))
 
     def delete(self):
         """
@@ -210,7 +210,7 @@ class MBAuthController(polyinterface.Controller):
     drivers = [{'driver': 'ST', 'value': 1, 'uom': 2}]
 
 
-class TemplateNode(polyinterface.Node):
+class MBWeather(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
     Polyglot/ISY with the controller.addNode method.
