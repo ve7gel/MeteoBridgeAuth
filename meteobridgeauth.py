@@ -44,7 +44,7 @@ class MBAuthController(polyinterface.Controller):
         super(MBAuthController, self).__init__(polyglot)
         self.hb = 0
         self.name = 'MeteoBridgeAuth Controller'
-        self.address = 'mbweather'
+        self.address = 'mbwxauth'
         self.primary = self.address
         self.password = ""
         self.username = ""
@@ -114,10 +114,13 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['temperature'].setDriver(
             uom.TEMP_DRVS['main'], temperature
         )
+        self.nodes['temperature'].setDriver(
+            uom.TEMP_DRVS['dewpoint'],dewpoint
+        )
         return
 
     def getstationdata(self,mbrcontent):
-        global temperature
+        global temperature, dewpoint,
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
