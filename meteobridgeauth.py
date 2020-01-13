@@ -2,6 +2,9 @@
 """
 This is a NodeServer template for Polyglot v2 written in Python2/3
 by Einstein.42 (James Milne) milne.james@gmail.com
+
+Based on MeteoBridge nodeserver (meteobridgepoly) authored by Bob Paauwe
+Customized to use template queries from MeteoBridge by Gordon Larsen
 """
 try:
     import polyinterface
@@ -11,6 +14,8 @@ import sys
 import time
 import urllib3
 import requests
+import write_profile
+import uom
 
 LOGGER = polyinterface.LOGGER
 """
@@ -21,33 +26,6 @@ You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as ne
 
 
 class MBAuthController(polyinterface.Controller):
-    """
-    The Controller Class is the primary node from an ISY perspective. It is a Superclass
-    of polyinterface.Node so all methods from polyinterface.Node are available to this
-    class as well.
-
-    Class Variables:
-    self.nodes: Dictionary of nodes. Includes the Controller node. Keys are the node addresses
-    self.name: String name of the node
-    self.address: String Address of Node, must be less than 14 characters (ISY limitation)
-    self.polyConfig: Full JSON config dictionary received from Polyglot for the controller Node
-    self.added: Boolean Confirmed added to ISY as primary node
-    self.config: Dictionary, this node's Config
-
-    Class Methods (not including the Node methods):
-    start(): Once the NodeServer config is received from Polyglot this method is automatically called.
-    addNode(polyinterface.Node, update = False): Adds Node to self.nodes and polyglot/ISY. This is called
-        for you on the controller itself. Update = True overwrites the existing Node data.
-    updateNode(polyinterface.Node): Overwrites the existing node data here and on Polyglot.
-    delNode(address): Deletes a Node from the self.nodes/polyglot and ISY. Address is the Node's Address
-    longPoll(): Runs every longPoll seconds (set initially in the server.json or default 10 seconds)
-    shortPoll(): Runs every shortPoll seconds (set initially in the server.json or default 30 seconds)
-    query(): Queries and reports ALL drivers for ALL nodes to the ISY.
-    getDriver('ST'): gets the current value from Polyglot for driver 'ST' returns a STRING, cast as needed
-    runForever(): Easy way to run forever without maxing your CPU or doing some silly 'time.sleep' nonsense
-                  this joins the underlying queue query thread and just waits for it to terminate
-                  which never happens.
-    """
 
     def __init__(self, polyglot):
         """
@@ -76,16 +54,6 @@ class MBAuthController(polyinterface.Controller):
         self.poly.onConfig(self.process_config)
 
     def start(self):
-        """
-        Optional.
-        Polyglot v2 Interface startup done. Here is where you start your integration.
-        This will run, once the NodeServer connects to Polyglot and gets it's config.
-        In this example I am calling a discovery method. While this is optional,
-        this is where you should start. No need to Super this method, the parent
-        version does nothing.
-        """
-        # This grabs the server.json data and checks profile_version is up to date
-        # serverdata = self.poly.get_server_data()
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
         self.discover()
@@ -101,12 +69,6 @@ class MBAuthController(polyinterface.Controller):
             return
 
     def query(self, command=None):
-        """
-        Optional.
-        By default a query to the control node reports the FULL driver set for ALL
-        nodes back to ISY. If you override this method you will need to Super or
-        issue a reportDrivers() to each node manually.
-        """
         self.check_params()
         for node in self.nodes:
             self.nodes[node].reportDrivers()
@@ -120,13 +82,8 @@ class MBAuthController(polyinterface.Controller):
         self.addNode(MBWeather(self, self.address, 'mbweather', 'Weather'))
 
     def delete(self):
-        """
-        Example
-        This is sent by Polyglot upon deletion of the NodeServer. If the process is
-        co-resident and controlled by Polyglot, it will be terminiated within 5 seconds
-        of receiving this message.
-        """
-        LOGGER.info('Oh God I\'m being deleted. Nooooooooooooooooooooooooooooooooooooooooo.')
+        self.stopping = True
+        LOGGER.info('Removing MeteoBridge Template nodeserver.')
 
     def stop(self):
         LOGGER.debug('NodeServer stopped.')
@@ -160,39 +117,78 @@ class MBAuthController(polyinterface.Controller):
             self.reportCmd("DOF", 2)
 
     def check_params(self):
-        """
-        This is an example if using custom Params for user and password and an example with a Dictionary
-        """
-        self.removeNoticesAll()
-        default_user = "YourUserName"
-        default_password = "YourPassword"
-        if 'user' in self.polyConfig['customParams']:
-            self.user = self.polyConfig['customParams']['user']
-        else:
-            self.user = default_user
-            LOGGER.error('check_params: user not defined in customParams, please add it.  Using {}'.format(self.user))
-            st = False
+        self.set_configuration(self.polyConfig)
+        self.setup_nodedefs(self.units)
 
-        if 'password' in self.polyConfig['customParams']:
-            self.password = self.polyConfig['customParams']['password']
-        else:
-            self.password = default_password
-            LOGGER.error(
-                'check_params: password not defined in customParams, please add it.  Using {}'.format(self.password))
-            st = False
-        # Make sure they are in the params
-        self.addCustomParam({'password': self.password, 'user': self.user,
-                             'MeteoBridge IP Address': '{ "IP Address": "TheType", "host": "host_or_IP", "port": "port_number" }'})
+        # Make sure they are in the params  -- does this cause a
+        # configuration event?
+        LOGGER.info("Adding configuation")
+        self.addCustomParam({
+            'IPAddress': self.ip,
+            'Units': self.units,
+        })
 
-        # Add a notice if they need to change the user/password from the default.
-        if self.user == default_user or self.password == default_password:
-            # This one passes a key to test the new way.
-            self.addNotice('This is a test', 'test')
+        self.myConfig = self.polyConfig['customParams']
 
-    def remove_notice_test(self, command):
-        LOGGER.info('remove_notice_test: notices={}'.format(self.poly.config['notices']))
         # Remove all existing notices
-        self.removeNotice('test')
+        LOGGER.info("remove all notices")
+        self.removeNoticesAll()
+
+        # Add a notice?
+        if self.ip == "":
+            self.addNotice("IP address of the MeteoBridge device is required.")
+        if self.username == "":
+            self.addNotice("Username for the MeteoBridge device is required.")
+        if self.password == "":
+            self.addNotice("Password for MeteoBridge is required.")
+
+    def set_configuration(self, config):
+        default_ip = ""
+        default_elevation = 0
+
+        LOGGER.info("Check for existing configuration value")
+
+        if 'IPAddress' in config['customParams']:
+            self.ip = config['customParams']['IPAddress']
+        else:
+            self.ip = default_ip
+
+        if 'Units' in config['customParams']:
+            self.units = config['customParams']['Units'].lower()
+        else:
+            self.units = 'metric'
+
+        return self.units
+
+    def setup_nodedefs(self, units):
+
+        # Configure the units for each node driver
+        self.temperature_list['main'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
+        self.temperature_list['dewpoint'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
+        self.temperature_list['windchill'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
+        self.humidity_list['main'] = 'I_HUMIDITY'
+        self.pressure_list['station'] = 'I_INHG' if units == 'us' else 'I_MB'
+        self.pressure_list['sealevel'] = 'I_INHG' if units == 'us' else 'I_MB'
+        self.wind_list['windspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
+        self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
+        self.wind_list['winddir'] = 'I_DEGREE'
+        self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
+        self.rain_list['total'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.light_list['uv'] = 'I_UV'
+        self.light_list['solar_radiation'] = 'I_RADIATION'
+
+        # Build the node definition
+        LOGGER.info('Creating node definition profile based on config.')
+        write_profile.write_profile(LOGGER, self.temperature_list,
+                self.humidity_list, self.pressure_list, self.wind_list,
+                self.rain_list, self.light_list, self.lightning_list)
+
+        # push updated profile to ISY
+        try:
+            self.poly.installprofile()
+        except:
+            LOGGER.error('Failed up push profile to ISY')
+
 
     def remove_notices_all(self, command):
         LOGGER.info('remove_notices_all: notices={}'.format(self.poly.config['notices']))
@@ -220,7 +216,6 @@ class MBAuthController(polyinterface.Controller):
         'DISCOVER': discover,
         'UPDATE_PROFILE': update_profile,
         'REMOVE_NOTICES_ALL': remove_notices_all,
-        'REMOVE_NOTICE_TEST': remove_notice_test
     }
     drivers = [{'driver': 'ST', 'value': 1, 'uom': 2}]
 
@@ -257,21 +252,6 @@ class MBWeather(polyinterface.Node):
         :param name: This nodes name
         """
         super(MBWeather, self).__init__(controller, primary, address, name)
-
-    def start(self):
-        """
-        Optional.
-        This method is run once the Node is successfully added to the ISY
-        and we get a return result from Polyglot. Only happens once.
-        """
-        self.setDriver('ST', 1)
-        pass
-
-    def shortPoll(self):
-        LOGGER.debug('shortPoll')
-
-    def longPoll(self):
-        LOGGER.debug('longPoll')
 
     def setOn(self, command):
         """
