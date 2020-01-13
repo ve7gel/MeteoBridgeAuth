@@ -303,11 +303,14 @@ class MBAuthController(polyinterface.Controller):
         st = self.poly.installprofile()
         return st
 
+    def SetUnits(self, u):
+        self.units = u
+
     id = 'MeteoBridgeAuth'
     name = 'MeteoBridgeAuth'
     address = 'mbwxauth'
     stopping = False
-    hint = 0x0b0000
+    hint = 0xffffff
     units = 'metric'
     commands = {
         'QUERY': query,
@@ -323,7 +326,7 @@ class MBAuthController(polyinterface.Controller):
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
-    hint = 0x0b0000
+    hint = 0xffffff
     units = 'metric'
     drivers = [ ]
 
