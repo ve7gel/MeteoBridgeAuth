@@ -43,7 +43,7 @@ class MBAuthController(polyinterface.Controller):
         """
         super(MBAuthController, self).__init__(polyglot)
         self.hb = 0
-        self.name = 'MeteoBridgeAuth Controller'
+        self.name = 'MeteoBridgeAuth'
         self.address = 'mbwxauth'
         self.primary = self.address
         self.password = ""
@@ -91,7 +91,7 @@ class MBAuthController(polyinterface.Controller):
             values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-latitude]%20' \
                      '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                      '[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20' \
-                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]'
+                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]'
 
             try:
                 # create "opener" (OpenerDirector instance)
@@ -159,18 +159,18 @@ class MBAuthController(polyinterface.Controller):
 
     def discover(self, *args, **kwargs):
         """
-          Add nodes for basic sensor type data
-                  - Temperature (temp, dewpoint, heat index, wind chill, feels)
-                  - Humidity
-                  - Pressure (abs, sealevel, trend)
-                  - Wind (speed, gust, direction, gust direction, etc.)
-                  - Precipitation (rate, hourly, daily, weekly, monthly, yearly)
-                  - Light (UV, solar radiation, lux)
-                  - Lightning (strikes, distance)
-          The nodes need to have thier drivers configured based on the user
-          supplied configuration. To that end, we should probably create the
-          node, update the driver list, set the units and then add the node.
-          """
+        Add nodes for basic sensor type data
+                - Temperature (temp, dewpoint, heat index, wind chill, feels)
+                - Humidity
+                - Pressure (abs, sealevel, trend)
+                - Wind (speed, gust, direction, gust direction, etc.)
+                - Precipitation (rate, hourly, daily, weekly, monthly, yearly)
+                - Light (UV, solar radiation, lux)
+                - Lightning (strikes, distance)
+        The nodes need to have thier drivers configured based on the user
+        supplied configuration. To that end, we should probably create the
+        node, update the driver list, set the units and then add the node.
+        """
         LOGGER.info("Creating nodes.")
         node = TemperatureNode(self, self.address, 'temperature', 'Temperatures')
         node.SetUnits(self.units);
@@ -290,7 +290,7 @@ class MBAuthController(polyinterface.Controller):
         try:
             self.poly.installprofile()
         except:
-            LOGGER.error('Failed up push profile to ISY')
+            LOGGER.error('Failed to push profile to ISY')
 
 
     def remove_notices_all(self, command):
@@ -382,12 +382,9 @@ class TemperatureNode(polyinterface.Node):
 
 if __name__ == "__main__":
     try:
-        polyglot = polyinterface.Interface('MBAuthController')
+        polyglot = polyinterface.Interface('MeteoBridgeAuth')
         """
         Instantiates the Interface to Polyglot.
-        The name doesn't really matter unless you are starting it from the
-        command line then you need a line Template=N
-        where N is the slot number.
         """
         polyglot.start()
         """
