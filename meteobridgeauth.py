@@ -117,10 +117,13 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['temperature'].setDriver(
             uom.TEMP_DRVS['dewpoint'],dewpoint
         )
+        self.nodes['temperature'].setDriver(
+            uom.TEMP_DRVS['windchill'], windchill
+        )
         return
 
     def getstationdata(self,mbrcontent):
-        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain, pressure
+        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain, pressure, windchill
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
@@ -149,6 +152,7 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.debug(mbrarray[14] + " " + str(temperature) + " " + str(rain) + " " + str(wind))
 
         timestamp = int(mbrarray[15])
+        windchill = float(mbrarray[16])
 
         return
 
