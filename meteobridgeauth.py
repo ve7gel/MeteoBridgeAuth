@@ -12,6 +12,10 @@ except ImportError:
     import pgc_interface as polyinterface
 import sys
 import time
+import struct
+import datetime
+import threading
+import math
 import urllib3
 import requests
 import write_profile
@@ -236,6 +240,65 @@ class MBAuthController(polyinterface.Controller):
         {'driver': 'ST', 'value': 1, 'uom': 2},
         {'driver': 'GV0', 'value': 0, 'uom': 72},
     ]
+
+class TemperatureNode(polyinterface.Node):
+    id = 'temperature'
+    hint = 0xffffff
+    units = 'metric'
+    drivers = [ ]
+
+    def SetUnits(self, u):
+        self.units = u
+
+    def Dewpoint(self, t, h):
+        b = (17.625 * t) / (243.04 + t)
+        rh = h / 100.0
+        c = math.log(rh)
+        dewpt = (243.04 * (c + b)) / (17.625 - c - b)
+        return round(dewpt, 1)
+
+    def ApparentTemp(self, t, ws, h):
+        wv = h / 100.0 * 6.105 * math.exp(17.27 * t / (237.7 + t))
+        at =  t + (0.33 * wv) - (0.70 * ws) - 4.0
+        return round(at, 1)
+
+    def Windchill(self, t, ws):
+        # really need temp in F and speed in MPH
+        tf = (t * 1.8) + 32
+        mph = ws / 0.44704
+
+        wc = 35.74 + (0.6215 * tf) - (35.75 * math.pow(mph, 0.16)) + (0.4275 * tf * math.pow(mph, 0.16))
+
+        if (tf <= 50.0) and (mph >= 5.0):
+            return round((wc - 32) / 1.8, 1)
+        else:
+            return t
+
+    def Heatindex(self, t, h):
+        tf = (t * 1.8) + 32
+        c1 = -42.379
+        c2 = 2.04901523
+        c3 = 10.1433127
+        c4 = -0.22475541
+        c5 = -6.83783 * math.pow(10, -3)
+        c6 = -5.481717 * math.pow(10, -2)
+        c7 = 1.22874 * math.pow(10, -3)
+        c8 = 8.5282 * math.pow(10, -4)
+        c9 = -1.99 * math.pow(10, -6)
+
+        hi = (c1 + (c2 * tf) + (c3 * h) + (c4 * tf * h) + (c5 * tf *tf) + (c6 * h * h) + (c7 * tf * tf * h) + (c8 * tf * h * h) + (c9 * tf * tf * h * h))
+
+        if (tf < 80.0) or (h < 40.0):
+            return t
+        else:
+            return round((hi - 32) / 1.8, 1)
+
+    def setDriver(self, driver, value):
+        if (self.units == "us"):
+            value = (value * 1.8) + 32  # convert to F
+
+        super(TemperatureNode, self).setDriver(driver, round(value, 1), report=True, force=True)
+
 
 if __name__ == "__main__":
     try:
