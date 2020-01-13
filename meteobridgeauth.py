@@ -107,6 +107,42 @@ class MBAuthController(polyinterface.Controller):
         except:
             LOGGER.error("Failue attempting connect to MeteoBridge device")
 
+        self.getstationdata(mbrdata)
+        LOGGER.info("Updated data from Meteobridge")
+
+        return
+
+    def getstationdata(self, pwscontent):
+        pwsArray = pwscontent.split(" ")
+
+        lat = float(pwsArray[4])
+        long = float(pwsArray[5])
+
+        temperature = float(pwsArray[0])
+        et0 = float(pwsArray[3])
+        mintemp = float(pwsArray[7])
+        maxtemp = float(pwsArray[6])
+        rh = float(pwsArray[1])
+        minrh = float(pwsArray[9])
+        maxrh = float(pwsArray[8])
+        wind = float(pwsArray[10])
+        # wind = wind / 3.6 # the Meteobridge already reports in mps so conversion is not required
+        solarradiation = float(pwsArray[11])  # needs to be converted from watt/sqm*h to Joule/sqm
+
+        if solarradiation is not None:
+            solarradiation *= 0.0864
+        # log.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
+        #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
+
+        rain = float(pwsArray[12])
+        dewpoint = float(pwsArray[13])
+        pressure = float(pwsArray[2]) / 10
+
+        if self.parserDebug:
+            self.__toUtc(pwsArray[14], temperature, rain, wind)
+
+        timestamp = int(pwsArray[15])
+
     def query(self, command=None):
         self.check_params()
         for node in self.nodes:
