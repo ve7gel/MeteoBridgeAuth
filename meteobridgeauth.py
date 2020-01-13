@@ -77,8 +77,8 @@ class MBAuthController(polyinterface.Controller):
         if self.ip == "":
             return
         try:
-            top_level_url = "http://meteobridge.internal.home/"
-
+            #top_level_url = "http://meteobridge.internal.home/"
+            top_level_url = "http://" + self.ip + "/"
             # create a password manager
             password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 
@@ -120,7 +120,7 @@ class MBAuthController(polyinterface.Controller):
         return
 
     def getstationdata(self,mbrcontent):
-        global temperature, dewpoint
+        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain, pressure
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
