@@ -19,6 +19,7 @@ import datetime
 import threading
 import math
 import urllib3
+import urllib.error
 import urllib.request
 import requests
 import write_profile
@@ -102,8 +103,7 @@ class MBAuthController(polyinterface.Controller):
                 LOGGER.debug(u.read())
 
             except urllib.error.HTTPError as e:
-                print(e)
-                print(e.headers)
+                print(e), print(e.headers)
 
     def query(self, command=None):
         self.check_params()
