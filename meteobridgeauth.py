@@ -60,6 +60,8 @@ class MBAuthController(polyinterface.Controller):
         self.name = 'MeteoBridgeAuth Controller'
         self.address = 'mbweather'
         self.primary = self.address
+        self.password = ""
+        self.username = ""
         self.ip = ""
         self.units = ""
         self.temperature_list = {}
@@ -90,23 +92,13 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info('MeteoBridge Template Node Server Started.')
 
     def shortPoll(self):
-        """
-        Optional.
-        This runs every 10 seconds. You would probably update your nodes either here
-        or longPoll. No need to Super this method the parent version does nothing.
-        The timer can be overriden in the server.json.
-        """
-        LOGGER.debug('shortPoll')
+        pass
 
     def longPoll(self):
-        """
-        Optional.
-        This runs every 30 seconds. You would probably update your nodes either here
-        or shortPoll. No need to Super this method the parent version does nothing.
-        The timer can be overriden in the server.json.
-        """
-        LOGGER.debug('longPoll')
-        self.heartbeat()
+        LOGGER.debug('longPoll-data reader')
+        # read data
+        if self.ip == "":
+            return
 
     def query(self, command=None):
         """
