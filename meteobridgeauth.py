@@ -81,7 +81,7 @@ class MBAuthController(polyinterface.Controller):
         password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 
         # Add the username and password.
-        password_mgr.add_password(None, top_level_url, username, password)
+        password_mgr.add_password(None, top_level_url, self.username, self.password)
         handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
 
         url = top_level_url + "cgi-bin/template.cgi?template="
