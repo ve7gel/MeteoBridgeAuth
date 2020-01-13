@@ -149,6 +149,16 @@ class MBAuthController(polyinterface.Controller):
         else:
             self.units = 'metric'
 
+        if 'Password' in config['customParams']:
+            self.password = config['customParams']['Password']
+        else:
+            self.password = ""
+
+        if 'Username' in config['customParams']:
+            self.username = config['customParams']['Username']
+        else:
+            self.username = ""
+
         return self.units
 
     def setup_nodedefs(self, units):
