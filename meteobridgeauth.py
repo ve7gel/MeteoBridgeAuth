@@ -72,7 +72,7 @@ class MBAuthController(polyinterface.Controller):
 
     def longPoll(self):
         global mbrdata
-        LOGGER.debug('longPoll-data reader')
+
         # read data
         if self.ip == "":
             return
@@ -99,7 +99,7 @@ class MBAuthController(polyinterface.Controller):
 
                 # use the opener to fetch a URL
                 u = opener.open(url + values)
-                mbrdata = u.read()
+                mbrdata = u.read().decode('utf-8')
                 LOGGER.debug(url + values)
                 LOGGER.debug(mbrdata)
 
