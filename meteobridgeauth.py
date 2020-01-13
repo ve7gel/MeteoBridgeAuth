@@ -120,7 +120,7 @@ class MBAuthController(polyinterface.Controller):
         return
 
     def getstationdata(self,mbrcontent):
-        global temperature, dewpoint,
+        global temperature, dewpoint
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
