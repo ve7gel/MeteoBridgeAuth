@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 This is a NodeServer template for Polyglot v2 written in Python2/3
 by Einstein.42 (James Milne) milne.james@gmail.com
@@ -167,7 +167,7 @@ class MBAuthController(polyinterface.Controller):
             st = False
         # Make sure they are in the params
         self.addCustomParam({'password': self.password, 'user': self.user,
-                             'MeteoBridge IP Address': '{ "type": "TheType", "host": "host_or_IP", "port": "port_number" }'})
+                             'MeteoBridge IP Address': '{ "IP Address": "TheType", "host": "host_or_IP", "port": "port_number" }'})
 
         # Add a notice if they need to change the user/password from the default.
         if self.user == default_user or self.password == default_password:
