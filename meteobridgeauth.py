@@ -75,11 +75,29 @@ class MBAuthController(polyinterface.Controller):
 
     def discover(self, *args, **kwargs):
         """
-        Example
-        Do discovery here. Does not have to be called discovery. Called from example
-        controller start method and from DISCOVER command recieved from ISY as an exmaple.
-        """
-        self.addNode(MBWeather(self, self.address, 'mbweather', 'Weather'))
+          Add nodes for basic sensor type data
+                  - Temperature (temp, dewpoint, heat index, wind chill, feels)
+                  - Humidity
+                  - Pressure (abs, sealevel, trend)
+                  - Wind (speed, gust, direction, gust direction, etc.)
+                  - Precipitation (rate, hourly, daily, weekly, monthly, yearly)
+                  - Light (UV, solar radiation, lux)
+                  - Lightning (strikes, distance)
+          The nodes need to have thier drivers configured based on the user
+          supplied configuration. To that end, we should probably create the
+          node, update the driver list, set the units and then add the node.
+          """
+        LOGGER.info("Creating nodes.")
+        node = TemperatureNode(self, self.address, 'temperature', 'Temperatures')
+        node.SetUnits(self.units);
+        for d in self.temperature_list:
+            node.drivers.append(
+                {
+                    'driver': uom.TEMP_DRVS[d],
+                    'value': 0,
+                    'uom': uom.UOM[self.temperature_list[d]]
+                })
+        self.addNode(node)
 
     def delete(self):
         self.stopping = True
