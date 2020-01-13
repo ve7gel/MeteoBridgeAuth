@@ -103,7 +103,9 @@ class MBAuthController(polyinterface.Controller):
                 LOGGER.debug(u.read())
 
             except urllib.error.HTTPError as e:
-                print(e), print(e.headers)
+                LOGGER.error(e, e.headers)
+        except:
+            LOGGER.error("Failue attempting connect to MeteoBridge device")
 
     def query(self, command=None):
         self.check_params()
