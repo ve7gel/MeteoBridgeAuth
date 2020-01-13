@@ -201,20 +201,12 @@ class MBAuthController(polyinterface.Controller):
         st = self.poly.installprofile()
         return st
 
-    """
-    Optional.
-    Since the controller is the parent node in ISY, it will actual show up as a node.
-    So it needs to know the drivers and what id it will use. The drivers are
-    the defaults in the parent Class, so you don't need them unless you want to add to
-    them. The ST and GV1 variables are for reporting status through Polyglot to ISY,
-    DO NOT remove them. UOM 2 is boolean.
-    The id must match the nodeDef id="controller"
-    In the nodedefs.xml
-    """
     id = 'MeteoBridgeAuth'
     name = 'MeteoBridgeAuth'
     address = 'mbwxauth'
-
+    stopping = 'false'
+    hint = 0xffffff
+    units = 'metric'
     commands = {
         'QUERY': query,
         'DISCOVER': discover,
