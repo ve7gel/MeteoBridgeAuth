@@ -98,9 +98,9 @@ class MBAuthController(polyinterface.Controller):
 
                 # use the opener to fetch a URL
                 u = opener.open(url + values)
-
+                mbrdata = u.read()
                 LOGGER.debug(url + values)
-                LOGGER.debug(u.read())
+                LOGGER.debug(mbrdata)
 
             except urllib.error.HTTPError as e:
                 LOGGER.error(e, e.headers)
@@ -112,36 +112,35 @@ class MBAuthController(polyinterface.Controller):
 
         return
 
-    def getstationdata(self, pwscontent):
-        pwsArray = pwscontent.split(" ")
+    def getstationdata(self,mbrcontent):
+        mbrArray = mbrcontent.split(" ")
 
-        lat = float(pwsArray[4])
-        long = float(pwsArray[5])
+        lat = float(mbrArray[4])
+        long = float(mbrArray[5])
 
-        temperature = float(pwsArray[0])
-        et0 = float(pwsArray[3])
-        mintemp = float(pwsArray[7])
-        maxtemp = float(pwsArray[6])
-        rh = float(pwsArray[1])
-        minrh = float(pwsArray[9])
-        maxrh = float(pwsArray[8])
-        wind = float(pwsArray[10])
+        temperature = float(mbrArray[0])
+        et0 = float(mbrArray[3])
+        mintemp = float(mbrArray[7])
+        maxtemp = float(mbrArray[6])
+        rh = float(mbrArray[1])
+        minrh = float(mbrArray[9])
+        maxrh = float(mbrArray[8])
+        wind = float(mbrArray[10])
         # wind = wind / 3.6 # the Meteobridge already reports in mps so conversion is not required
-        solarradiation = float(pwsArray[11])  # needs to be converted from watt/sqm*h to Joule/sqm
+        solarradiation = float(mbrArray[11])  # needs to be converted from watt/sqm*h to Joule/sqm
 
         if solarradiation is not None:
             solarradiation *= 0.0864
         # log.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
 
-        rain = float(pwsArray[12])
-        dewpoint = float(pwsArray[13])
-        pressure = float(pwsArray[2]) / 10
+        rain = float(mbrArray[12])
+        dewpoint = float(mbrArray[13])
+        pressure = float(mbrArray[2]) / 10
 
-        if self.parserDebug:
-            self.__toUtc(pwsArray[14], temperature, rain, wind)
+        LOGGER.debug(mbrArray[14], temperature, rain, wind)
 
-        timestamp = int(pwsArray[15])
+        timestamp = int(mbrArray[15])
 
     def query(self, command=None):
         self.check_params()
