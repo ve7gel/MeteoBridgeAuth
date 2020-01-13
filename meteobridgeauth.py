@@ -115,7 +115,7 @@ class MBAuthController(polyinterface.Controller):
         self.addCustomParam({
             'IPAddress': self.ip,
             'Units': self.units,
-            'Pasword': self.password,
+            'Password': self.password,
             'Username': self.username
         })
 
