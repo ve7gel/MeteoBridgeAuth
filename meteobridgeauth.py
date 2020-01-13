@@ -111,9 +111,13 @@ class MBAuthController(polyinterface.Controller):
         self.getstationdata(mbrdata)
         LOGGER.info("Updated data from Meteobridge")
 
+        self.nodes['temperature'].setDriver(
+            uom.TEMP_DRVS['main'], temperature
+        )
         return
 
     def getstationdata(self,mbrcontent):
+        global temperature
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
@@ -142,6 +146,8 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.debug(mbrarray[14] + " " + str(temperature) + " " + str(rain) + " " + str(wind))
 
         timestamp = int(mbrarray[15])
+
+        return
 
     def query(self, command=None):
         self.check_params()
