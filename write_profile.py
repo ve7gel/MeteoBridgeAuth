@@ -193,35 +193,3 @@ if __name__ == "__main__":
         format='%(levelname)s:\t%(name)s\t%(message)s'
     )
     logger.setLevel(logging.DEBUG)
-
-    # Test dictionaries to generate a custom nodedef file.
-    tl = {'main' : 'I_TEMP_F', 'dewpoint' : 'I_TEMP_F', 'apparent' : 'I_TEMP_F',
-            'extra3' : 'I_TEMP_F'}
-    hl = {'main' : 'I_HUMIDITY'}
-    pl = {'station' : 'I_INHG', 'trend' : 'I_TREND'}
-    wl = {'windspeed' : 'I_MPH', 'gustspeed' : 'I_MPH', 'winddir' : 'I_DEGREE'}
-    rl = {'hourly': 'I_MM', 'monthly': 'I_MM', 'yearly': 'I_MM'}
-    ll = {'uv' : 'I_UV'}
-    sl = {}
-
-    # Only write the profile if the version is updated.
-    sd = get_server_data(logger)
-    logger.debug(sd)
-    if sd is not False:
-        local_version = None
-        try:
-            with open(VERSION_FILE,'r') as vfile:
-                local_version = vfile.readline()
-                local_version = local_version.rstrip()
-                vfile.close()
-        except (FileNotFoundError):
-            pass
-        except (Exception) as err:
-            logger.error('{0} failed to read local version from {1}: {2}'.format(pfx,VERSION_FILE,err), exc_info=True)
-
-        if local_version == sd['profile_version']:
-            #logger.info('{0} Not Generating new profile since local version {1} is the same current {2}'.format(pfx,local_version,sd['profile_version']))
-            write_profile(logger, tl, hl, pl, wl, rl, ll, sl)
-        else:
-            logger.info('{0} Generating new profile since local version {1} is not current {2}'.format(pfx,local_version,sd['profile_version']))
-            write_profile(logger, tl, hl, pl, wl, rl, ll, sl)
