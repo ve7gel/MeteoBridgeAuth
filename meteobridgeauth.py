@@ -163,13 +163,13 @@ class MBAuthController(polyinterface.Controller):
         rain_today = float(mbrarray[12])
         dewpoint = float(mbrarray[13])
         pressure = float(mbrarray[2]) / 10
-
-        LOGGER.debug(mbrarray[14] + " " + str(temperature) + " " + str(rain_yesterday) + " " + str(wind))
-
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
         rain_rate = float(mbrarray[17])
         rain_yesterday = float(mbrarray[18])
+
+        LOGGER.debug(mbrarray[14] + " " + str(temperature) + " " + str(rain_yesterday) + " " + str(wind))
+
         return
 
     def query(self, command=None):
