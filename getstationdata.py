@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 class extract:
-    global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-        pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
 
     def getstationdata(self, mbrcontent):
         mbrarray = mbrcontent.split(" ")

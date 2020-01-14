@@ -33,15 +33,12 @@ polyinterface has a LOGGER that is created by default and logs to:
 logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
+global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
+    pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, mbrcontent
 
 class MBAuthController(polyinterface.Controller):
 
     def __init__(self, polyglot):
-        """
-        Optional.
-        Super runs all the parent class necessities. You do NOT have
-        to override the __init__ method, but if you do, you MUST call super.
-        """
         super(MBAuthController, self).__init__(polyglot)
         self.hb = 0
         self.name = 'MeteoBridgeAuth'
