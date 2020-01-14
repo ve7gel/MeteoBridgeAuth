@@ -127,7 +127,7 @@ class MBAuthController(polyinterface.Controller):
             uom.TEMP_DRVS['tempmin'], mintemp
         )
         self.nodes['rain'].setDriver(
-            uom.TEMP_DRVS['rate'], rain_rate
+            uom.RAIN_DRVS['rate'], rain_rate
         )
         return
 
