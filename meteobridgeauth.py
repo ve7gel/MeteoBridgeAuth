@@ -174,7 +174,6 @@ class MBAuthController(polyinterface.Controller):
         self.check_params()
         for node in self.nodes:
             self.nodes[node].reportDrivers()
-            LOGGER.debug(self.nodes[node])
 
     def discover(self, *args, **kwargs):
         """
@@ -464,7 +463,7 @@ class PrecipitationNode(polyinterface.Node):
     def setDriver(self, driver, value):
         if (self.units == 'us'):
             value = round(value * 0.03937, 2)
-        super(PrecipitationNode, self).setDriver(driver, value, report=True, force=True)
+        super(PrecipitationNode, self).setDriver(driver, round(value,1), report=True, force=True)
 
 if __name__ == "__main__":
     try:
