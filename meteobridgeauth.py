@@ -343,6 +343,7 @@ class MBAuthController(polyinterface.Controller):
         self.humidity_list['main'] = 'I_HUMIDITY'
         self.pressure_list['station'] = 'I_INHG' if units == 'us' else 'I_MB'
         self.pressure_list['sealevel'] = 'I_INHG' if units == 'us' else 'I_MB'
+        self.pressure_list['trend'] = 'I_TREND'
         self.wind_list['windspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['winddir'] = 'I_DEGREE'
@@ -454,45 +455,6 @@ class PrecipitationNode(polyinterface.Node):
     hint = 0xffffff
     units = 'metric'
     drivers = [ ]
-    hourly_rain = 0
-    daily_rain = 0
-    weekly_rain = 0
-    monthly_rain = 0
-    yearly_rain = 0
-
-    prev_hour = 0
-    prev_day = 0
-    prev_week = 0
-
-    def SetUnits(self, u):
-        self.units = u
-
-    def hourly_accumulation(self, r):
-        current_hour = datetime.datetime.now().hour
-        if (current_hour != self.prev_hour):
-            self.prev_hour = current_hour
-            self.hourly = 0
-
-        self.hourly_rain += r
-        return self.hourly_rain
-
-    def daily_accumulation(self, r):
-        current_day = datetime.datetime.now().day
-        if (current_day != self.prev_day):
-            self.prev_day = current_day
-            self.daily_rain = 0
-
-        self.daily_rain += r
-        return self.daily_rain
-
-    def weekly_accumulation(self, r):
-        current_week = datetime.datetime.now().day
-        if (current_weekday != self.prev_weekday):
-            self.prev_week = current_weekday
-            self.weekly_rain = 0
-
-        self.weekly_rain += r
-        return self.weekly_rain
 
     def setDriver(self, driver, value):
         if (self.units == 'us'):
