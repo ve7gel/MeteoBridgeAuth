@@ -121,10 +121,10 @@ class MBAuthController(polyinterface.Controller):
             uom.TEMP_DRVS['windchill'], windchill
         )
         self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['maxtemp'], maxtemp
+            uom.TEMP_DRVS['tempmax'], maxtemp
         )
         self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['mintemp'], mintemp
+            uom.TEMP_DRVS['tempmin'], mintemp
         )
         return
 
