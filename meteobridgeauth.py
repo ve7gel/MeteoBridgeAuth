@@ -126,6 +126,9 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['temperature'].setDriver(
             uom.TEMP_DRVS['tempmin'], mintemp
         )
+        self.nodes['temperature'].setDriver(
+            uom.TEMP_DRVS['tempmin'], mintemp
+        )
         return
 
     def getstationdata(self,mbrcontent):
@@ -191,6 +194,17 @@ class MBAuthController(polyinterface.Controller):
                     'value': 0,
                     'uom': uom.UOM[self.temperature_list[d]]
                 })
+        self.addNode(node)
+
+        node = PrecipitationNode(self, self.address, 'rain', 'Precipitation')
+        node.SetUnits(self.units);
+        for d in self.rain_list:
+            node.drivers.append(
+                    {
+                        'driver': uom.RAIN_DRVS[d],
+                        'value': 0,
+                        'uom': uom.UOM[self.rain_list[d]]
+                        })
         self.addNode(node)
 
     def delete(self):
@@ -394,6 +408,57 @@ class TemperatureNode(polyinterface.Node):
             value = (value * 1.8) + 32  # convert to F
 
         super(TemperatureNode, self).setDriver(driver, round(value, 1), report=True, force=True)
+
+
+class PrecipitationNode(polyinterface.Node):
+    id = 'precipitation'
+    hint = 0xffffff
+    units = 'metric'
+    drivers = []
+    hourly_rain = 0
+    daily_rain = 0
+    weekly_rain = 0
+    monthly_rain = 0
+    yearly_rain = 0
+
+    prev_hour = 0
+    prev_day = 0
+    prev_week = 0
+
+    def SetUnits(self, u):
+        self.units = u
+
+    def hourly_accumulation(self, r):
+        current_hour = datetime.datetime.now().hour
+        if (current_hour != self.prev_hour):
+            self.prev_hour = current_hour
+            self.hourly = 0
+
+        self.hourly_rain += r
+        return self.hourly_rain
+
+    def daily_accumulation(self, r):
+        current_day = datetime.datetime.now().day
+        if (current_day != self.prev_day):
+            self.prev_day = current_day
+            self.daily_rain = 0
+
+        self.daily_rain += r
+        return self.daily_rain
+
+    def weekly_accumulation(self, r):
+        current_week = datetime.datetime.now().day
+        if (current_weekday != self.prev_weekday):
+            self.prev_week = current_weekday
+            self.weekly_rain = 0
+
+        self.weekly_rain += r
+        return self.weekly_rain
+
+    def setDriver(self, driver, value):
+        if (self.units == 'us'):
+            value = round(value * 0.03937, 2)
+        super(PrecipitationNode, self).setDriver(driver, value, report=True, force=True)
 
 
 if __name__ == "__main__":

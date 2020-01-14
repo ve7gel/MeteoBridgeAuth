@@ -66,7 +66,6 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
         nodedef.write("    <sts>\n")
         logger.debug(temperature_list)
         for t in temperature_list:
-            logger.debug(uom.TEMP_DRVS[t] +" " + temperature_list[t])
             nodedef.write(STATUS_TMPL % (uom.TEMP_DRVS[t], temperature_list[t]))
         nodedef.write("    </sts>\n")
         nodedef.write("  </nodeDef>\n")
