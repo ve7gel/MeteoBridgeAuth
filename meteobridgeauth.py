@@ -143,7 +143,7 @@ class MBAuthController(polyinterface.Controller):
             uom.WIND_DRVS['winddir'], wind_dir
         )
         self.nodes['wind'].setDriver(
-            uom.RAIN_DRVS['gustspeed'], wind_gust
+            uom.WIND_DRVS['gustspeed'], wind_gust
         )
         return
 
