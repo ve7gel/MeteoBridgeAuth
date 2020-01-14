@@ -174,13 +174,13 @@ class MBAuthController(polyinterface.Controller):
         # LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
 
-        #rain_today = float(mbrarray[12])
-        rain_today = 17.4
+        rain_today = float(mbrarray[12])
         dewpoint = float(mbrarray[13])
         pressure = float(mbrarray[2]) / 10
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
-        rain_rate = float(mbrarray[17])
+        #rain_rate = float(mbrarray[17])
+        rain_rate = 17.0
         rain_yesterday = float(mbrarray[18])
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
