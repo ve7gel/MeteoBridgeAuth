@@ -514,7 +514,6 @@ class PressureNode(polyinterface.Node):
     drivers = [ ]
     mytrend = []
 
-
     def SetUnits(self, u):
         self.units = u
 
