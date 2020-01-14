@@ -43,8 +43,8 @@ ST-139H-GV5-NAME = Extra Humidity 5
 
 ND-pressure-NAME = Barometric Pressures
 ND-pressure-ICON = Input
-ST-139P-ST-NAME = Absolute Pressure
-ST-139P-GV0-NAME = Relative Pressure
+ST-139P-ST-NAME = Station Pressure
+ST-139P-GV0-NAME = Sea Level Pressure
 ST-139P-GV1-NAME = Pressure Trend
 
 ND-wind-NAME = Wind
