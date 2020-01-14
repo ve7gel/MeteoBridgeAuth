@@ -8,10 +8,10 @@ class extract:
         lat = float(mbrarray[4])
         long = float(mbrarray[5])
 
-        temperature = float(mbrarray[0])
+        self.temperature = float(mbrarray[0])
         et0 = float(mbrarray[3])
-        mintemp = float(mbrarray[7])
-        maxtemp = float(mbrarray[6])
+        self.mintemp = float(mbrarray[7])
+        self.maxtemp = float(mbrarray[6])
         rh = float(mbrarray[1])
         minrh = float(mbrarray[9])
         maxrh = float(mbrarray[8])

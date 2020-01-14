@@ -35,8 +35,8 @@ You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as ne
 """
 
 class MBAuthController(polyinterface.Controller):
-    global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-        pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
+    #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
+       # pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
 
     def __init__(self, polyglot):
         super(MBAuthController, self).__init__(polyglot)
