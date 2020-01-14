@@ -94,7 +94,7 @@ LITE_DRVS = {
 LITE_EDIT = {
         'uv' : 'I_UV',
         'solar_radiation' : 'I_RADIATION',
-        'illuminace' : 'I_LUX'
+        'illuminace' : 'I_LUX',
         'evapotranspiration' : 'I_MM'
         }
 
