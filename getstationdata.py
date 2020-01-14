@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-class extract:
+class extractarray:
 
-    def getstationdata(self, mbrcontent):
+    def extract(self, mbrcontent):
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])

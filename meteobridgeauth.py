@@ -25,7 +25,7 @@ import requests
 import write_profile
 import uom
 
-from getstationdata import extract
+from getstationdata import extractarray
 
 LOGGER = polyinterface.LOGGER
 """
@@ -109,7 +109,7 @@ class MBAuthController(polyinterface.Controller):
         except:
             LOGGER.error("Failue attempting connect to MeteoBridge device")
 
-            extract(mbrdata)
+            extractarray(mbrdata)
 
         LOGGER.info("Updated data from Meteobridge")
 
