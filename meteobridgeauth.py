@@ -24,7 +24,8 @@ import urllib.request
 import requests
 import write_profile
 import uom
-import getstationdata
+
+from getstationdata import extract
 
 LOGGER = polyinterface.LOGGER
 """
@@ -33,10 +34,9 @@ logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
 
-
 class MBAuthController(polyinterface.Controller):
     global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-        pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
+        pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, mbrcontent
 
     def __init__(self, polyglot):
         """
@@ -112,7 +112,8 @@ class MBAuthController(polyinterface.Controller):
         except:
             LOGGER.error("Failue attempting connect to MeteoBridge device")
 
-        getstationdata(mbrdata)
+            extract(mbrdata)
+
         LOGGER.info("Updated data from Meteobridge")
 
         self.nodes['temperature'].setDriver(
