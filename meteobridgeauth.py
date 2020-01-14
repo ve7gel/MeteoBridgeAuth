@@ -91,7 +91,7 @@ class MBAuthController(polyinterface.Controller):
             values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-latitude]%20' \
                      '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                      '[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20' \
-                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]'
+                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20[rain0rate-act]'
 
             try:
                 # create "opener" (OpenerDirector instance)
@@ -126,13 +126,14 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['temperature'].setDriver(
             uom.TEMP_DRVS['tempmin'], mintemp
         )
-        self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['tempmin'], mintemp
+        self.nodes['precipitation'].setDriver(
+            uom.TEMP_DRVS['rate'], rain_rate
         )
         return
 
     def getstationdata(self,mbrcontent):
-        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain, pressure, windchill
+        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain, pressure, windchill,\
+               rain_rate
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
@@ -162,6 +163,7 @@ class MBAuthController(polyinterface.Controller):
 
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
+        rain_rate = float(mbrarray[17])
 
         return
 
@@ -198,7 +200,6 @@ class MBAuthController(polyinterface.Controller):
 
         node = PrecipitationNode(self, self.address, 'rain', 'Precipitation')
         node.SetUnits(self.units);
-        LOGGER.debug(self.rain_list)
         for d in self.rain_list:
             node.drivers.append(
                     {
@@ -410,7 +411,6 @@ class TemperatureNode(polyinterface.Node):
 
         super(TemperatureNode, self).setDriver(driver, round(value, 1), report=True, force=True)
 
-
 class PrecipitationNode(polyinterface.Node):
     id = 'precipitation'
     hint = 0xffffff
@@ -460,7 +460,6 @@ class PrecipitationNode(polyinterface.Node):
         if (self.units == 'us'):
             value = round(value * 0.03937, 2)
         super(PrecipitationNode, self).setDriver(driver, value, report=True, force=True)
-
 
 if __name__ == "__main__":
     try:
