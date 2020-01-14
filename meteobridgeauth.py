@@ -424,7 +424,7 @@ def getstationdata(mbrcontent):
 
         rain_today = float(mbrarray[12])
         dewpoint = float(mbrarray[13])
-        stn_pressure = float(mbrarray[2]) / 10
+        stn_pressure = float(mbrarray[2])
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
         rain_rate = float(mbrarray[17])
@@ -432,7 +432,7 @@ def getstationdata(mbrcontent):
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
         uv = float(mbrarray[21])
-        sl_pressure = float(mbrarray[21]) / 10
+        sl_pressure = float(mbrarray[21])
 
 
 class TemperatureNode(polyinterface.Node):
@@ -521,20 +521,6 @@ class PressureNode(polyinterface.Node):
 
     def SetUnits(self, u):
         self.units = u
-
-    # convert station pressure in millibars to sealevel pressure
-    def toSeaLevel(self, station, elevation):
-        i = 287.05
-        a = 9.80665
-        r = 0.0065
-        s = 1013.35 # pressure at sealevel
-        n = 288.15
-
-        l = a / (i * r)
-        c = i * r / a
-        u = math.pow(1 + math.pow(s / station, c) * (r * elevation / n), l)
-
-        return (round((station * u), 3))
 
     # track pressures in a queue and calculate trend
     def updateTrend(self, current):
