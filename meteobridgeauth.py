@@ -131,7 +131,7 @@ class MBAuthController(polyinterface.Controller):
             uom.RAIN_DRVS['rate'], rain_rate
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['daily'], rain_today
+            uom.RAIN_DRVS['total'], rain_today
         )
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['yesterday'], rain_yesterday
@@ -331,6 +331,7 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['winddir'] = 'I_DEGREE'
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
+        self.rain_list['total'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['daily'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
