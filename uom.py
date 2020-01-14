@@ -83,6 +83,7 @@ RAIN_DRVS = {
         'maxrate' : 'GV5',
         'yesterday' : 'GV6',
         'total' : 'GV7',
+        'et0' : 'GV8'
         }
 
 LITE_DRVS = {

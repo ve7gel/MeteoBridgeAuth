@@ -289,6 +289,7 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['winddir'] = 'I_DEGREE'
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
         self.rain_list['total'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.rain_list['et0'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
 
