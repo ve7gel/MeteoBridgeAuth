@@ -164,7 +164,7 @@ class MBAuthController(polyinterface.Controller):
         dewpoint = float(mbrarray[13])
         pressure = float(mbrarray[2]) / 10
 
-        LOGGER.debug(mbrarray[14] + " " + str(temperature) + " " + str(rain_today) + " " + str(wind))
+        LOGGER.debug(mbrarray[14] + " " + str(temperature) + " " + str(rain_yesterday) + " " + str(wind))
 
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
