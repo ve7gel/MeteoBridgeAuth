@@ -120,6 +120,12 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['temperature'].setDriver(
             uom.TEMP_DRVS['windchill'], windchill
         )
+        self.nodes['temperature'].setDriver(
+            uom.TEMP_DRVS['maxtemp'], maxtemp
+        )
+        self.nodes['temperature'].setDriver(
+            uom.TEMP_DRVS['mintemp'], mintemp
+        )
         return
 
     def getstationdata(self,mbrcontent):
