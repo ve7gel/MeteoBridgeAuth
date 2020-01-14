@@ -432,8 +432,7 @@ def getstationdata(mbrcontent):
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
         uv = float(mbrarray[21])
-        sl_pressure = float(mbrarray[21])
-
+        sl_pressure = float(mbrarray[22])
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
