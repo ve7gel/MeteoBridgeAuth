@@ -405,7 +405,7 @@ def getstationdata():
         except:
             LOGGER.error("Failue attempting connect to MeteoBridge device")
 
-        mbrarray = mbrcontent.split(" ")
+        mbrarray = mbrdata.split(" ")
 
         lat = float(mbrarray[4])
         long = float(mbrarray[5])
