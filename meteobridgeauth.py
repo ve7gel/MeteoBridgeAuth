@@ -145,7 +145,7 @@ class MBAuthController(polyinterface.Controller):
             uom.LITE_DRVS['solar_radiation'], solarradiation
         )
         self.nodes['light'].setDriver(
-            uom.LITE_DRVS['evapotranspiration'], uv
+            uom.LITE_DRVS['uv'], uv
         )
         self.nodes['light'].setDriver(
             uom.LITE_DRVS['evapotranspiration'], et0
