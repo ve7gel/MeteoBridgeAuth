@@ -133,9 +133,9 @@ class MBAuthController(polyinterface.Controller):
             uom.RAIN_DRVS['daily'], rain_today
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yesterday'], rain_yesterday,
-            LOGGER.debug("Rain Yesterday=" + str(rain_yesterday))
+            uom.RAIN_DRVS['yesterday'], rain_yesterday
         )
+        LOGGER.debug("Rain Yesterday=" + str(rain_yesterday))
         return
 
     def getstationdata(self,mbrcontent):
