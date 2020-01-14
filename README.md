@@ -1,12 +1,60 @@
 # MeteoBridgeAuth
 Nodeserver to acquire data using templates from Meteobridge weather server.  Requires authorization thus entry of username and password.
+(c) 2020
 
-#### Installation
+This node server is intended to support the [Meteobridge](http://www.meteobridge.com/).
 
-TBD
+## Installation
 
-#### Requirements
+1. Backup Your ISY in case of problems!
+   * Really, do the backup, please
+2. Go to the Polyglot Store in the UI and install.
+3. Add NodeServer in Polyglot Web
+   * After the install completes, Polyglot will reboot your ISY, you can watch the status in the main polyglot log.
+4. Once your ISY is back up open the Admin Console.
+5. The node server should automatically run and find your hub(s) and start adding weather sensors.  It can take a couple of minutes to discover the sensors. Verify by checking the nodeserver log. 
+   * While this is running you can view the nodeserver log in the Polyglot UI to see what it's doing
 
-TBD
+### Node Settings
+The settings for this node are:
+
+#### Short Poll
+   * Not used
+#### Long Poll
+   * How often the MeteoBridge is polled for data
+#### Username
+   * Username required to access the MeteoBridge. (same as webui login)
+#### Password
+   * Password associated with above username
+#### IPAddress
+   * Configure the IP address of the MeteoBridge.
+#### Units
+   * Configure the units used when displaying data. Choices are:
+   *   metric - SI / metric units
+   *   us     - units generally used in the U.S.
+   *   uk     - units generally used in the U.K.
 
 
+## Requirements
+
+1. Polyglot V2 itself should be run on Raspian Stretch.
+  To check your version, ```cat /etc/os-release``` and the first line should look like
+  ```PRETTY_NAME="Raspbian GNU/Linux 9 (stretch)"```. It is possible to upgrade from Jessie to
+  Stretch, but I would recommend just re-imaging the SD card.  Some helpful links:
+   * https://www.raspberrypi.org/blog/raspbian-stretch/
+   * https://linuxconfig.org/raspbian-gnu-linux-upgrade-from-jessie-to-raspbian-stretch-9
+2. This has only been tested with ISY 5.0.16b so it is not guaranteed to work with any other version.
+
+# Upgrading
+
+Open the Polyglot web page, go to nodeserver store and click "Update" for "MeteoBridge".
+
+Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboard and select Control -> Restart, then watch the log to make sure everything goes well.
+
+The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
+
+# Release Notes
+
+
+- 1.0.0 14/01/2020
+   - Initial release
