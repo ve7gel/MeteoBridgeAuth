@@ -160,9 +160,9 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['pressure'].setDriver(
             uom.PRES_DRVS['sealevel'], sl_pressure
         )
-        self.nodes['pressure'].setDriver(
-            uom.PRES_DRVS['trend']
-        )
+#        self.nodes['pressure'].setDriver(
+#            uom.PRES_DRVS['trend'], t
+#        )
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
