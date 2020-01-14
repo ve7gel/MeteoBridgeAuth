@@ -183,7 +183,7 @@ class MBAuthController(polyinterface.Controller):
         rain_yesterday = float(mbrarray[18])
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
-        total_rain = mbrarray[21]
+        total_rain = float(mbrarray[21])
 
         return
 
