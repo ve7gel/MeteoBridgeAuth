@@ -198,6 +198,7 @@ class MBAuthController(polyinterface.Controller):
 
         node = PrecipitationNode(self, self.address, 'rain', 'Precipitation')
         node.SetUnits(self.units);
+        LOGGER.debug(self.rain_list)
         for d in self.rain_list:
             node.drivers.append(
                     {
