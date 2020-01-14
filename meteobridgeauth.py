@@ -456,6 +456,9 @@ class PrecipitationNode(polyinterface.Node):
     units = 'metric'
     drivers = [ ]
 
+    def SetUnits(self, u):
+        self.units = u
+
     def setDriver(self, driver, value):
         if (self.units == 'us'):
             value = round(value * 0.03937, 2)
