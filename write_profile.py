@@ -206,6 +206,7 @@ if __name__ == "__main__":
 
     # Only write the profile if the version is updated.
     sd = get_server_data(logger)
+    logger.debug(sd)
     if sd is not False:
         local_version = None
         try:
