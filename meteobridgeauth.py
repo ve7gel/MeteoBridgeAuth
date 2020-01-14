@@ -369,7 +369,7 @@ class MBAuthController(polyinterface.Controller):
         {'driver': 'GV0', 'value': 0, 'uom': 72},
     ]
 
-def getstationdata(self):
+def getstationdata():
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
             pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure
         try:
