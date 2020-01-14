@@ -133,7 +133,8 @@ class MBAuthController(polyinterface.Controller):
             uom.RAIN_DRVS['daily'], rain_today
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yesterday'], rain_yesterday
+            uom.RAIN_DRVS['yesterday'], rain_yesterday,
+            LOGGER.debug("Rain Yesterday=" + str(rain_yesterday))
         )
         return
 
@@ -155,8 +156,8 @@ class MBAuthController(polyinterface.Controller):
         # wind = wind / 3.6 # the Meteobridge already reports in mps so conversion is not required
         solarradiation = float(mbrarray[11])  # needs to be converted from watt/sqm*h to Joule/sqm
 
-        if solarradiation is not None:
-            solarradiation *= 0.0864
+        #if solarradiation is not None:
+        #    solarradiation *= 0.0864
         # log.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
 
