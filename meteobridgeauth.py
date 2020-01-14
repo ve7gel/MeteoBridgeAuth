@@ -307,7 +307,7 @@ class MBAuthController(polyinterface.Controller):
         self.rain_list['total'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
-        self.light_list['et0'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
 
         # Build the node definition
         LOGGER.info('Creating node definition profile based on config.')

@@ -82,14 +82,14 @@ RAIN_DRVS = {
         'yearly' : 'GV4',
         'maxrate' : 'GV5',
         'yesterday' : 'GV6',
-        'total' : 'GV7',
-        'et0' : 'GV8'
+        'total' : 'GV7'
         }
 
 LITE_DRVS = {
         'uv' : 'ST',
         'solar_radiation' : 'GV0',
-        'illuminace' : 'GV1'
+        'illuminace' : 'GV1',
+        'evapotranspiration' : 'GV2'
         }
 LITE_EDIT = {
         'uv' : 'I_UV',
