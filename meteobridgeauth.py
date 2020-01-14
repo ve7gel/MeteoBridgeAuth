@@ -135,6 +135,12 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['yesterday'], rain_yesterday
         )
+        self.nodes['rain'].setDriver(
+            uom.RAIN_DRVS['daily'], rain_today
+        )
+        self.nodes['rain'].setDriver(
+            uom.RAIN_DRVS['yesterday'], rain_yesterday
+        )
         return
 
     def getstationdata(self,mbrcontent):
@@ -464,6 +470,87 @@ class PrecipitationNode(polyinterface.Node):
         if (self.units == 'us'):
             value = round(value * 0.03937, 2)
         super(PrecipitationNode, self).setDriver(driver, round(value,1), report=True, force=True)
+
+class HumidityNode(polyinterface.Node):
+    id = 'humidity'
+    hint = 0xffffff
+    units = 'metric'
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 22}]
+
+    def SetUnits(self, u):
+        self.units = u
+
+    def setDriver(self, driver, value):
+        super(HumidityNode, self).setDriver(driver, value, report=True, force=True)
+
+class PressureNode(polyinterface.Node):
+    id = 'pressure'
+    hint = 0xffffff
+    units = 'metric'
+    drivers = [ ]
+    mytrend = []
+
+
+    def SetUnits(self, u):
+        self.units = u
+
+    # convert station pressure in millibars to sealevel pressure
+    def toSeaLevel(self, station, elevation):
+        i = 287.05
+        a = 9.80665
+        r = 0.0065
+        s = 1013.35 # pressure at sealevel
+        n = 288.15
+
+        l = a / (i * r)
+        c = i * r / a
+        u = math.pow(1 + math.pow(s / station, c) * (r * elevation / n), l)
+
+        return (round((station * u), 3))
+
+    # track pressures in a queue and calculate trend
+    def updateTrend(self, current):
+        t = 0
+        past = 0
+
+        if len(self.mytrend) == 180:
+            past = self.mytrend.pop()
+
+        if self.mytrend != []:
+            past = self.mytrend[0]
+
+        # calculate trend
+        if ((past - current) > 1):
+            t = -1
+        elif ((past - current) < -1):
+            t = 1
+
+        self.mytrend.insert(0, current)
+        return t
+
+    # We want to override the SetDriver method so that we can properly
+    # convert the units based on the user preference.
+    def setDriver(self, driver, value):
+        if (self.units == 'us'):
+            value = round(value * 0.02952998751, 3)
+        super(PressureNode, self).setDriver(driver, value, report=True, force=True)
+
+
+class WindNode(polyinterface.Node):
+    id = 'wind'
+    hint = 0xffffff
+    units = 'metric'
+    drivers = [ ]
+
+    def SetUnits(self, u):
+        self.units = u
+
+    def setDriver(self, driver, value):
+        if (driver == 'ST' or driver == 'GV1' or driver == 'GV3'):
+            # Metric value is meters/sec (not KPH)
+            if (self.units != 'metric'):
+                value = round(value * 2.23694, 2)
+        super(WindNode, self).setDriver(driver, value, report=True, force=True)
 
 if __name__ == "__main__":
     try:
