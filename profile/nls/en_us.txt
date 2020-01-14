@@ -1,5 +1,5 @@
 # controller
-ND-MeteoBridge-NAME = MeteoBridgeAuth
+ND-MeteoBridgeAuth-NAME = MeteoBridge
 ND-MeteoBridgeAuth-ICON = Weather
 CMD-ctl-DISCOVER-NAME = Re-Discover
 CMD-ctl-UPDATE_PROFILE-NAME = Update Profile
