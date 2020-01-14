@@ -72,7 +72,7 @@ class MBAuthController(polyinterface.Controller):
         if self.ip == "":
             return
 
-        getstationdata()
+        self.getstationdata()
 
         LOGGER.info("Updated data from Meteobridge")
 
@@ -369,9 +369,11 @@ class MBAuthController(polyinterface.Controller):
         {'driver': 'GV0', 'value': 0, 'uom': 72},
     ]
 
-def getstationdata():
+    def getstationdata(self):
+
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
             pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure
+
         try:
             #top_level_url = "http://meteobridge.internal.home/"
             top_level_url = "http://" + self.ip + "/"
