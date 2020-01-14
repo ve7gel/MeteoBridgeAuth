@@ -275,6 +275,7 @@ class MBAuthController(polyinterface.Controller):
         self.temperature_list['windchill'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
         self.temperature_list['tempmax'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
         self.temperature_list['tempmin'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
+        LOGGER.debug(self.temperature_list)
         self.humidity_list['main'] = 'I_HUMIDITY'
         self.pressure_list['station'] = 'I_INHG' if units == 'us' else 'I_MB'
         self.pressure_list['sealevel'] = 'I_INHG' if units == 'us' else 'I_MB'
