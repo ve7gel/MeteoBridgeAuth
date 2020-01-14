@@ -163,7 +163,7 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
-
+        LOGGER.debug(str(pressure.updateTrend))
         return
 
     def query(self, command=None):
