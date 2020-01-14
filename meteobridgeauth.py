@@ -92,7 +92,7 @@ class MBAuthController(polyinterface.Controller):
                      '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                      '[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20' \
                      '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]'
+                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[rain0total-amax]'
 
             try:
                 # create "opener" (OpenerDirector instance)
@@ -131,7 +131,10 @@ class MBAuthController(polyinterface.Controller):
             uom.RAIN_DRVS['rate'], rain_rate
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['total'], rain_today
+            uom.RAIN_DRVS['rain_today'], rain_today
+        )
+        self.nodes['rain'].setDriver(
+            uom.RAIN_DRVS['total'], total_rain
         )
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['yesterday'], rain_yesterday
@@ -149,7 +152,7 @@ class MBAuthController(polyinterface.Controller):
 
     def getstationdata(self,mbrcontent):
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-            pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
+            pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, total_rain
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
@@ -180,6 +183,7 @@ class MBAuthController(polyinterface.Controller):
         rain_yesterday = float(mbrarray[18])
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
+        total_rain = mbrarray[21]
 
         return
 
