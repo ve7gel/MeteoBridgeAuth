@@ -346,7 +346,7 @@ class MBAuthController(polyinterface.Controller):
         self.humidity_list['main'] = 'I_HUMIDITY'
         self.pressure_list['station'] = 'I_INHG' if units == 'us' else 'I_MB'
         self.pressure_list['sealevel'] = 'I_INHG' if units == 'us' else 'I_MB'
-        self.pressure_list['trend'] = 'I_TREND'
+        #self.pressure_list['trend'] = 'I_TREND'
         self.wind_list['windspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['winddir'] = 'I_DEGREE'
