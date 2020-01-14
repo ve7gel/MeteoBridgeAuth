@@ -419,7 +419,7 @@ class PrecipitationNode(polyinterface.Node):
     id = 'precipitation'
     hint = 0xffffff
     units = 'metric'
-    drivers = []
+    drivers = [ ]
     hourly_rain = 0
     daily_rain = 0
     weekly_rain = 0
