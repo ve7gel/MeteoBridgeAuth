@@ -576,6 +576,20 @@ class WindNode(polyinterface.Node):
                 value = round(value * 2.23694, 2)
         super(WindNode, self).setDriver(driver, value, report=True, force=True)
 
+
+class LightNode(polyinterface.Node):
+    id = 'light'
+    units = 'metric'
+    hint = 0xffffff
+    drivers = [ ]
+
+    def SetUnits(self, u):
+        self.units = u
+
+    def setDriver(self, driver, value):
+        super(LightNode, self).setDriver(driver, value, report=True, force=True)
+
+
 if __name__ == "__main__":
     try:
         polyglot = polyinterface.Interface('MeteoBridgeAuth')
