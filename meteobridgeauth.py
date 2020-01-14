@@ -441,7 +441,7 @@ class MBAuthController(polyinterface.Controller):
         wind_dir = mbrarray[20]
         uv = float(mbrarray[21])
         sl_pressure = float(mbrarray[22])
-        low_battery = int(mbrarray[23])
+        low_battery = float(mbrarray[23])
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
