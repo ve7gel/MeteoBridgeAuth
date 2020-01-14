@@ -91,7 +91,7 @@ class MBAuthController(polyinterface.Controller):
             values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-latitude]%20' \
                      '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                      '[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20' \
-                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20[rain0rate-act]'
+                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20[rain0rate-act]%20[rain0total-ydmax]'
 
             try:
                 # create "opener" (OpenerDirector instance)
@@ -132,10 +132,13 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['daily'], rain_today
         )
+        self.nodes['rain'].setDriver(
+            uom.RAIN_DRVS['yesterday'], rain_yesterday
+        )
         return
 
     def getstationdata(self,mbrcontent):
-        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, pressure, windchill, rain_rate
+        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, pressure, windchill, rain_rate, rain_yesterday
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
@@ -166,7 +169,7 @@ class MBAuthController(polyinterface.Controller):
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
         rain_rate = float(mbrarray[17])
-
+        rain_yesterday = float(mbrarray[18])
         return
 
     def query(self, command=None):
@@ -307,6 +310,7 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['winddir'] = 'I_DEGREE'
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
         self.rain_list['daily'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
         self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
