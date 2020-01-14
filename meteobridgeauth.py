@@ -87,7 +87,7 @@ class MBAuthController(polyinterface.Controller):
                      '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                      '[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20' \
                      '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[rain0total-aavg]'
+                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]'
 
             try:
                 # create "opener" (OpenerDirector instance)
@@ -291,7 +291,6 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['winddir'] = 'I_DEGREE'
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
-        self.rain_list['total'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['daily'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
@@ -372,8 +371,7 @@ def getstationdata(mbrcontent):
         pressure = float(mbrarray[2]) / 10
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
-        # rain_rate = float(mbrarray[17])
-        rain_rate = 17.0
+        rain_rate = float(mbrarray[17])
         rain_yesterday = float(mbrarray[18])
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
