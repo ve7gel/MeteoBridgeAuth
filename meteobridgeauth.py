@@ -126,7 +126,7 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['temperature'].setDriver(
             uom.TEMP_DRVS['tempmin'], mintemp
         )
-        self.nodes['precipitation'].setDriver(
+        self.nodes['rain0'].setDriver(
             uom.TEMP_DRVS['rate'], rain_rate
         )
         return
@@ -239,7 +239,7 @@ class MBAuthController(polyinterface.Controller):
 
         # Make sure they are in the params  -- does this cause a
         # configuration event?
-        LOGGER.info("Adding configuation")
+        LOGGER.info("Adding configuration")
         self.addCustomParam({
             'IPAddress': self.ip,
             'Units': self.units,
@@ -305,9 +305,9 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['winddir'] = 'I_DEGREE'
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
         self.rain_list['total'] = 'I_MM' if units == 'metric' else 'I_INCHES'
-        self.rain_list['et0'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
+        self.light_list['et0'] = 'I_MM' if units == 'metric' else 'I_INCHES'
 
         # Build the node definition
         LOGGER.info('Creating node definition profile based on config.')
