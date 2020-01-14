@@ -87,7 +87,7 @@ class MBAuthController(polyinterface.Controller):
                      '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                      '[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20' \
                      '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]'
+                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]'
 
             try:
                 # create "opener" (OpenerDirector instance)
@@ -147,9 +147,22 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['light'].setDriver(
             uom.LITE_DRVS['uv'], uv
         )
-        self.nodes['light'].setDriver(
-            uom.LITE_DRVS['evapotranspiration'], et0
+        if et0 != None:
+            self.nodes['light'].setDriver(
+                uom.LITE_DRVS['evapotranspiration'], et0
+            )
+        else:
+            LOGGER.info("Evapotranspiration not available (Davis VP2 stations only")
+        self.nodes['pressure'].setDriver(
+            uom.LITE_DRVS['station'], stn_pressure
         )
+        self.nodes['pressure'].setDriver(
+            uom.LITE_DRVS['sealevel'], sl_pressure
+        )
+        self.nodes['humidity'].setDriver(
+            uom.LITE_DRVS['main'], rh
+        )
+
         return
 
     def query(self, command=None):
@@ -385,7 +398,7 @@ class MBAuthController(polyinterface.Controller):
 
 def getstationdata(mbrcontent):
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-            pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv
+            pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure
 
         mbrarray = mbrcontent.split(" ")
 
@@ -410,7 +423,7 @@ def getstationdata(mbrcontent):
 
         rain_today = float(mbrarray[12])
         dewpoint = float(mbrarray[13])
-        pressure = float(mbrarray[2]) / 10
+        stn_pressure = float(mbrarray[2]) / 10
         timestamp = int(mbrarray[15])
         windchill = float(mbrarray[16])
         rain_rate = float(mbrarray[17])
@@ -418,6 +431,7 @@ def getstationdata(mbrcontent):
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
         uv = float(mbrarray[21])
+        sl_pressure = float(mbrarray[21]) / 10
 
 
 class TemperatureNode(polyinterface.Node):
