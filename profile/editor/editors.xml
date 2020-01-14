@@ -75,7 +75,7 @@
 		<range uom="105" min="0" max="20000" prec="3" />
 	</editor>
 	<editor id="I_MM">
-		<range uom="4" min="0" max="20000" prec="3" />
+		<range uom="82" min="0" max="20000" prec="3" />
 	</editor>
 	<editor id="I_DAYS">
 		<range uom="10" min="0" max="20000" prec="2" />
