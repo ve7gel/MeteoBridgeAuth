@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 class extractarray:
+    global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
+        pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
 
     def extract(self, mbrcontent):
         mbrarray = mbrcontent.split(" ")
@@ -8,10 +10,10 @@ class extractarray:
         lat = float(mbrarray[4])
         long = float(mbrarray[5])
 
-        self.temperature = float(mbrarray[0])
+        temperature = float(mbrarray[0])
         et0 = float(mbrarray[3])
-        self.mintemp = float(mbrarray[7])
-        self.maxtemp = float(mbrarray[6])
+        mintemp = float(mbrarray[7])
+        maxtemp = float(mbrarray[6])
         rh = float(mbrarray[1])
         minrh = float(mbrarray[9])
         maxrh = float(mbrarray[8])
