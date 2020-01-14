@@ -183,14 +183,25 @@ class MBAuthController(polyinterface.Controller):
                 })
         self.addNode(node)
 
-        node = PrecipitationNode(self, self.address, 'rain', 'Precipitation')
+        node = HumidityNode(self, self.address, 'humidity', 'Humidity')
         node.SetUnits(self.units);
-        for d in self.rain_list:
+        for d in self.humidity_list:
             node.drivers.append(
                     {
-                        'driver': uom.RAIN_DRVS[d],
+                        'driver': uom.HUMD_DRVS[d],
                         'value': 0,
-                        'uom': uom.UOM[self.rain_list[d]]
+                        'uom': uom.UOM[self.humidity_list[d]]
+                        })
+        self.addNode(node)
+
+        node = PressureNode(self, self.address, 'pressure', 'Barometric Pressure')
+        node.SetUnits(self.units);
+        for d in self.pressure_list:
+            node.drivers.append(
+                    {
+                        'driver': uom.PRES_DRVS[d],
+                        'value': 0,
+                        'uom': uom.UOM[self.pressure_list[d]]
                         })
         self.addNode(node)
 
@@ -203,6 +214,28 @@ class MBAuthController(polyinterface.Controller):
                     'value': 0,
                     'uom': uom.UOM[self.wind_list[d]]
                 })
+        self.addNode(node)
+
+        node = PrecipitationNode(self, self.address, 'rain', 'Precipitation')
+        node.SetUnits(self.units);
+        for d in self.rain_list:
+            node.drivers.append(
+                    {
+                        'driver': uom.RAIN_DRVS[d],
+                        'value': 0,
+                        'uom': uom.UOM[self.rain_list[d]]
+                        })
+        self.addNode(node)
+
+        node = LightNode(self, self.address, 'light', 'Illumination')
+        node.SetUnits(self.units);
+        for d in self.light_list:
+            node.drivers.append(
+                    {
+                        'driver': uom.LITE_DRVS[d],
+                        'value': 0,
+                        'uom': uom.UOM[self.light_list[d]]
+                        })
         self.addNode(node)
 
     def delete(self):
