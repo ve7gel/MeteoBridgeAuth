@@ -92,7 +92,7 @@ class MBAuthController(polyinterface.Controller):
                      '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                      '[th0hum-dmin]%20[wind0avgwind-davg]%20[sol0rad-act]%20[rain0total-daysum]%20' \
                      '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[rain0total-amax]'
+                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[rain0total-aavg]'
 
             try:
                 # create "opener" (OpenerDirector instance)
@@ -174,7 +174,8 @@ class MBAuthController(polyinterface.Controller):
         # LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
 
-        rain_today = float(mbrarray[12])
+        #rain_today = float(mbrarray[12])
+        rain_today = 17.4
         dewpoint = float(mbrarray[13])
         pressure = float(mbrarray[2]) / 10
         timestamp = int(mbrarray[15])
