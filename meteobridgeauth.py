@@ -133,7 +133,7 @@ class MBAuthController(polyinterface.Controller):
             uom.RAIN_DRVS['daily'], rain_today
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yesterday'], float(rain_yesterday)
+            uom.RAIN_DRVS['yesterday'], rain_yesterday
         )
         return
 
@@ -174,6 +174,7 @@ class MBAuthController(polyinterface.Controller):
         self.check_params()
         for node in self.nodes:
             self.nodes[node].reportDrivers()
+            LOGGER.debug(self.nodes[node])
 
     def discover(self, *args, **kwargs):
         """
