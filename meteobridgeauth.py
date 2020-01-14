@@ -71,40 +71,8 @@ class MBAuthController(polyinterface.Controller):
         # read data
         if self.ip == "":
             return
-        try:
-            #top_level_url = "http://meteobridge.internal.home/"
-            top_level_url = "http://" + self.ip + "/"
-            # create a password manager
-            password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 
-            # Add the username and password.
-            password_mgr.add_password(None, top_level_url, self.username, self.password)
-            handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-            url = top_level_url + "cgi-bin/template.cgi?template="
-
-            values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-latitude]%20' \
-                     '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
-                     '[th0hum-dmin]%20[wind0wind-act]%20[sol0rad-act]%20[rain0total-daysum]%20' \
-                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]'
-
-            try:
-                # create "opener" (OpenerDirector instance)
-                opener = urllib.request.build_opener(handler)
-
-                # use the opener to fetch a URL
-                u = opener.open(url + values)
-                mbrdata = u.read().decode('utf-8')
-                LOGGER.debug(url + values)
-                LOGGER.debug(mbrdata)
-
-            except urllib.error.HTTPError as e:
-                LOGGER.error(e, e.headers)
-        except:
-            LOGGER.error("Failue attempting connect to MeteoBridge device")
-
-        getstationdata(mbrdata)
+        getstationdata()
 
         LOGGER.info("Updated data from Meteobridge")
 
@@ -401,9 +369,41 @@ class MBAuthController(polyinterface.Controller):
         {'driver': 'GV0', 'value': 0, 'uom': 72},
     ]
 
-def getstationdata(mbrcontent):
+def getstationdata(self):
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
             pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure
+        try:
+            #top_level_url = "http://meteobridge.internal.home/"
+            top_level_url = "http://" + self.ip + "/"
+            # create a password manager
+            password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+
+            # Add the username and password.
+            password_mgr.add_password(None, top_level_url, self.username, self.password)
+            handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+
+            url = top_level_url + "cgi-bin/template.cgi?template="
+
+            values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-latitude]%20' \
+                     '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
+                     '[th0hum-dmin]%20[wind0wind-act]%20[sol0rad-act]%20[rain0total-daysum]%20' \
+                     '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
+                     '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]'
+
+            try:
+                # create "opener" (OpenerDirector instance)
+                opener = urllib.request.build_opener(handler)
+
+                # use the opener to fetch a URL
+                u = opener.open(url + values)
+                mbrdata = u.read().decode('utf-8')
+                LOGGER.debug(url + values)
+                LOGGER.debug(mbrdata)
+
+            except urllib.error.HTTPError as e:
+                LOGGER.error(e, e.headers)
+        except:
+            LOGGER.error("Failue attempting connect to MeteoBridge device")
 
         mbrarray = mbrcontent.split(" ")
 
