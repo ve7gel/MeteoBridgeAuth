@@ -43,8 +43,8 @@ TEMP_DRVS = {
         'extra8' : 'GV12',
         'extra9' : 'GV13',
         'extra10' : 'GV14',
-        'max' : 'GV15',
-        'min' : 'GV16',
+        'tempmax' : 'GV15',
+        'tempmin' : 'GV16',
         'soil' : 'GV17',
         }
 
