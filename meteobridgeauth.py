@@ -133,7 +133,7 @@ class MBAuthController(polyinterface.Controller):
             uom.RAIN_DRVS['daily'], rain_today
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yesterday'], rain_yesterday
+            uom.RAIN_DRVS['yesterday'], float(rain_yesterday)
         )
         return
 
@@ -157,7 +157,7 @@ class MBAuthController(polyinterface.Controller):
 
         #if solarradiation is not None:
         #    solarradiation *= 0.0864
-        # log.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
+        # LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
 
         rain_today = float(mbrarray[12])
@@ -167,8 +167,6 @@ class MBAuthController(polyinterface.Controller):
         windchill = float(mbrarray[16])
         rain_rate = float(mbrarray[17])
         rain_yesterday = float(mbrarray[18])
-
-        LOGGER.debug(mbrarray[14] + " " + str(temperature) + " " + str(rain_yesterday) + " " + str(wind))
 
         return
 
