@@ -408,7 +408,7 @@ class MBAuthController(polyinterface.Controller):
         #    LOGGER.error(e, e.headers)
         except:
             LOGGER.error("Unable to connect to your MeteoBridge hub")
-            return
+            pass
 
         mbrarray = mbrdata.split(" ")
 
