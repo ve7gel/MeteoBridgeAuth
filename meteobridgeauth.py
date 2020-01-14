@@ -404,11 +404,9 @@ class MBAuthController(polyinterface.Controller):
             #LOGGER.debug(url)
             LOGGER.debug(mbrdata)
 
-        #except urllib.error.HTTPError as e:
-        #    LOGGER.error(e, e.headers)
-        except:
+        except urllib.error.HTTPError as e:
+            LOGGER.error(e, e.headers)
             LOGGER.error("Unable to connect to your MeteoBridge hub")
-            pass
 
         mbrarray = mbrdata.split(" ")
 
