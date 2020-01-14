@@ -134,9 +134,6 @@ class MBAuthController(polyinterface.Controller):
             uom.RAIN_DRVS['daily'], rain_today
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['total'], total_rain
-        )
-        self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['yesterday'], rain_yesterday
         )
         self.nodes['wind'].setDriver(
@@ -152,7 +149,7 @@ class MBAuthController(polyinterface.Controller):
 
     def getstationdata(self,mbrcontent):
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-            pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, total_rain
+            pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
         mbrarray = mbrcontent.split(" ")
 
         lat = float(mbrarray[4])
@@ -184,7 +181,6 @@ class MBAuthController(polyinterface.Controller):
         rain_yesterday = float(mbrarray[18])
         wind_gust = float(mbrarray[19])
         wind_dir = mbrarray[20]
-        total_rain = float(mbrarray[21])
 
         return
 
