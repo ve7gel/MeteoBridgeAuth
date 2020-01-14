@@ -13,15 +13,8 @@ try:
 except ImportError:
     import pgc_interface as polyinterface
 import sys
-import time
-import struct
-import datetime
-import threading
-import math
-import urllib3
 import urllib.error
 import urllib.request
-import requests
 import write_profile
 import uom
 
