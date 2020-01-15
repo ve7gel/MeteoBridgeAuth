@@ -445,38 +445,39 @@ class MBAuthController(polyinterface.Controller):
         battery = round(float(mbrarray[23]),0)
 
 class Create_Template():
-    mbtemplate = ""
-    mbtemplatelist = [
-            "[th0temp-act]",
-            "[th0hum-act]",
-            "[thb0press-act]",
-            "[sol0evo-act]",
-            "[mbsystem-station]",
-            "[mbsystem-stationnum]",
-            "[th0temp-dmax]",
-            "[th0temp-dmin]",
-            "[th0hum-dmax]",
-            "[th0hum-dmin]",
-            "[wind0avgwind-davg]",
-            "[sol0rad-act]",
-            "[rain0total-daysum]",
-            "[th0dew-act]",
-            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
-            "[epoch]",
-            "[wind0chill-act]",
-            "[rain0rate-act]",
-            "[rain0total-ydmax]",
-            "[wind0wind-max10]",
-            "[wind0dir-act]",
-            "[uv0index-act]",
-            "[thb0seapress-act]",
-            "[thb0lowbat-act]"
-        ]
 
-    for tempstr in mbtemplatelist:
-            mbtemplate = mbtemplate + tempstr + "%20"
+    def __str__(self):
+        mbtemplatelist = [
+                "[th0temp-act]",
+                "[th0hum-act]",
+                "[thb0press-act]",
+                "[sol0evo-act]",
+                "[mbsystem-station]",
+                "[mbsystem-stationnum]",
+                "[th0temp-dmax]",
+                "[th0temp-dmin]",
+                "[th0hum-dmax]",
+                "[th0hum-dmin]",
+                "[wind0avgwind-davg]",
+                "[sol0rad-act]",
+                "[rain0total-daysum]",
+                "[th0dew-act]",
+                "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
+                "[epoch]",
+                "[wind0chill-act]",
+                "[rain0rate-act]",
+                "[rain0total-ydmax]",
+                "[wind0wind-max10]",
+                "[wind0dir-act]",
+                "[uv0index-act]",
+                "[thb0seapress-act]",
+                "[thb0lowbat-act]"
+            ]
 
-    super(self=mbtemplate)
+        for tempstr in mbtemplatelist:
+                mbtemplate = mbtemplate + tempstr + "%20"
+
+        return mbtemplate
 
 
 class TemperatureNode(polyinterface.Node):
