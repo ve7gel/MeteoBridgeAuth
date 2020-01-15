@@ -63,7 +63,6 @@ def create_template():
             print(tempstr)
             mbtemplate = mbtemplate + tempstr + "%20"
 
-    LOGGER.debug(mbtemplate)
     return mbtemplate
 
 class MBAuthController(polyinterface.Controller):
