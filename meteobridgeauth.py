@@ -131,7 +131,7 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
-        self.setDriver('GV0', 1)
+        self.setDriver('GV0', battery)
 
         return
 
