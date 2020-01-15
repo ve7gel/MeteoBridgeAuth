@@ -552,26 +552,6 @@ class PressureNode(polyinterface.Node):
     def SetUnits(self, u):
         self.units = u
 
-    # track pressures in a queue and calculate trend
-    def updateTrend(self, current):
-        t = 0
-        past = 0
-
-        if len(self.mytrend) == 180:
-            past = self.mytrend.pop()
-
-        if self.mytrend != []:
-            past = self.mytrend[0]
-
-        # calculate trend
-        if ((past - current) > 1):
-            t = -1
-        elif ((past - current) < -1):
-            t = 1
-
-        self.mytrend.insert(0, current)
-        return t
-
     # We want to override the SetDriver method so that we can properly
     # convert the units based on the user preference.
     def setDriver(self, driver, value):
