@@ -59,8 +59,6 @@ def create_template():
             "[thb0lowbat-act]"
         ]
 
-    LOGGER.debug(mbtemplatelist)
-
     for tempstr in mbtemplatelist:
             print(tempstr)
             mbtemplate = mbtemplate + tempstr + "%20"
