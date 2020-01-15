@@ -23,6 +23,7 @@ UOM = {
         'I_KM': 83,
         'I_MILE': 116,
         'I_MPS' : 49,
+        'I_BATTERY' : 25,
         }
 
 
