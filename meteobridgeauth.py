@@ -322,9 +322,7 @@ class MBAuthController(polyinterface.Controller):
         self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
-
-        if mbstation == 'Vantage':
-             self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
 
         # Build the node definition
         LOGGER.info('Creating node definition profile based on config.')
@@ -393,7 +391,7 @@ class MBAuthController(polyinterface.Controller):
 
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
             pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-            battery,mbstation,mbstationnum
+            battery, mbstation, mbstationnum
 
         try:
             # create "opener" (OpenerDirector instance)
