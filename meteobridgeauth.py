@@ -59,7 +59,6 @@ def create_template():
         ]
 
     for tempstr in mbtemplatelist:
-            print(tempstr)
             mbtemplate = mbtemplate + tempstr + "%20"
 
     return mbtemplate
@@ -438,7 +437,7 @@ class MBAuthController(polyinterface.Controller):
             # use the opener to fetch a URL
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
-            LOGGER.debug(url)
+            #LOGGER.debug(url)
             #LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
