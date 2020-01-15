@@ -50,7 +50,7 @@ def create_template():
             "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
             "[epoch]"
         ]
-    LOGGER.debug(mbtemplatelist + "\n" + len(mbtemplatelist))
+    LOGGER.debug(mbtemplatelist + "\n" + str(len(mbtemplatelist)))
 
     for tempstr in mbtemplatelist:
             print(tempstr)
@@ -58,7 +58,6 @@ def create_template():
 
     LOGGER.debug(mbtemplate)
     return mbtemplate
-
 
 class MBAuthController(polyinterface.Controller):
     #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
