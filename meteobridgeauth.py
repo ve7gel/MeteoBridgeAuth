@@ -29,40 +29,6 @@ global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarrad
     battery,mbstation,mbstationnum
 
 
-def create_template():
-    mbtemplate = ""
-    mbtemplatelist = [
-            "[th0temp-act]",
-            "[th0hum-act]",
-            "[thb0press-act]",
-            "[sol0evo-act]",
-            "[mbsystem-station]",
-            "[mbsystem-stationnum]",
-            "[th0temp-dmax]",
-            "[th0temp-dmin]",
-            "[th0hum-dmax]",
-            "[th0hum-dmin]",
-            "[wind0avgwind-davg]",
-            "[sol0rad-act]",
-            "[rain0total-daysum]",
-            "[th0dew-act]",
-            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
-            "[epoch]",
-            "[wind0chill-act]",
-            "[rain0rate-act]",
-            "[rain0total-ydmax]",
-            "[wind0wind-max10]",
-            "[wind0dir-act]",
-            "[uv0index-act]",
-            "[thb0seapress-act]",
-            "[thb0lowbat-act]"
-        ]
-
-    for tempstr in mbtemplatelist:
-            mbtemplate = mbtemplate + tempstr + "%20"
-
-    return mbtemplate
-
 class MBAuthController(polyinterface.Controller):
     #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
        # pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
@@ -415,7 +381,7 @@ class MBAuthController(polyinterface.Controller):
 
         url = top_level_url + "cgi-bin/template.cgi?template="
  
-        values = create_template()
+        values = Create_Template()
         
         #values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-station]%20' \
         #         '[mbsystem-stationnum]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
@@ -477,6 +443,41 @@ class MBAuthController(polyinterface.Controller):
         uv = float(mbrarray[21])
         sl_pressure = float(mbrarray[22])
         battery = round(float(mbrarray[23]),0)
+
+class Create_Template():
+    mbtemplate = ""
+    mbtemplatelist = [
+            "[th0temp-act]",
+            "[th0hum-act]",
+            "[thb0press-act]",
+            "[sol0evo-act]",
+            "[mbsystem-station]",
+            "[mbsystem-stationnum]",
+            "[th0temp-dmax]",
+            "[th0temp-dmin]",
+            "[th0hum-dmax]",
+            "[th0hum-dmin]",
+            "[wind0avgwind-davg]",
+            "[sol0rad-act]",
+            "[rain0total-daysum]",
+            "[th0dew-act]",
+            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
+            "[epoch]",
+            "[wind0chill-act]",
+            "[rain0rate-act]",
+            "[rain0total-ydmax]",
+            "[wind0wind-max10]",
+            "[wind0dir-act]",
+            "[uv0index-act]",
+            "[thb0seapress-act]",
+            "[thb0lowbat-act]"
+        ]
+
+    for tempstr in mbtemplatelist:
+            mbtemplate = mbtemplate + tempstr + "%20"
+
+         super(self=mbtemplate)
+
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
