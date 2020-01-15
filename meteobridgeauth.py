@@ -26,7 +26,7 @@ You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as ne
 """
 global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
     pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-    low_battery
+    battery
 
 class MBAuthController(polyinterface.Controller):
     #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
@@ -131,7 +131,7 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
-        self.setDriver('GV0', low_battery)
+        self.setDriver('GV0', battery)
 
         return
 
@@ -383,14 +383,14 @@ class MBAuthController(polyinterface.Controller):
                  '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                  '[th0hum-dmin]%20[wind0wind-act]%20[sol0rad-act]%20[rain0total-daysum]%20' \
                  '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-                 '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]%20[th0lowbat-act]'
+                 '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]%20[data17num-act]'
         return url + values, handler
 
     def getstationdata(self,url,handler):
 
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
             pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-            low_battery
+            battery
 
         try:
             # create "opener" (OpenerDirector instance)
@@ -438,7 +438,7 @@ class MBAuthController(polyinterface.Controller):
         wind_dir = mbrarray[20]
         uv = float(mbrarray[21])
         sl_pressure = float(mbrarray[22])
-        low_battery = round(float(mbrarray[23]),0)
+        battery = round(float(mbrarray[23]),0)
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
