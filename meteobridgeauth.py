@@ -303,7 +303,7 @@ class MBAuthController(polyinterface.Controller):
         return self.units
 
     def setup_nodedefs(self, units):
-
+        global mbstation
         # Configure the units for each node driver
         self.temperature_list['main'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
         self.temperature_list['dewpoint'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
