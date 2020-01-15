@@ -117,7 +117,7 @@ class MBAuthController(polyinterface.Controller):
                 uom.LITE_DRVS['evapotranspiration'], et0
             )
         else:
-            LOGGER.info("Evapotranspiration not available (Davis VP2 stations only)")
+            LOGGER.info("Evapotranspiration not available (Davis Vantage stations only)")
 
         self.nodes['pressure'].setDriver(
             uom.PRES_DRVS['station'], stn_pressure
