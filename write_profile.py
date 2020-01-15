@@ -46,7 +46,7 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
     nodedef.write(NODEDEF_TMPL % ('MeteoBridgeAuth', 'ctl'))
     nodedef.write("    <sts>\n")
     nodedef.write("      <st id=\"ST\" editor=\"bool\" />\n")
-    nodedef.write("      <st id=\"GV0\" editor=\"I_VOLTS\" />\n")
+    nodedef.write("      <st id=\"GV0\" editor=\"I_BATTERY\" />\n")
     nodedef.write("    </sts>\n")
     nodedef.write("    <cmds>\n")
     nodedef.write("      <sends />\n")
