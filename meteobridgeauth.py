@@ -464,7 +464,7 @@ class Create_Template():
             "[th0temp-dmax]",  #1, max outdoor temp today
             "[th0temp-dmin]",  #2, min outdoor temp today
             "[th0dew-act]",  #3, current outdoor dewpoint
-            "[wind0chill-act]",  # r current windchill as calculated by MeteoBridge
+            "[wind0chill-act]",  #4 current windchill as calculated by MeteoBridge
 
             "[th0hum-act]",  #5 current outdoor relative humidity
             "[th0hum-dmax]",  #6 max outdoor relative humidity today
@@ -472,7 +472,7 @@ class Create_Template():
 
             "[thb0press-act]", #8 current station pressure
             "[thb0seapress-act]",  #9 current sealevel barometric pressure
-            "[thb0press-delta60=barotrend]" #10 pressure trend
+            "[thb0press-delta60=barotrend]", #10 pressure trend
             
             "[sol0rad-act]",  #11 current solar radiation
             "[uv0index-act]",  #12 current UV index
