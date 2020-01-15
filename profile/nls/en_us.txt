@@ -90,6 +90,9 @@ EN_TREND-0 = Falling
 EN_TREND-1 = Steady
 EN_TREND-2 = Rising
 
+EN_BATTERY-0 = Ok
+EN_BATTERY-1 = Replace
+
 EN_CARDINAL-0 = N
 EN_CARDINAL-1 = NNE
 EN_CARDINAL-2 = NE
