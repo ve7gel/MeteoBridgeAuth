@@ -37,8 +37,8 @@ def create_template():
             "[th0hum-act]",
             "[thb0press-act]",
             "[sol0evo-act]",
-            "[mbsystem-latitude]",
-            "[mbsystem-longitude]",
+            "[mbsystem-station]",
+            "[mbsystem-stationnum]",
             "[th0temp-dmax]",
             "[th0temp-dmin]",
             "[th0hum-dmax]",
@@ -48,8 +48,17 @@ def create_template():
             "[rain0total-daysum]",
             "[th0dew-act]",
             "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
-            "[epoch]"
+            "[epoch]",
+            "[wind0chill-act]",
+            "[rain0rate-act]",
+            "[rain0total-ydmax]",
+            "[wind0wind-max10]",
+            "[wind0dir-act]",
+            "[uv0index-act]",
+            "[thb0seapress-act]",
+            "[thb0lowbat-act]"
         ]
+
     LOGGER.debug(mbtemplatelist)
 
     for tempstr in mbtemplatelist:
