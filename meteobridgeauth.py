@@ -25,7 +25,7 @@ logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
 global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-    pressure, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
+    pressure, pressure_trend, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
     battery,mbstation,mbstationnum
 
 
@@ -394,7 +394,7 @@ class MBAuthController(polyinterface.Controller):
     def getstationdata(self,url,handler):
 
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-            pressure, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
+            pressure, pressure_trend, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
             battery, mbstation, mbstationnum
 
         try:
@@ -425,28 +425,30 @@ class MBAuthController(polyinterface.Controller):
 
         stn_pressure = float(mbrarray[8])
         sl_pressure = float(mbrarray[9])
+        pressure_trend = float(mbrarray[10])
+        pressure_trend = pressure_trend + 1 # Meteobridge reports -1, 0, +1 for trends,converted for ISY
 
-        solarradiation = float(mbrarray[10])  # conversion from watt/sqm*h to Joule/sqm
+        solarradiation = float(mbrarray[11])  # conversion from watt/sqm*h to Joule/sqm
         # if solarradiation is not None:
         #    solarradiation *= 0.0864
-        uv = float(mbrarray[11])
-        et0 = float(mbrarray[12])
+        uv = float(mbrarray[12])
+        et0 = float(mbrarray[13])
 
-        wind = float(mbrarray[13])
+        wind = float(mbrarray[14])
         # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
-        wind_gust = float(mbrarray[14])
-        wind_dir = mbrarray[15]
+        wind_gust = float(mbrarray[15])
+        wind_dir = mbrarray[16]
 
-        rain_rate = float(mbrarray[16])
-        rain_today = float(mbrarray[17])
-        rain_yesterday = float(mbrarray[18])
-        rain_month = float(mbrarray[19])
+        rain_rate = float(mbrarray[17])
+        rain_today = float(mbrarray[18])
+        rain_yesterday = float(mbrarray[19])
+        rain_month = float(mbrarray[20])
 
-        mbstation = mbrarray[20]
-        mbstationnum = float(mbrarray[21])
-        battery = round(float(mbrarray[22]),0)
+        mbstation = mbrarray[21]
+        mbstationnum = float(mbrarray[22])
+        battery = round(float(mbrarray[23]),0)
 
-        timestamp = int(mbrarray[23])
+        timestamp = int(mbrarray[24])
 
         # LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
@@ -470,26 +472,27 @@ class Create_Template():
 
             "[thb0press-act]", #8 current station pressure
             "[thb0seapress-act]",  #9 current sealevel barometric pressure
+            "[thb0press-delta60=barotrend]" #10 pressure trend
+            
+            "[sol0rad-act]",  #11 current solar radiation
+            "[uv0index-act]",  #12 current UV index
+            "[sol0evo-act]", #13 current evapotranspiration - Davis Vantage only
 
-            "[sol0rad-act]",  #10 current solar radiation
-            "[uv0index-act]",  #11 current UV index
-            "[sol0evo-act]", #12 current evapotranspiration - Davis Vantage only
+            "[wind0avgwind-act]", #14 average wind (depends on particular station)
+            "[wind0wind-max10]", #15 10 minute wind gust
+            "[wind0dir-act]", #16 current wind direction
 
-            "[wind0avgwind-act]", #13 average wind (depends on particular station)
-            "[wind0wind-max10]", #14 10 minute wind gust
-            "[wind0dir-act]", #15 current wind direction
+            "[rain0rate-act]",  # 17 current rate of rainfall
+            "[rain0total-daysum]", #18 rain accumulation for today
+            "[rain0total-ydmax]",  # 19 total rainfall yesterday
+            "[rain0total-monthsum]",  # 20 rain accumulation for this month
 
-            "[rain0rate-act]",  # 16 current rate of rainfall
-            "[rain0total-daysum]", #17 rain accumulation for today
-            "[rain0total-ydmax]",  # 18 total rainfall yesterday
-            "[rain0total-monthsum]",  # 19 rain accumulation for this month
+            "[mbsystem-station]",  #21 station id
+            "[mbsystem-stationnum]",  #22 meteobridge station number
+            "[thb0lowbat-act]" #23 Station battery status (0=Ok, 1=Replace)
 
-            "[mbsystem-station]",  #20 station id
-            "[mbsystem-stationnum]",  #21 meteobridge station number
-            "[thb0lowbat-act]" #22 Station battery status (0=Ok, 1=Replace)
-
-            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #23 current observation time
-            "[epoch]",  #24 current unix time
+            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #24 current observation time
+            "[epoch]",  #25 current unix time
         ]
 
         for tempstr in mbtemplatelist:
