@@ -25,7 +25,7 @@ logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
 global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-    pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
+    pressure, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
     battery,mbstation,mbstationnum
 
 
@@ -321,6 +321,7 @@ class MBAuthController(polyinterface.Controller):
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
         self.rain_list['daily'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.rain_list['monthly'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
         self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
@@ -393,7 +394,7 @@ class MBAuthController(polyinterface.Controller):
     def getstationdata(self,url,handler):
 
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-            pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
+            pressure, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
             battery, mbstation, mbstationnum
 
         try:
@@ -412,68 +413,84 @@ class MBAuthController(polyinterface.Controller):
 
         mbrarray = mbrdata.split(" ")
 
-        mbstation = mbrarray[4]
-        mbstationnum = float(mbrarray[5])
-
         temperature = float(mbrarray[0])
-        et0 = float(mbrarray[3])
-        mintemp = float(mbrarray[7])
-        maxtemp = float(mbrarray[6])
-        rh = float(mbrarray[1])
-        minrh = float(mbrarray[9])
-        maxrh = float(mbrarray[8])
-        wind = float(mbrarray[10])
-        # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
-        solarradiation = float(mbrarray[11])  # needs to be converted from watt/sqm*h to Joule/sqm
+        maxtemp = float(mbrarray[1])
+        mintemp = float(mbrarray[2])
+        dewpoint = float(mbrarray[3])
+        windchill = float(mbrarray[4])
 
+        rh = float(mbrarray[5])
+        maxrh = float(mbrarray[6])
+        minrh = float(mbrarray[7])
+
+        stn_pressure = float(mbrarray[8])
+        sl_pressure = float(mbrarray[9])
+
+        solarradiation = float(mbrarray[10])  # conversion from watt/sqm*h to Joule/sqm
         # if solarradiation is not None:
         #    solarradiation *= 0.0864
+        uv = float(mbrarray[11])
+        et0 = float(mbrarray[12])
+
+        wind = float(mbrarray[13])
+        # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
+        wind_gust = float(mbrarray[14])
+        wind_dir = mbrarray[15]
+
+        rain_rate = float(mbrarray[16])
+        rain_today = float(mbrarray[17])
+        rain_yesterday = float(mbrarray[18])
+        rain_month = float(mbrarray[19])
+
+        mbstation = mbrarray[20]
+        mbstationnum = float(mbrarray[21])
+        battery = round(float(mbrarray[22]),0)
+
+        timestamp = int(mbrarray[23])
+
         # LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
 
-        rain_today = float(mbrarray[12])
-        dewpoint = float(mbrarray[13])
-        stn_pressure = float(mbrarray[2])
-        timestamp = int(mbrarray[15])
-        windchill = float(mbrarray[16])
-        rain_rate = float(mbrarray[17])
-        rain_yesterday = float(mbrarray[18])
-        wind_gust = float(mbrarray[19])
-        wind_dir = mbrarray[20]
-        uv = float(mbrarray[21])
-        sl_pressure = float(mbrarray[22])
-        battery = round(float(mbrarray[23]),0)
+
 
 class Create_Template():
 
     def __str__(self):
         mbtemplate = ""
         mbtemplatelist = [
-                "[th0temp-act]",
-                "[th0hum-act]",
-                "[thb0press-act]",
-                "[sol0evo-act]",
-                "[mbsystem-station]",
-                "[mbsystem-stationnum]",
-                "[th0temp-dmax]",
-                "[th0temp-dmin]",
-                "[th0hum-dmax]",
-                "[th0hum-dmin]",
-                "[wind0avgwind-davg]",
-                "[sol0rad-act]",
-                "[rain0total-daysum]",
-                "[th0dew-act]",
-                "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
-                "[epoch]",
-                "[wind0chill-act]",
-                "[rain0rate-act]",
-                "[rain0total-ydmax]",
-                "[wind0wind-max10]",
-                "[wind0dir-act]",
-                "[uv0index-act]",
-                "[thb0seapress-act]",
-                "[thb0lowbat-act]"
-            ]
+            "[th0temp-act]", #0, current outdoor temperature
+            "[th0temp-dmax]",  #1, max outdoor temp today
+            "[th0temp-dmin]",  #2, min outdoor temp today
+            "[th0dew-act]",  #3, current outdoor dewpoint
+            "[wind0chill-act]",  # r current windchill as calculated by MeteoBridge
+
+            "[th0hum-act]",  #5 current outdoor relative humidity
+            "[th0hum-dmax]",  #6 max outdoor relative humidity today
+            "[th0hum-dmin]",  #7 min outddor relative humidity today
+
+            "[thb0press-act]", #8 current station pressure
+            "[thb0seapress-act]",  #9 current sealevel barometric pressure
+
+            "[sol0rad-act]",  #10 current solar radiation
+            "[uv0index-act]",  #11 current UV index
+            "[sol0evo-act]", #12 current evapotranspiration - Davis Vantage only
+
+            "[wind0avgwind-act]", #13 average wind (depends on particular station)
+            "[wind0wind-max10]", #14 10 minute wind gust
+            "[wind0dir-act]", #15 current wind direction
+
+            "[rain0rate-act]",  # 16 current rate of rainfall
+            "[rain0total-daysum]", #17 rain accumulation for today
+            "[rain0total-ydmax]",  # 18 total rainfall yesterday
+            "[rain0total-monthsum]",  # 19 rain accumulation for this month
+
+            "[mbsystem-station]",  #20 station id
+            "[mbsystem-stationnum]",  #21 meteobridge station number
+            "[thb0lowbat-act]" #22 Station battery status (0=Ok, 1=Replace)
+
+            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #23 current observation time
+            "[epoch]",  #24 current unix time
+        ]
 
         for tempstr in mbtemplatelist:
                 mbtemplate = mbtemplate + tempstr + "%20"
