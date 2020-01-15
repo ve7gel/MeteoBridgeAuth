@@ -24,6 +24,9 @@ polyinterface has a LOGGER that is created by default and logs to:
 logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
+global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
+    pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
+    low_battery
 
 class MBAuthController(polyinterface.Controller):
     #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
@@ -128,6 +131,7 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
+        self.setDriver('GV0', low_battery)
 
         return
 
