@@ -131,7 +131,7 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
-        self.setDriver('GV0', "OK")
+        self.setDriver('GV0', 1)
 
         return
 
@@ -364,7 +364,7 @@ class MBAuthController(polyinterface.Controller):
     # Hub status information here: battery and rssi values.
     drivers = [
         {'driver': 'ST', 'value': 1, 'uom': 2},
-        {'driver': 'GV0', 'value': 0, 'uom': 0},
+        {'driver': 'GV0', 'value': 0, 'uom': 78},
     ]
 
     def create_url(self):
