@@ -26,7 +26,7 @@ You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as ne
 """
 global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
     pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-    battery
+    battery,mbstation
 
 class MBAuthController(polyinterface.Controller):
     #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
@@ -313,7 +313,7 @@ class MBAuthController(polyinterface.Controller):
         self.humidity_list['main'] = 'I_HUMIDITY'
         self.pressure_list['station'] = 'I_INHG' if units == 'us' else 'I_MB'
         self.pressure_list['sealevel'] = 'I_INHG' if units == 'us' else 'I_MB'
-        #self.pressure_list['trend'] = 'I_TREND'
+        self.pressure_list['trend'] = 'I_TREND'
         self.wind_list['windspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['winddir'] = 'I_DEGREE'
@@ -380,7 +380,7 @@ class MBAuthController(polyinterface.Controller):
 
         url = top_level_url + "cgi-bin/template.cgi?template="
 
-        values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-latitude]%20' \
+        values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-station]%20' \
                  '[mbsystem-longitude]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
                  '[th0hum-dmin]%20[wind0wind-act]%20[sol0rad-act]%20[rain0total-daysum]%20' \
                  '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
@@ -391,7 +391,7 @@ class MBAuthController(polyinterface.Controller):
 
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
             pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-            battery
+            battery,mbstation
 
         try:
             # create "opener" (OpenerDirector instance)
@@ -409,7 +409,8 @@ class MBAuthController(polyinterface.Controller):
 
         mbrarray = mbrdata.split(" ")
 
-        lat = float(mbrarray[4])
+        #lat = float(mbrarray[4])
+        mbstation = mbrarray[4]
         long = float(mbrarray[5])
 
         temperature = float(mbrarray[0])
