@@ -412,7 +412,7 @@ class MBAuthController(polyinterface.Controller):
         #lat = float(mbrarray[4])
         mbstation = mbrarray[4]
         #long = float(mbrarray[5])
-        mbstationnum = float(mbrarray[5])
+        mbstationnum = mbrarray[5]
 
         temperature = float(mbrarray[0])
         et0 = float(mbrarray[3])
