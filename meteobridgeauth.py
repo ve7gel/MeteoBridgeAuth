@@ -322,6 +322,7 @@ class MBAuthController(polyinterface.Controller):
         self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
+
         if mbstation == "Vantage":
              self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
 
