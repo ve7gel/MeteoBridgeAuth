@@ -28,6 +28,38 @@ global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarrad
     pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
     battery,mbstation,mbstationnum
 
+
+def create_template():
+   
+    mbtemplate = ""
+    mbtemplatelist = [
+            "[th0temp-act]",
+            "[th0hum-act]",
+            "[thb0press-act]",
+            "[sol0evo-act]",
+            "[mbsystem-latitude]",
+            "[mbsystem-longitude]",
+            "[th0temp-dmax]",
+            "[th0temp-dmin]",
+            "[th0hum-dmax]",
+            "[th0hum-dmin]",
+            "[wind0avgwind-davg]",
+            "[sol0rad-act]",
+            "[rain0total-daysum]",
+            "[th0dew-act]",
+            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",
+            "[epoch]"
+        ]
+    LOGGER.debug(mbtemplatelist + "\n" + len(mbtemplatelist))
+
+    for tempstr in mbtemplatelist:
+            print(tempstr)
+            mbtemplate = mbtemplate + tempstr + "%20"
+
+    LOGGER.debug(mbtemplate)
+    return mbtemplate
+
+
 class MBAuthController(polyinterface.Controller):
     #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
        # pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
@@ -379,12 +411,14 @@ class MBAuthController(polyinterface.Controller):
         handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
 
         url = top_level_url + "cgi-bin/template.cgi?template="
-
-        values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-station]%20' \
-                 '[mbsystem-stationnum]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
-                 '[th0hum-dmin]%20[wind0wind-act]%20[sol0rad-act]%20[rain0total-daysum]%20' \
-                 '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-                 '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]%20[thb0lowbat-act]'
+ 
+        values = create_template()
+        
+        #values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-station]%20' \
+        #         '[mbsystem-stationnum]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
+        #         '[th0hum-dmin]%20[wind0wind-act]%20[sol0rad-act]%20[rain0total-daysum]%20' \
+        #         '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
+        #         '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]%20[thb0lowbat-act]'
         return url + values, handler
 
     def getstationdata(self,url,handler):
@@ -401,7 +435,7 @@ class MBAuthController(polyinterface.Controller):
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
             #LOGGER.debug(url)
-            LOGGER.debug(mbrdata)
+            #LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
             LOGGER.error(e, e.headers)
@@ -409,9 +443,7 @@ class MBAuthController(polyinterface.Controller):
 
         mbrarray = mbrdata.split(" ")
 
-        #lat = float(mbrarray[4])
         mbstation = mbrarray[4]
-        #long = float(mbrarray[5])
         mbstationnum = float(mbrarray[5])
 
         temperature = float(mbrarray[0])
@@ -422,7 +454,7 @@ class MBAuthController(polyinterface.Controller):
         minrh = float(mbrarray[9])
         maxrh = float(mbrarray[8])
         wind = float(mbrarray[10])
-        # wind = wind / 3.6 # the Meteobridge already reports in mps so conversion is not required
+        # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
         solarradiation = float(mbrarray[11])  # needs to be converted from watt/sqm*h to Joule/sqm
 
         # if solarradiation is not None:
