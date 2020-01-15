@@ -364,7 +364,7 @@ class MBAuthController(polyinterface.Controller):
     # Hub status information here: battery and rssi values.
     drivers = [
         {'driver': 'ST', 'value': 1, 'uom': 2},
-        {'driver': 'GV0', 'value': 0, 'uom': 78},
+        {'driver': 'GV0', 'value': 0, 'uom': 'BATLVL'},
     ]
 
     def create_url(self):
