@@ -381,7 +381,7 @@ class MBAuthController(polyinterface.Controller):
 
         url = top_level_url + "cgi-bin/template.cgi?template="
  
-        values = Create_Template()
+        values = str(Create_Template())
         
         #values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-station]%20' \
         #         '[mbsystem-stationnum]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
