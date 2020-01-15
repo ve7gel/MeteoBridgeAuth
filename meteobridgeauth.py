@@ -445,8 +445,10 @@ class MBAuthController(polyinterface.Controller):
         battery = round(float(mbrarray[23]),0)
 
 class Create_Template():
+    def __init__(self):
 
     def __str__(self):
+        mbtemplate = ""
         mbtemplatelist = [
                 "[th0temp-act]",
                 "[th0hum-act]",
