@@ -410,8 +410,7 @@ class MBAuthController(polyinterface.Controller):
         mbrarray = mbrdata.split(" ")
 
         #lat = float(mbrarray[4])
-        #mbstation = mbrarray[4]
-        mbstation = "WeatherFlow"
+        mbstation = mbrarray[4]
         #long = float(mbrarray[5])
         mbstationnum = float(mbrarray[5])
 
