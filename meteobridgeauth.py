@@ -476,7 +476,7 @@ class Create_Template():
     for tempstr in mbtemplatelist:
             mbtemplate = mbtemplate + tempstr + "%20"
 
-         super(self=mbtemplate)
+    super(self=mbtemplate)
 
 
 class TemperatureNode(polyinterface.Node):
