@@ -30,7 +30,6 @@ global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarrad
 
 
 def create_template():
-   
     mbtemplate = ""
     mbtemplatelist = [
             "[th0temp-act]",
@@ -439,7 +438,7 @@ class MBAuthController(polyinterface.Controller):
             # use the opener to fetch a URL
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
-            #LOGGER.debug(url)
+            LOGGER.debug(url)
             #LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
