@@ -445,8 +445,8 @@ class MBAuthController(polyinterface.Controller):
 
         timestamp = int(mbrarray[24])
 
-        LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
-                  " " + str(rh) + " " + str(wind) + " " + str(solarradiation) + " " + str(pressure_trend))
+        #LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
+        #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation) + " " + str(pressure_trend))
 
 
 
