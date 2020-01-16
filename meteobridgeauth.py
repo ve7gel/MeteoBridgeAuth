@@ -132,8 +132,7 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
-        if mbstation == "Vantage":
-          self.setDriver('GV0', battery)
+        self.setDriver('GV0', battery)
           # value 0 = Ok, 1 = Replace
 
         return
@@ -496,7 +495,7 @@ class Create_Template():
 
         return mbtemplate
 
-
+#Future
 class Create_Url():
 
     def __str__(self):
