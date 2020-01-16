@@ -383,12 +383,7 @@ class MBAuthController(polyinterface.Controller):
         url = top_level_url + "cgi-bin/template.cgi?template="
  
         values = str(Create_Template())
-        
-        #values = '[th0temp-act]%20[th0hum-act]%20[thb0press-act]%20[sol0evo-act]%20[mbsystem-station]%20' \
-        #         '[mbsystem-stationnum]%20[th0temp-dmax]%20[th0temp-dmin]%20[th0hum-dmax]%20' \
-        #         '[th0hum-dmin]%20[wind0wind-act]%20[sol0rad-act]%20[rain0total-daysum]%20' \
-        #         '[th0dew-act]%20[UYYYY][UMM][UDD][Uhh][Umm][Uss]%20[epoch]%20[wind0chill-act]%20' \
-        #         '[rain0rate-act]%20[rain0total-ydmax]%20[wind0wind-max10]%20[wind0dir-act]%20[uv0index-act]%20[thb0seapress-act]%20[thb0lowbat-act]'
+
         return url + values, handler
 
     def getstationdata(self,url,handler):
@@ -450,8 +445,8 @@ class MBAuthController(polyinterface.Controller):
 
         timestamp = int(mbrarray[24])
 
-        # LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
-        #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation))
+        LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
+                  " " + str(rh) + " " + str(wind) + " " + str(solarradiation)) + " " + str(pressure_trend)
 
 
 
