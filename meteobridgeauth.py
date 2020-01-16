@@ -472,7 +472,7 @@ class Create_Template():
             
             "[sol0rad-act]",  #11 current solar radiation
             "[uv0index-act]",  #12 current UV index
-            "[sol0evo-daysum]", #13 today's evapotranspiration - Davis Vantage only
+            "[sol0evo-daysum]", #13 today's cumulative evapotranspiration - Davis Vantage only
 
             "[wind0avgwind-act]", #14 average wind (depends on particular station)
             "[wind0wind-max10]", #15 10 minute wind gust
