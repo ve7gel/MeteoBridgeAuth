@@ -69,7 +69,7 @@ class MBAuthController(polyinterface.Controller):
         if self.ip == "":
             return
 
-        mb_url, mb_handler = self.create_url()
+        mb_url, mb_handler = Create_Url()
         self.getstationdata(mb_url, mb_handler)
 
         LOGGER.info("Updated data from Meteobridge")
@@ -370,21 +370,6 @@ class MBAuthController(polyinterface.Controller):
         {'driver': 'GV0', 'value': 0, 'uom': '25'},
     ]
 
-    def create_url(self):
-        # top_level_url = "http://meteobridge.internal.home/"
-        top_level_url = "http://" + self.ip + "/"
-        # create a password manager
-        password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-
-        # Add the username and password.
-        password_mgr.add_password(None, top_level_url, self.username, self.password)
-        handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-        url = top_level_url + "cgi-bin/template.cgi?template="
- 
-        values = str(Create_Template())
-
-        return url + values, handler
 
     def getstationdata(self,url,handler):
 
@@ -494,7 +479,23 @@ class Create_Template():
                 mbtemplate = mbtemplate + tempstr + "%20"
 
         return mbtemplate
+class Create_Url():
 
+    def __str__(self):
+        # top_level_url = "http://meteobridge.internal.home/"
+        top_level_url = "http://" + self.ip + "/"
+        # create a password manager
+        password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+
+        # Add the username and password.
+        password_mgr.add_password(None, top_level_url, self.username, self.password)
+        handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+
+        url = top_level_url + "cgi-bin/template.cgi?template="
+
+        values = str(Create_Template())
+
+        return url + values, handler
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
