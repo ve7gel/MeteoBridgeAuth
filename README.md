@@ -1,5 +1,8 @@
 # MeteoBridgeAuth
-Nodeserver to acquire data using templates from Meteobridge weather server.  Requires authorization thus entry of username and password.  This nodeserver is an adaptation of the meteobridgepoly nodeserver written by Bob Pauuwe http://www.bobsplace.com
+Nodeserver to acquire data using templates from Meteobridge 
+weather server.  Requires authorization thus entry of username
+and password.  This nodeserver is an adaptation of the
+meteobridgepoly nodeserver written by [Bob Pauuwe](http://www.bobsplace.com).
 
 (c) 2020 Bob Pauuwe and Gordon Larsen MIT license.
 
