@@ -56,6 +56,7 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
         self.discover()
+
         LOGGER.info('MeteoBridge Template Node Server Started.')
 
     def shortPoll(self):
@@ -369,7 +370,7 @@ class MBAuthController(polyinterface.Controller):
     ]
 
     def create_url(self):
-        # top_level_url = "http://meteobridge.internal.home/"
+        # top_level_url
         top_level_url = "http://" + self.ip + "/"
         # create a password manager
         password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
