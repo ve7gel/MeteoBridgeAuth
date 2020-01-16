@@ -26,7 +26,7 @@ You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as ne
 """
 global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
     pressure, pressure_trend, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-    battery,mbstation,mbstationnum
+    battery,mbstation,mbstationnum,ip,username,password
 
 
 class MBAuthController(polyinterface.Controller):
@@ -57,7 +57,7 @@ class MBAuthController(polyinterface.Controller):
         self.check_params()
         self.discover()
         mb_url = Create_Url()
-        #LOGGER.debug(mb_url)
+        LOGGER.debug(mb_url)
         LOGGER.info('MeteoBridge Template Node Server Started.')
 
     def shortPoll(self):
@@ -496,7 +496,7 @@ class Create_Template():
         return mbtemplate
 
 #Future
-class Create_Url():
+class Create_Url(ip,username,password):
 
     def __str__(self):
         # top_level_url
