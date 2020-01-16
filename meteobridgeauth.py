@@ -57,7 +57,7 @@ class MBAuthController(polyinterface.Controller):
         self.check_params()
         self.discover()
         mb_url = Create_Url()
-        LOGGER.debug(mb_url)
+        #LOGGER.debug(mb_url)
         LOGGER.info('MeteoBridge Template Node Server Started.')
 
     def shortPoll(self):
@@ -511,7 +511,7 @@ class Create_Url():
         url = top_level_url + "cgi-bin/template.cgi?template="
 
         values = str(Create_Template())
-
+        LOGGER.debug(url+values, handler)
         return url + values, handler
 
 class TemperatureNode(polyinterface.Node):
