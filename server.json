@@ -6,8 +6,8 @@
     "install": "install.sh",
     "description": "MeteoBridge Template Node Server",
     "notice": "",
-    "shortPoll": "5",
-    "longPoll": "10",
+    "shortPoll": "15",
+    "longPoll": "60",
     "testMode": false,
     "profile_version": "0.1.4",
     "credits": [
