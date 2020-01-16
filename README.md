@@ -3,8 +3,11 @@ Nodeserver to acquire data using templates from Meteobridge weather server.  Req
 
 (c) 2020 Bob Pauuwe and Gordon Larsen MIT license.
 
-This node server is intended to support the [Meteobridge](http://www.meteobridge.com/).
-
+This node server is designed to support the [Meteobridge](http://www.meteobridge.com/)
+in combination with a [Davis Instruments Vantage Pro 2+](https://www.davisinstruments.com/solution/vantage-pro2/) weather station
+It should run with other Meteobridge connected weather stations, but 
+the evapotranspiration values provided by the VP2+ will be missing
+ 
 ## Installation
 
 1. Backup Your ISY in case of problems!

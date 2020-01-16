@@ -30,8 +30,6 @@ global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarrad
 
 
 class MBAuthController(polyinterface.Controller):
-    #global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-       # pressure, windchill, rain_rate, rain_yesterday, wind_gust, wind_dir
 
     def __init__(self, polyglot):
         super(MBAuthController, self).__init__(polyglot)
@@ -152,7 +150,7 @@ class MBAuthController(polyinterface.Controller):
                 - Precipitation (rate, hourly, daily, weekly, monthly, yearly)
                 - Light (UV, solar radiation, lux)
                 - Lightning (strikes, distance)
-        The nodes need to have thier drivers configured based on the user
+        The nodes need to have their drivers configured based on the user
         supplied configuration. To that end, we should probably create the
         node, update the driver list, set the units and then add the node.
         """
