@@ -56,7 +56,7 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
         self.discover()
-        mb_url = Create_Url()
+        mb_url = Create_Url(ip,username,password)
         LOGGER.debug(mb_url)
         LOGGER.info('MeteoBridge Template Node Server Started.')
 
@@ -496,7 +496,7 @@ class Create_Template():
         return mbtemplate
 
 #Future
-class Create_Url():
+class Create_Url(ip,username,password):
 
     def __str__(self):
         # top_level_url
