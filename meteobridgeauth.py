@@ -496,16 +496,16 @@ class Create_Template():
         return mbtemplate
 
 #Future
-class Create_Url(ip,username,password):
+class Create_Url():
 
     def __str__(self):
         # top_level_url
-        top_level_url = "http://" + self.ip + "/"
+        top_level_url = "http://" + ip + "/"
         # create a password manager
         password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 
         # Add the username and password.
-        password_mgr.add_password(None, top_level_url, self.username, self.password)
+        password_mgr.add_password(None, top_level_url, username, password)
         handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
 
         url = top_level_url + "cgi-bin/template.cgi?template="
