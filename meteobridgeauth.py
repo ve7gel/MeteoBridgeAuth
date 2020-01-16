@@ -495,7 +495,7 @@ class Create_Template():
         return mbtemplate
 
 #Future
-class Create_Url(ip,username,password):
+class Create_Url():
 
     def __str__(self):
         # top_level_url
