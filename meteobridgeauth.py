@@ -56,7 +56,7 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
         self.discover()
-        mb_url, mb_handler = Create_Url()
+        mb_url = Create_Url()
         LOGGER.info('MeteoBridge Template Node Server Started.')
 
     def shortPoll(self):
