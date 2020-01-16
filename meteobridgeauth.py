@@ -132,8 +132,9 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['humidity'].setDriver(
             uom.HUMD_DRVS['main'], rh
         )
-        self.setDriver('GV0', battery)
-        # value 0 = Ok, 1 = Replace
+        if mbstation == "Vantage":
+          self.setDriver('GV0', battery)
+          # value 0 = Ok, 1 = Replace
 
         return
 
