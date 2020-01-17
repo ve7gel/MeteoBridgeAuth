@@ -63,6 +63,7 @@ The MeteoBridge nodeserver keeps track of the version number and when a profile 
 # Release Notes
 -1.0.2 17/02/2020
    -add missing conversion to "us" units for evapotranspiration
+   -add missing monthly rainfall data
 - 1.0.1 17/02/2020 
     -remove custom parameter for username, it is hard coded as
  
