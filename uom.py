@@ -78,7 +78,7 @@ RAIN_DRVS = {
         'rate' : 'ST',
         'hourly' : 'GV0',
         'daily' : 'GV1',
-        'weekly' : 'GV2',
+        '24hour' : 'GV2',
         'monthly' : 'GV3',
         'yearly' : 'GV4',
         'maxrate' : 'GV5',
