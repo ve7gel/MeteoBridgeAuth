@@ -122,8 +122,8 @@ class MBAuthController(polyinterface.Controller):
             uom.LITE_DRVS['uv'], uv
         )
         if mbstation == "Vantage":
-            self.nodes['light'].setDriver(
-                uom.RAIN_DRVS['evapotranspiration'], et0
+            self.nodes['rain'].setDriver(
+                uom.LITE_DRVS['evapotranspiration'], et0
             )
         else:
             LOGGER.info("Evapotranspiration not available (Davis Vantage stations only)")
