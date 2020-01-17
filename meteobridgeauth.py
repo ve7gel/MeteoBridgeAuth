@@ -100,6 +100,9 @@ class MBAuthController(polyinterface.Controller):
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['yesterday'], rain_yesterday
         )
+        self.nodes['rain'].setDriver(
+            uom.RAIN_DRVS['monthly'], rain_month
+        )
         self.nodes['wind'].setDriver(
             uom.WIND_DRVS['windspeed'], wind
         )
