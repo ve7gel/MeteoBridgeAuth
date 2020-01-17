@@ -66,6 +66,6 @@ The MeteoBridge nodeserver keeps track of the version number and when a profile 
     -remove custom parameter for username, it is hard coded as
 "metebridge" in the MeteoBridge.
     -fixed missing driver update for montly rainfall
-    
+    -added yearly rainfall accumulation
 - 1.0.0 16/01/2020
    - Initial alpha release

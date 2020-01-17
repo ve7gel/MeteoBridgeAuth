@@ -29,7 +29,7 @@ You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as ne
 """
 global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
     pressure, pressure_trend, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-    battery,mbstation,mbstationnum
+    battery,mbstation,mbstationnum,rain_year
 
 
 class MBAuthController(polyinterface.Controller):
@@ -102,6 +102,9 @@ class MBAuthController(polyinterface.Controller):
         )
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['monthly'], rain_month
+        )
+        self.nodes['rain'].setDriver(
+            uom.RAIN_DRVS['yearly'], rain_year
         )
         self.nodes['wind'].setDriver(
             uom.WIND_DRVS['windspeed'], wind
@@ -319,6 +322,7 @@ class MBAuthController(polyinterface.Controller):
         self.rain_list['daily'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['monthly'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.rain_list['yearly'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
         self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
@@ -387,7 +391,7 @@ class MBAuthController(polyinterface.Controller):
 
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
             pressure, pressure_trend, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-            battery, mbstation, mbstationnum
+            battery, mbstation, mbstationnum, rain_year
 
         try:
             # create "opener" (OpenerDirector instance)
@@ -435,12 +439,13 @@ class MBAuthController(polyinterface.Controller):
         rain_today = float(mbrarray[18])
         rain_yesterday = float(mbrarray[19])
         rain_month = float(mbrarray[20])
+        rain_year = float(mbrarray(21))
 
-        mbstation = mbrarray[21]
-        mbstationnum = float(mbrarray[22])
-        battery = round(float(mbrarray[23]),0)
+        mbstation = mbrarray[22]
+        mbstationnum = float(mbrarray[23])
+        battery = round(float(mbrarray[24]),0)
 
-        timestamp = int(mbrarray[24])
+        timestamp = int(mbrarray[25])
 
         #LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation) + " " + str(pressure_trend))
@@ -478,13 +483,14 @@ class Create_Template():
             "[rain0total-daysum]", #18 rain accumulation for today
             "[rain0total-ydmax]",  # 19 total rainfall yesterday
             "[rain0total-monthsum]",  # 20 rain accumulation for this month
+            "[rain0total-yearsum]", #21 rain accumulation year-to-date
 
-            "[mbsystem-station]",  #21 station id
-            "[mbsystem-stationnum]",  #22 meteobridge station number
-            "[thb0lowbat-act]" #23 Station battery status (0=Ok, 1=Replace)
+            "[mbsystem-station]",  #22 station id
+            "[mbsystem-stationnum]",  #23 meteobridge station number
+            "[thb0lowbat-act]" #24 Station battery status (0=Ok, 1=Replace)
 
-            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #24 current observation time
-            "[epoch]",  #25 current unix time
+            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #25 current observation time
+            "[epoch]",  #26 current unix time
         ]
 
         for tempstr in mbtemplatelist:
