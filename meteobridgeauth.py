@@ -123,7 +123,7 @@ class MBAuthController(polyinterface.Controller):
         )
         if mbstation == "Vantage":
             self.nodes['light'].setDriver(
-                uom.LITE_DRVS['evapotranspiration'], et0
+                uom.RAIN_DRVS['evapotranspiration'], et0
             )
         else:
             LOGGER.info("Evapotranspiration not available (Davis Vantage stations only)")
@@ -325,7 +325,7 @@ class MBAuthController(polyinterface.Controller):
         self.rain_list['yearly'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.light_list['uv'] = 'I_UV'
         self.light_list['solar_radiation'] = 'I_RADIATION'
-        self.light_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.rain_list['evapotranspiration'] = 'I_MM' if units == 'metric' else 'I_INCHES'
 
         # Build the node definition
         LOGGER.info('Creating node definition profile based on config.')
@@ -602,7 +602,6 @@ class LightNode(polyinterface.Node):
         self.units = u
 
     def setDriver(self, driver, value):
-        LOGGER.debug(driver)
         super(LightNode, self).setDriver(driver, value, report=True, force=True)
 
 
