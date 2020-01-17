@@ -72,6 +72,7 @@ class MBAuthController(polyinterface.Controller):
             return
 
         mb_url, mb_handler = self.create_url()
+
         self.getstationdata(mb_url, mb_handler)
 
         LOGGER.info("Updated data from Meteobridge")
