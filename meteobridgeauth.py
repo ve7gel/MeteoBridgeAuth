@@ -5,6 +5,9 @@ by Einstein.42 (James Milne) milne.james@gmail.com
 
 Based on MeteoBridge nodeserver (meteobridgepoly) authored by Bob Paauwe
 Customized to use template queries from MeteoBridge by Gordon Larsen
+
+17/01/2020 - Removed username custom paramter - it cannot be changed, always "meteobridge"
+
 """
 import urllib
 
