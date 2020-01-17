@@ -602,6 +602,7 @@ class LightNode(polyinterface.Node):
         self.units = u
 
     def setDriver(self, driver, value):
+        LOGGER.debug(driver,value)
         super(LightNode, self).setDriver(driver, value, report=True, force=True)
 
 
