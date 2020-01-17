@@ -38,7 +38,7 @@ class MBAuthController(polyinterface.Controller):
         self.address = 'mbwxauth'
         self.primary = self.address
         self.password = ""
-        self.username = ""
+        self.username = "meteobridge"
         self.ip = ""
         self.units = ""
         self.temperature_list = {}
@@ -257,8 +257,7 @@ class MBAuthController(polyinterface.Controller):
             'IPAddress': self.ip,
             'Units': self.units,
             'Password': self.password,
-            'Username': self.username
-        })
+            })
 
         self.myConfig = self.polyConfig['customParams']
 
@@ -269,8 +268,6 @@ class MBAuthController(polyinterface.Controller):
         # Add a notice?
         if self.ip == "":
             self.addNotice("IP address of the MeteoBridge device is required.")
-        if self.username == "":
-            self.addNotice("Username for the MeteoBridge device is required.")
         if self.password == "":
             self.addNotice("Password for MeteoBridge is required.")
 
@@ -294,11 +291,6 @@ class MBAuthController(polyinterface.Controller):
             self.password = config['customParams']['Password']
         else:
             self.password = ""
-
-        if 'Username' in config['customParams']:
-            self.username = config['customParams']['Username']
-        else:
-            self.username = ""
 
         return self.units
 
