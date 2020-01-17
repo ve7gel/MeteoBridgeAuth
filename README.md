@@ -61,10 +61,11 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
-
+-1.0.2 17/02/2020
+   -add missing conversion to "us" units for evapotranspiration
 - 1.0.1 17/02/2020 
     -remove custom parameter for username, it is hard coded as
-    -add missing conversion to "us" units for evapotranspiration
+ 
 "meteobridge" in the MeteoBridge.
     -fixed missing driver update for monthly rainfall
     -added yearly rainfall accumulation
