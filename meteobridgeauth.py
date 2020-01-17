@@ -124,10 +124,10 @@ class MBAuthController(polyinterface.Controller):
             uom.LITE_DRVS['uv'], uv
         )
         if mbstation == "Vantage":
-                if self.units == 'us':
-                     et0_conv = round(et0 * 25.4,2)
+            if self.units == 'us':
+                et0_conv = round(et0 * 25.4, 2)
 
-            self.nodes['rain'].setDriver(
+            self.nodes['light'].setDriver(
                 uom.LITE_DRVS['evapotranspiration'], et0_conv
             )
         else:
