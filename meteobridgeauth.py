@@ -408,7 +408,7 @@ class MBAuthController(polyinterface.Controller):
             LOGGER.error("Unable to connect to your MeteoBridge hub")
 
         mbrarray = mbrdata.split(" ")
-
+        LOGGER.debug(mbrarray)
         temperature = float(mbrarray[0])
         maxtemp = float(mbrarray[1])
         mintemp = float(mbrarray[2])
@@ -495,7 +495,7 @@ class Create_Template():
 
         for tempstr in mbtemplatelist:
                 mbtemplate = mbtemplate + tempstr + "%20"
-        LOGGER.debug(mbtemplate)
+
         return mbtemplate
 
 #Future
