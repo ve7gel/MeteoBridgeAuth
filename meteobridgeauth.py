@@ -495,7 +495,7 @@ class Create_Template():
 
         for tempstr in mbtemplatelist:
                 mbtemplate = mbtemplate + tempstr + "%20"
-
+        LOGGER.debug(mbtemplate)
         return mbtemplate
 
 #Future
