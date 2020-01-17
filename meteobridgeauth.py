@@ -401,7 +401,7 @@ class MBAuthController(polyinterface.Controller):
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
             #LOGGER.debug(url)
-            #LOGGER.debug(mbrdata)
+            LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
             LOGGER.error(e, e.headers)
@@ -571,7 +571,7 @@ class PressureNode(polyinterface.Node):
     # convert the units based on the user preference.
     def setDriver(self, driver, value):
         if (self.units == 'us'):
-            value = round(value * 0.02952998751, 3)
+            value = round(value * 0.02952998751, 2)
         super(PressureNode, self).setDriver(driver, value, report=True, force=True)
 
 
