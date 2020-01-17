@@ -401,14 +401,13 @@ class MBAuthController(polyinterface.Controller):
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
             #LOGGER.debug(url)
-            #LOGGER.debug(mbrdata)
+            LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
             LOGGER.error(e, e.headers)
             LOGGER.error("Unable to connect to your MeteoBridge hub")
 
         mbrarray = mbrdata.split(" ")
-        LOGGER.debug(mbrarray)
         temperature = float(mbrarray[0])
         maxtemp = float(mbrarray[1])
         mintemp = float(mbrarray[2])
