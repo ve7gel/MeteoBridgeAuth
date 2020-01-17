@@ -543,7 +543,7 @@ class PrecipitationNode(polyinterface.Node):
     def setDriver(self, driver, value):
         if (self.units == 'us'):
             value = round(value * 0.03937, 2)
-        super(PrecipitationNode, self).setDriver(driver, round(value,1), report=True, force=True)
+        super(PrecipitationNode, self).setDriver(driver, round(value,2), report=True, force=True)
 
 class HumidityNode(polyinterface.Node):
     id = 'humidity'
