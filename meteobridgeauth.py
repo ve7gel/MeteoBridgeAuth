@@ -66,7 +66,7 @@ class MBAuthController(polyinterface.Controller):
         pass
 
     def longPoll(self):
-
+        et0_conv=0
         # read data
         if self.ip == "":
             return
