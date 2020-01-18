@@ -48,7 +48,8 @@ The settings for this node are:
   Stretch, but I would recommend just re-imaging the SD card.  Some helpful links:
    * https://www.raspberrypi.org/blog/raspbian-stretch/
    * https://linuxconfig.org/raspbian-gnu-linux-upgrade-from-jessie-to-raspbian-stretch-9
-2. This has only been tested with ISY 5.0.16b so it is not guaranteed to work with any other version.
+2. This NS has been tested and verified for compatibility with UDI Polisy.
+3. This has only been tested with ISY 5.0.16b so it is not guaranteed to work with any other version.
 
 # Upgrading
 
@@ -59,6 +60,8 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
+- 1.0.4 18/01/2020
+   - move create_url call to the start method.  There's no need to re-create it during each longpoll.
 - 1.0.3 17/01/2020
    - made some corrections to README.md
    - fixed pressure trend display for "us" units
