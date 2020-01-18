@@ -1,5 +1,4 @@
- 
-# Configuration
+ # Configuration
 
 This node server accesses data from the MeteoBridge weather hub,
 using templates and therefore requires authorization to do so.
