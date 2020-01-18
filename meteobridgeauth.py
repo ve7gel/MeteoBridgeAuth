@@ -25,10 +25,6 @@ polyinterface has a LOGGER that is created by default and logs to:
 logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
-global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-    pressure, pressure_trend, windchill, rain_rate, rain_24hour, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-    battery,mbstation,mbstationnum,rain_year
-
 
 class MBAuthController(polyinterface.Controller):
 
@@ -77,55 +73,55 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info("Updated data from Meteobridge")
 
         self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['main'], temperature
+            uom.TEMP_DRVS['main'], self.temperature
         )
         self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['dewpoint'],dewpoint
+            uom.TEMP_DRVS['dewpoint'],self.dewpoint
         )
         self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['windchill'], windchill
+            uom.TEMP_DRVS['windchill'], self.windchill
         )
         self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['tempmax'], maxtemp
+            uom.TEMP_DRVS['tempmax'], self.maxtemp
         )
         self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['tempmin'], mintemp
+            uom.TEMP_DRVS['tempmin'], self.mintemp
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['rate'], rain_rate
+            uom.RAIN_DRVS['rate'], self.rain_rate
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['daily'], rain_today
+            uom.RAIN_DRVS['daily'], self.rain_today
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['24hour'], rain_24hour
+            uom.RAIN_DRVS['24hour'], self.rain_24hour
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yesterday'], rain_yesterday
+            uom.RAIN_DRVS['yesterday'], self.rain_yesterday
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['monthly'], rain_month
+            uom.RAIN_DRVS['monthly'], self.rain_month
         )
         self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yearly'], rain_year
+            uom.RAIN_DRVS['yearly'], self.rain_year
         )
         self.nodes['wind'].setDriver(
-            uom.WIND_DRVS['windspeed'], wind
+            uom.WIND_DRVS['windspeed'], self.wind
         )
         self.nodes['wind'].setDriver(
-            uom.WIND_DRVS['winddir'], wind_dir
+            uom.WIND_DRVS['winddir'], self.wind_dir
         )
         self.nodes['wind'].setDriver(
-            uom.WIND_DRVS['gustspeed'], wind_gust
+            uom.WIND_DRVS['gustspeed'], self.wind_gust
         )
         self.nodes['light'].setDriver(
-            uom.LITE_DRVS['solar_radiation'], solarradiation
+            uom.LITE_DRVS['solar_radiation'], self.solarradiation
         )
         self.nodes['light'].setDriver(
-            uom.LITE_DRVS['uv'], uv
+            uom.LITE_DRVS['uv'], self.uv
         )
-        if mbstation == "Vantage":
-            et0_conv = et0
+        if self.mbstation == "Vantage":
+            et0_conv = self.et0
             if self.units == 'us':
                 et0_conv = round(et0_conv / 25.4, 3)
 
@@ -136,18 +132,18 @@ class MBAuthController(polyinterface.Controller):
             LOGGER.info("Evapotranspiration not available (Davis Vantage stations only)")
 
         self.nodes['pressure'].setDriver(
-            uom.PRES_DRVS['station'], stn_pressure
+            uom.PRES_DRVS['station'], self.stn_pressure
         )
         self.nodes['pressure'].setDriver(
-            uom.PRES_DRVS['sealevel'], sl_pressure
+            uom.PRES_DRVS['sealevel'], self.sl_pressure
         )
         self.nodes['pressure'].setDriver(
-            uom.PRES_DRVS['trend'], pressure_trend
+            uom.PRES_DRVS['trend'], self.pressure_trend
         )
         self.nodes['humidity'].setDriver(
-            uom.HUMD_DRVS['main'], rh
+            uom.HUMD_DRVS['main'], self.rh
         )
-        self.setDriver('GV0', battery)
+        self.setDriver('GV0', self.battery)
           # value 0 = Ok, 1 = Replace
 
         return
@@ -397,10 +393,6 @@ class MBAuthController(polyinterface.Controller):
 
     def getstationdata(self,url,handler):
 
-        global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-            pressure, pressure_trend, windchill, rain_rate, rain_24hour, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
-            battery, mbstation, mbstationnum, rain_year
-
         try:
             # create "opener" (OpenerDirector instance)
             opener = urllib.request.build_opener(handler)
@@ -416,47 +408,47 @@ class MBAuthController(polyinterface.Controller):
             LOGGER.error("Unable to connect to your MeteoBridge hub")
 
         mbrarray = mbrdata.split(" ")
-        temperature = float(mbrarray[0])
-        maxtemp = float(mbrarray[1])
-        mintemp = float(mbrarray[2])
-        dewpoint = float(mbrarray[3])
-        windchill = float(mbrarray[4])
+        self.temperature = float(mbrarray[0])
+        self.maxtemp = float(mbrarray[1])
+        self.mintemp = float(mbrarray[2])
+        self.dewpoint = float(mbrarray[3])
+        self.windchill = float(mbrarray[4])
 
-        rh = float(mbrarray[5])
-        maxrh = float(mbrarray[6])
-        minrh = float(mbrarray[7])
+        self.rh = float(mbrarray[5])
+        self.maxrh = float(mbrarray[6])
+        self.minrh = float(mbrarray[7])
 
-        stn_pressure = float(mbrarray[8])
-        sl_pressure = float(mbrarray[9])
-        pressure_trend = float(mbrarray[10])
-        pressure_trend = pressure_trend + 1 # Meteobridge reports -1, 0, +1 for trends,converted for ISY
+        self.stn_pressure = float(mbrarray[8])
+        self.sl_pressure = float(mbrarray[9])
+        self.pressure_trend = float(mbrarray[10])
+        self.pressure_trend = self.pressure_trend + 1 # Meteobridge reports -1, 0, +1 for trends,converted for ISY
 
-        solarradiation = float(mbrarray[11])  # conversion from watt/sqm*h to Joule/sqm
+        self.solarradiation = float(mbrarray[11])  # conversion from watt/sqm*h to Joule/sqm
         # if solarradiation is not None:
         #    solarradiation *= 0.0864
-        uv = float(mbrarray[12])
-        et0 = float(mbrarray[13])
+        self.uv = float(mbrarray[12])
+        self.et0 = float(mbrarray[13])
 
-        wind = float(mbrarray[14])
+        self.wind = float(mbrarray[14])
         # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
-        wind_gust = float(mbrarray[15])
-        wind_dir = mbrarray[16]
+        self.wind_gust = float(mbrarray[15])
+        self.wind_dir = mbrarray[16]
 
-        rain_rate = float(mbrarray[17])
-        rain_today = float(mbrarray[18])
-        rain_24hour = float(mbrarray[19])
-        rain_yesterday = float(mbrarray[20])
-        rain_month = float(mbrarray[21])
-        rain_year = float(mbrarray[22])
+        self.rain_rate = float(mbrarray[17])
+        self.rain_today = float(mbrarray[18])
+        self.rain_24hour = float(mbrarray[19])
+        self.rain_yesterday = float(mbrarray[20])
+        self.rain_month = float(mbrarray[21])
+        self.rain_year = float(mbrarray[22])
 
-        mbstation = mbrarray[23]
-        mbstationnum = float(mbrarray[24])
-        battery = round(float(mbrarray[25]),0)
+        self.mbstation = mbrarray[23]
+        self.mbstationnum = float(mbrarray[24])
+        self.battery = round(float(mbrarray[25]),0)
 
-        timestamp = int(mbrarray[26])
+        self.timestamp = int(mbrarray[26])
 
-        #LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
-        #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation) + " " + str(pressure_trend))
+        #LOGGER.debug(str(self.temperature) + " " + str(self.et0) + " " + str(self.mintemp) + " " + str(self.maxtemp) +
+        #          " " + str(self.rh) + " " + str(self.wind) + " " + str(self.solarradiation) + " " + str(self.pressure_trend))
 
 
 class Create_Template():
