@@ -1,4 +1,4 @@
-
+ 
 # Configuration
 
 This node server accesses data from the MeteoBridge weather hub,
