@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-This is a NodeServer template for Polyglot v2 written in Python2/3
-by Einstein.42 (James Milne) milne.james@gmail.com
+NodeServer to extract weather data from the MeteoBridge Hub.  Designed around a DAVIS VP2+ weather station. May work
+others, not tested.  At the moment, only DAVIS stations provide ET0 readings.
 
 Based on MeteoBridge nodeserver (meteobridgepoly) authored by Bob Paauwe
 Customized to use template queries from MeteoBridge by Gordon Larsen
@@ -26,7 +26,7 @@ logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
 global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-    pressure, pressure_trend, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
+    pressure, pressure_trend, windchill, rain_rate, rain_24hour, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
     battery,mbstation,mbstationnum,rain_year
 
 
@@ -95,6 +95,9 @@ class MBAuthController(polyinterface.Controller):
         )
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['daily'], rain_today
+        )
+        self.nodes['rain'].setDriver(
+            uom.RAIN_DRVS['24hour'], rain_24hour
         )
         self.nodes['rain'].setDriver(
             uom.RAIN_DRVS['yesterday'], rain_yesterday
@@ -239,7 +242,7 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info('Removing MeteoBridge Template nodeserver.')
 
     def stop(self):
-        LOGGER.debug('NodeServer stopped.')
+        LOGGER.info('NodeServer stopped.')
 
     def process_config(self, config):
         if 'customParams' in config:
@@ -323,6 +326,7 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['winddir'] = 'I_DEGREE'
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
         self.rain_list['daily'] = 'I_MM' if units == 'metric' else 'I_INCHES'
+        self.rain_list['24hour'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['yesterday'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['monthly'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['yearly'] = 'I_MM' if units == 'metric' else 'I_INCHES'
@@ -393,7 +397,7 @@ class MBAuthController(polyinterface.Controller):
     def getstationdata(self,url,handler):
 
         global temperature, dewpoint, mintemp, maxtemp, rh, minrh, maxrh, wind, solarradiation, et0, rain_today, \
-            pressure, pressure_trend, windchill, rain_rate, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
+            pressure, pressure_trend, windchill, rain_rate, rain_24hour, rain_yesterday, rain_month, wind_gust, wind_dir, uv, sl_pressure, stn_pressure, \
             battery, mbstation, mbstationnum, rain_year
 
         try:
@@ -404,7 +408,7 @@ class MBAuthController(polyinterface.Controller):
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
             #LOGGER.debug(url)
-            LOGGER.debug(mbrdata)
+            #LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
             LOGGER.error(e, e.headers)
@@ -439,15 +443,16 @@ class MBAuthController(polyinterface.Controller):
 
         rain_rate = float(mbrarray[17])
         rain_today = float(mbrarray[18])
-        rain_yesterday = float(mbrarray[19])
-        rain_month = float(mbrarray[20])
-        rain_year = float(mbrarray[21])
+        rain_24hour = float(mbrarray[19])
+        rain_yesterday = float(mbrarray[20])
+        rain_month = float(mbrarray[21])
+        rain_year = float(mbrarray[22])
 
-        mbstation = mbrarray[22]
-        mbstationnum = float(mbrarray[23])
-        battery = round(float(mbrarray[24]),0)
+        mbstation = mbrarray[23]
+        mbstationnum = float(mbrarray[24])
+        battery = round(float(mbrarray[25]),0)
 
-        timestamp = int(mbrarray[25])
+        timestamp = int(mbrarray[26])
 
         #LOGGER.debug(str(temperature) + " " + str(et0) + " " + str(mintemp) + " " + str(maxtemp) +
         #          " " + str(rh) + " " + str(wind) + " " + str(solarradiation) + " " + str(pressure_trend))
@@ -483,16 +488,17 @@ class Create_Template():
 
             "[rain0rate-act]",  # 17 current rate of rainfall
             "[rain0total-daysum]", #18 rain accumulation for today
-            "[rain0total-ydmax]",  # 19 total rainfall yesterday
-            "[rain0total-monthsum]",  # 20 rain accumulation for this month
-            "[rain0total-yearsum]", #21 rain accumulation year-to-date
+            "[rain0total-sum24h]", #19 rain over the last 24 hours
+            "[rain0total-ydmax]",  # 20 total rainfall yesterday
+            "[rain0total-monthsum]",  # 21 rain accumulation for this month
+            "[rain0total-yearsum]", #22 rain accumulation year-to-date
 
-            "[mbsystem-station]",  #22 station id
-            "[mbsystem-stationnum]",  #23 meteobridge station number
-            "[thb0lowbat-act]" #24 Station battery status (0=Ok, 1=Replace)
+            "[mbsystem-station]",  #23 station id
+            "[mbsystem-stationnum]",  #24 meteobridge station number
+            "[thb0lowbat-act]" #25 Station battery status (0=Ok, 1=Replace)
 
-            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #25 current observation time
-            "[epoch]",  #26 current unix time
+            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #26 current observation time
+            "[epoch]",  #27 current unix time
         ]
 
         for tempstr in mbtemplatelist:
@@ -565,7 +571,6 @@ class PressureNode(polyinterface.Node):
     hint = 0xffffff
     units = 'metric'
     drivers = [ ]
-    mytrend = []
 
     def SetUnits(self, u):
         self.units = u
@@ -573,8 +578,10 @@ class PressureNode(polyinterface.Node):
     # We want to override the SetDriver method so that we can properly
     # convert the units based on the user preference.
     def setDriver(self, driver, value):
-        if (self.units == 'us'):
-            value = round(value * 0.02952998751, 2)
+        if driver != 'GV1':
+            if (self.units == 'us'):
+                        value = round(value * 0.02952998751, 2)
+
         super(PressureNode, self).setDriver(driver, value, report=True, force=True)
 
 

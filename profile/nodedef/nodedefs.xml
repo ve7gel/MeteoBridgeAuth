@@ -1,37 +1,62 @@
 <nodeDefs>
-    <!-- NODE DEF from 5.0 document http://wiki.universal-devices.com/index.php?title=V50_MAIN -->
-    <!-- controller, this must mach the id in your Controller class-->
-    <nodeDef id="controller" nls="ctl">
-        <editors />
-        <sts>
-			<st id="ST" editor="bool" />
-		</sts>
-        <cmds>
-            <sends>
-              <cmd id="DON" />
-              <cmd id="DOF" />
-            </sends>
-            <accepts>
-              <cmd id="QUERY" />
-              <cmd id="DISCOVER" />
-              <cmd id="REMOVE_NOTICES_ALL" />
-              <cmd id="REMOVE_NOTICE_TEST" />
-              <cmd id="UPDATE_PROFILE" />
-            </accepts>
-        </cmds>
-    </nodeDef>
-	<!-- templatenodeid -->
-    <nodeDef id="templatenodeid" nls="tmplnode">
-        <editors />
-        <sts>
-            <st id="ST" editor="bool" />
-        </sts>
-        <cmds>
-            <sends />
-            <accepts>
-                <cmd id="DON" />
-                <cmd id="DOF" />
-            </accepts>
-        </cmds>
-    </nodeDef>
+  <nodeDef id="MeteoBridgeAuth" nodeType="139" nls="ctl">
+    <sts>
+      <st id="ST" editor="bool" />
+      <st id="GV0" editor="I_BATTERY" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="DISCOVER" />
+        <cmd id="REMOVE_NOTICES_ALL" />
+        <cmd id="UPDATE_PROFILE" />
+      </accepts>
+    </cmds>
+  </nodeDef>
+
+  <nodeDef id="temperature" nodeType="139" nls="139T">
+    <sts>
+      <st id="ST" editor="I_TEMP_C" />
+      <st id="GV0" editor="I_TEMP_C" />
+      <st id="GV1" editor="I_TEMP_C" />
+      <st id="GV15" editor="I_TEMP_C" />
+      <st id="GV16" editor="I_TEMP_C" />
+    </sts>
+  </nodeDef>
+  <nodeDef id="humidity" nodeType="139" nls="139H">
+    <sts>
+      <st id="ST" editor="I_HUMIDITY" />
+    </sts>
+  </nodeDef>
+  <nodeDef id="pressure" nodeType="139" nls="139P">
+    <sts>
+      <st id="ST" editor="I_MB" />
+      <st id="GV0" editor="I_MB" />
+      <st id="GV1" editor="I_TREND" />
+    </sts>
+  </nodeDef>
+  <nodeDef id="wind" nodeType="139" nls="139W">
+    <sts>
+      <st id="ST" editor="I_MPS" />
+      <st id="GV1" editor="I_MPS" />
+      <st id="GV0" editor="I_DEGREE" />
+    </sts>
+  </nodeDef>
+  <nodeDef id="precipitation" nodeType="139" nls="139R">
+    <sts>
+      <st id="ST" editor="I_MMHR" />
+      <st id="GV1" editor="I_MM" />
+      <st id="GV2" editor="I_MM" />
+      <st id="GV6" editor="I_MM" />
+      <st id="GV3" editor="I_MM" />
+      <st id="GV4" editor="I_MM" />
+    </sts>
+  </nodeDef>
+  <nodeDef id="light" nodeType="139" nls="139L">
+    <sts>
+      <st id="ST" editor="I_UV" />
+      <st id="GV0" editor="I_RADIATION" />
+      <st id="GV2" editor="I_MM" />
+    </sts>
+  </nodeDef>
 </nodeDefs>

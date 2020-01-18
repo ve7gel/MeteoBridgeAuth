@@ -29,8 +29,6 @@ The settings for this node are:
    * Not used
 #### Long Poll
    * How often the MeteoBridge is polled for data
-#### Username
-   * Username required to access the MeteoBridge. (same as webui login)
 #### Password
    * Password associated with above username
 #### IPAddress
@@ -39,7 +37,7 @@ The settings for this node are:
    * Configure the units used when displaying data. Choices are:
    *   metric - SI / metric units
    *   us     - units generally used in the U.S.
-   *   uk     - units generally used in the U.K.
+
 
 
 ## Requirements
@@ -61,14 +59,17 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
--1.0.2 17/02/2020
-   -add missing conversion to "us" units for evapotranspiration
-   -add missing monthly rainfall data
-- 1.0.1 17/02/2020 
-    -remove custom parameter for username, it is hard coded as
- 
-"meteobridge" in the MeteoBridge.
-    -fixed missing driver update for monthly rainfall
-    -added yearly rainfall accumulation
+- 1.0.3 17/01/2020
+   - made some corrections to README.md
+   - fixed pressure trend display for "us" units
+   - added 24 hour rainfall data 
+- 1.0.2 17/01/2020
+   - add missing conversion to "us" units for evapotranspiration
+   - add missing monthly rainfall data
+- 1.0.1 17/01/2020 
+    - remove custom parameter for username, it is hard coded as
+ "meteobridge" in the MeteoBridge.
+    - fixed missing driver update for monthly rainfall
+    - added yearly rainfall accumulation
 - 1.0.0 16/01/2020
    - Initial alpha release
