@@ -4,7 +4,7 @@
     "type": "python3",
     "executable": "meteobridgeauth.py",
     "install": "install.sh",
-    "description": "MeteoBridge Template Node Server",
+    "description": "Node Server using Meteobridge Templates",
     "notice": "",
     "shortPoll": "15",
     "longPoll": "60",
