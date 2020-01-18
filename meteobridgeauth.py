@@ -468,7 +468,7 @@ class Create_Template():
 
             "[thb0press-act]", #8 current station pressure
             "[thb0seapress-act]",  #9 current sealevel barometric pressure
-            "[thb0press-delta60=barotrend]", #10 pressure trend
+            "[thb0press-delta3h=barotrend]", #10 pressure trend
             
             "[sol0rad-act]",  #11 current solar radiation
             "[uv0index-act]",  #12 current UV index
