@@ -401,7 +401,7 @@ class MBAuthController(polyinterface.Controller):
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
             #LOGGER.debug(url)
-            #LOGGER.debug(mbrdata)
+            LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
             LOGGER.error(e, e.headers)
