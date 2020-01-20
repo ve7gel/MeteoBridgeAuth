@@ -5,7 +5,7 @@ others, not tested.  At the moment, only DAVIS stations provide ET0 readings.
 
 Based on MeteoBridge nodeserver (meteobridgepoly) authored by Bob Paauwe
 Customized to use template queries from MeteoBridge by Gordon Larsen
-
+Copyright 2010 Robert Paauwe and Gordon Larsen, MIT License
 """
 #import urllib
 
