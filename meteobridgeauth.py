@@ -7,7 +7,7 @@ Based on MeteoBridge nodeserver (meteobridgepoly) authored by Bob Paauwe
 Customized to use template queries from MeteoBridge by Gordon Larsen
 
 """
-import urllib
+#import urllib
 
 try:
     import polyinterface
@@ -408,47 +408,50 @@ class MBAuthController(polyinterface.Controller):
             LOGGER.error("Unable to connect to your MeteoBridge hub")
 
         mbrarray = mbrdata.split(" ")
-        self.temperature = float(mbrarray[0])
-        self.maxtemp = float(mbrarray[1])
-        self.mintemp = float(mbrarray[2])
-        self.dewpoint = float(mbrarray[3])
-        self.windchill = float(mbrarray[4])
 
-        self.rh = float(mbrarray[5])
-        self.maxrh = float(mbrarray[6])
-        self.minrh = float(mbrarray[7])
+        try:
+            self.temperature = float(mbrarray[0])
+            self.maxtemp = float(mbrarray[1])
+            self.mintemp = float(mbrarray[2])
+            self.dewpoint = float(mbrarray[3])
+            self.windchill = float(mbrarray[4])
 
-        self.stn_pressure = float(mbrarray[8])
-        self.sl_pressure = float(mbrarray[9])
-        self.pressure_trend = float(mbrarray[10])
-        self.pressure_trend = self.pressure_trend + 1 # Meteobridge reports -1, 0, +1 for trends,converted for ISY
+            self.rh = float(mbrarray[5])
+            self.maxrh = float(mbrarray[6])
+            self.minrh = float(mbrarray[7])
 
-        self.solarradiation = float(mbrarray[11])  # conversion from watt/sqm*h to Joule/sqm
-        # if solarradiation is not None:
-        #    solarradiation *= 0.0864
-        self.uv = float(mbrarray[12])
-        self.et0 = float(mbrarray[13])
+            self.stn_pressure = float(mbrarray[8])
+            self.sl_pressure = float(mbrarray[9])
+            self.pressure_trend = float(mbrarray[10])
+            self.pressure_trend = self.pressure_trend + 1 # Meteobridge reports -1, 0, +1 for trends,converted for ISY
 
-        self.wind = float(mbrarray[14])
-        # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
-        self.wind_gust = float(mbrarray[15])
-        self.wind_dir = mbrarray[16]
+            self.solarradiation = float(mbrarray[11])  # conversion from watt/sqm*h to Joule/sqm
+            # if solarradiation is not None:
+            #    solarradiation *= 0.0864
+            self.uv = float(mbrarray[12])
+            self.et0 = float(mbrarray[13])
 
-        self.rain_rate = float(mbrarray[17])
-        self.rain_today = float(mbrarray[18])
-        self.rain_24hour = float(mbrarray[19])
-        self.rain_yesterday = float(mbrarray[20])
-        self.rain_month = float(mbrarray[21])
-        self.rain_year = float(mbrarray[22])
+            self.wind = float(mbrarray[14])
+            # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
+            self.wind_gust = float(mbrarray[15])
+            self.wind_dir = mbrarray[16]
 
-        self.mbstation = mbrarray[23]
-        self.mbstationnum = float(mbrarray[24])
-        self.battery = round(float(mbrarray[25]),0)
+            self.rain_rate = float(mbrarray[17])
+            self.rain_today = float(mbrarray[18])
+            self.rain_24hour = float(mbrarray[19])
+            self.rain_yesterday = float(mbrarray[20])
+            self.rain_month = float(mbrarray[21])
+            self.rain_year = float(mbrarray[22])
 
-        self.timestamp = int(mbrarray[26])
+            self.mbstation = mbrarray[23]
+            self.mbstationnum = float(mbrarray[24])
+            self.battery = round(float(mbrarray[25]),0)
 
-        #LOGGER.debug(str(self.temperature) + " " + str(self.et0) + " " + str(self.mintemp) + " " + str(self.maxtemp) +
-        #          " " + str(self.rh) + " " + str(self.wind) + " " + str(self.solarradiation) + " " + str(self.pressure_trend))
+            self.timestamp = int(mbrarray[26])
+
+        except:
+            print("Invalid value")
+            LOGGER.debug(mbrarray)
 
 
 class Create_Template():
