@@ -66,87 +66,87 @@ class MBAuthController(polyinterface.Controller):
         if self.ip == "":
             return
 
-        #mb_url, mb_handler = self.create_url()
-
         self.getstationdata(self.mb_url, self.mb_handler)
 
         LOGGER.info("Updated data from Meteobridge")
 
-        self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['main'], self.temperature
-        )
-        self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['dewpoint'],self.dewpoint
-        )
-        self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['windchill'], self.windchill
-        )
-        self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['tempmax'], self.maxtemp
-        )
-        self.nodes['temperature'].setDriver(
-            uom.TEMP_DRVS['tempmin'], self.mintemp
-        )
-        self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['rate'], self.rain_rate
-        )
-        self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['daily'], self.rain_today
-        )
-        self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['24hour'], self.rain_24hour
-        )
-        self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yesterday'], self.rain_yesterday
-        )
-        self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['monthly'], self.rain_month
-        )
-        self.nodes['rain'].setDriver(
-            uom.RAIN_DRVS['yearly'], self.rain_year
-        )
-        self.nodes['wind'].setDriver(
-            uom.WIND_DRVS['windspeed'], self.wind
-        )
-        self.nodes['wind'].setDriver(
-            uom.WIND_DRVS['winddir'], self.wind_dir
-        )
-        self.nodes['wind'].setDriver(
-            uom.WIND_DRVS['gustspeed'], self.wind_gust
-        )
-        self.nodes['light'].setDriver(
-            uom.LITE_DRVS['solar_radiation'], self.solarradiation
-        )
-        self.nodes['light'].setDriver(
-            uom.LITE_DRVS['uv'], self.uv
-        )
-        if self.mbstation == "Vantage":
-            et0_conv = self.et0
-            if self.units == 'us':
-                et0_conv = round(et0_conv / 25.4, 3)
-
-            self.nodes['light'].setDriver(
-                uom.LITE_DRVS['evapotranspiration'], et0_conv
+        try:
+            self.nodes['temperature'].setDriver(
+                uom.TEMP_DRVS['main'], self.temperature
             )
-        else:
-            LOGGER.info("Evapotranspiration not available (Davis Vantage stations only)")
+            self.nodes['temperature'].setDriver(
+                uom.TEMP_DRVS['dewpoint'],self.dewpoint
+            )
+            self.nodes['temperature'].setDriver(
+                uom.TEMP_DRVS['windchill'], self.windchill
+            )
+            self.nodes['temperature'].setDriver(
+                uom.TEMP_DRVS['tempmax'], self.maxtemp
+            )
+            self.nodes['temperature'].setDriver(
+                uom.TEMP_DRVS['tempmin'], self.mintemp
+            )
+            self.nodes['rain'].setDriver(
+                uom.RAIN_DRVS['rate'], self.rain_rate
+            )
+            self.nodes['rain'].setDriver(
+                uom.RAIN_DRVS['daily'], self.rain_today
+            )
+            self.nodes['rain'].setDriver(
+                uom.RAIN_DRVS['24hour'], self.rain_24hour
+            )
+            self.nodes['rain'].setDriver(
+                uom.RAIN_DRVS['yesterday'], self.rain_yesterday
+            )
+            self.nodes['rain'].setDriver(
+                uom.RAIN_DRVS['monthly'], self.rain_month
+            )
+            self.nodes['rain'].setDriver(
+                uom.RAIN_DRVS['yearly'], self.rain_year
+            )
+            self.nodes['wind'].setDriver(
+                uom.WIND_DRVS['windspeed'], self.wind
+            )
+            self.nodes['wind'].setDriver(
+                uom.WIND_DRVS['winddir'], self.wind_dir
+            )
+            self.nodes['wind'].setDriver(
+                uom.WIND_DRVS['gustspeed'], self.wind_gust
+            )
+            self.nodes['light'].setDriver(
+                uom.LITE_DRVS['solar_radiation'], self.solarradiation
+            )
+            self.nodes['light'].setDriver(
+                uom.LITE_DRVS['uv'], self.uv
+            )
+            if self.mbstation == "Vantage":
+                et0_conv = self.et0
+                if self.units == 'us':
+                    et0_conv = round(et0_conv / 25.4, 3)
 
-        self.nodes['pressure'].setDriver(
-            uom.PRES_DRVS['station'], self.stn_pressure
-        )
-        self.nodes['pressure'].setDriver(
-            uom.PRES_DRVS['sealevel'], self.sl_pressure
-        )
-        self.nodes['pressure'].setDriver(
-            uom.PRES_DRVS['trend'], self.pressure_trend
-        )
-        self.nodes['humidity'].setDriver(
-            uom.HUMD_DRVS['main'], self.rh
-        )
-        self.setDriver('GV0', self.battery)
-          # value 0 = Ok, 1 = Replace
+                self.nodes['light'].setDriver(
+                    uom.LITE_DRVS['evapotranspiration'], et0_conv
+                )
+            else:
+                LOGGER.info("Evapotranspiration not available (Davis Vantage stations only)")
 
-        return
+            self.nodes['pressure'].setDriver(
+                uom.PRES_DRVS['station'], self.stn_pressure
+            )
+            self.nodes['pressure'].setDriver(
+                uom.PRES_DRVS['sealevel'], self.sl_pressure
+            )
+            self.nodes['pressure'].setDriver(
+                uom.PRES_DRVS['trend'], self.pressure_trend
+            )
+            self.nodes['humidity'].setDriver(
+                uom.HUMD_DRVS['main'], self.rh
+            )
+            self.setDriver('GV0', self.battery)
+              # value 0 = Ok, 1 = Replace
+
+        except:
+            pass
 
     def query(self, command=None):
         self.check_params()
@@ -400,8 +400,6 @@ class MBAuthController(polyinterface.Controller):
             # use the opener to fetch a URL
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
-            #LOGGER.debug(url)
-            LOGGER.debug(mbrdata)
 
         except urllib.error.HTTPError as e:
             LOGGER.error(e, e.headers)
@@ -443,6 +441,7 @@ class MBAuthController(polyinterface.Controller):
             self.rain_month = float(mbrarray[21])
             self.rain_year = float(mbrarray[22])
 
+
             self.mbstation = mbrarray[23]
             self.mbstationnum = float(mbrarray[24])
             self.battery = round(float(mbrarray[25]),0)
@@ -450,7 +449,7 @@ class MBAuthController(polyinterface.Controller):
             self.timestamp = int(mbrarray[26])
 
         except:
-            print("Invalid value")
+            LOGGER.debug("Invalid value")
             LOGGER.debug(mbrarray)
 
 
