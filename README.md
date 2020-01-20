@@ -4,8 +4,6 @@ weather server.  Requires authorization thus entry of username
 and password.  This nodeserver is an adaptation of the
 meteobridgepoly nodeserver written by [Bob Pauuwe](http://www.bobsplace.com).
 
-(c) 2020 Bob Pauuwe and Gordon Larsen MIT license.
-
 This node server is designed to support the [Meteobridge](http://www.meteobridge.com/)
 in combination with a [Davis Instruments Vantage Pro 2+](https://www.davisinstruments.com/solution/vantage-pro2/) weather station
 It should run with other Meteobridge connected weather stations, but 
