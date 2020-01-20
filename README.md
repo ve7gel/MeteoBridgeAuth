@@ -59,7 +59,7 @@ The MeteoBridge nodeserver keeps track of the version number and when a profile 
 
 # Release Notes
 - 1.0.5 20/01/2020
-    - add some error trapping
+    - add some error trapping for bad/missing values from Meteobridge
 - 1.0.4 18/01/2020
    - move create_url call to the start method.  There's no need to re-create it during each longpoll.
 - 1.0.3 17/01/2020
