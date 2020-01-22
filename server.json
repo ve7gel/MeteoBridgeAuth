@@ -7,7 +7,7 @@
     "description": "Node Server using Meteobridge Templates",
     "notice": "",
     "shortPoll": "15",
-    "longPoll": "60",
+    "longPoll": "600",
     "testMode": false,
     "profile_version": "0.1.5",
     "credits": [

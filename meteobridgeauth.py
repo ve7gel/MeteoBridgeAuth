@@ -373,7 +373,7 @@ class MBAuthController(polyinterface.Controller):
     # Hub status information here: battery and rssi values.
     drivers = [
         {'driver': 'ST', 'value': 1, 'uom': 2},
-        {'driver': 'GV0', 'value': 0, 'uom': '25'},
+        {'driver': 'GV0', 'value': 0, 'uom': 25},
     ]
 
     def create_url(self):
@@ -403,7 +403,6 @@ class MBAuthController(polyinterface.Controller):
             mbrdata = u.read().decode('utf-8')
 
         except urllib.error.HTTPError as e:
-            LOGGER.error(e, e.headers)
             LOGGER.error("Unable to connect to your MeteoBridge hub")
 
         mbrarray = mbrdata.split(" ")
