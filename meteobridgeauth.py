@@ -55,6 +55,7 @@ class MBAuthController(polyinterface.Controller):
         self.check_params()
         self.discover()
         self.mb_url, self.mb_handler = self.create_url()
+        self.longPoll()
 
         LOGGER.info('MeteoBridge Template Node Server Started.')
 

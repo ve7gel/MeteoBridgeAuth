@@ -58,6 +58,8 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
+- 1.0.6 27/01/2020
+    - add a 'longPoll' in start() to immediately populate node fields 
 - 1.0.5 20/01/2020
     - add some error trapping for bad/missing values from Meteobridge
 - 1.0.4 18/01/2020
