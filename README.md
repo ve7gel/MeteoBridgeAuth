@@ -59,7 +59,7 @@ The MeteoBridge nodeserver keeps track of the version number and when a profile 
 
 # Release Notes
 
--1.0.8 11/02/2020
+- 1.0.8 11/02/2020
     - add debug level setting to primary node. This update may require delete (not uninstall)/ add of the NS
     - minor code cleanup
     - change primary node address for clarity
