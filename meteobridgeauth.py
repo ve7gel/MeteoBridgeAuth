@@ -415,7 +415,7 @@ class MBAuthController(polyinterface.Controller):
         return url + values, handler
 
     def getstationdata(self, url, handler):
-
+        LOGGER.debug("url in getstationdata: {}".format(url))
         try:
             # create "opener" (OpenerDirector instance)
             opener = urllib.request.build_opener(handler)
