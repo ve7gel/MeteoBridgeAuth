@@ -14,7 +14,7 @@
         {
             "title": "MeteoBridgeAuth: a NodeServer for MeteoBridge Template Integration",
             "author": "Gordon Larsen",
-            "version": "1.0.8",
+            "version": "1.0.8 ",
             "date": "February 11, 2020",
             "source": "https://github.com/ve7gel/MeteoBridgeAuth",
             "license": "https://github.com/ve7gel/MeteoBridgeAuth/blob/master/LICENSE"
