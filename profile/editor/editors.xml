@@ -23,6 +23,9 @@
 	<editor id="I_SENSOR_STATUS">
 		<range uom="25" subset="0,1" nls="EN_SENSOR_STATUS" />
 	</editor>
+	<editor id="LOGLEVEL">
+    	<range uom="25" subset="0,10,20,30,40,50" nls="EN-LOGLEVEL"/>
+    </editor>
 	<editor id="I_SENSOR_TRIGGER">
 		<range uom="25" subset="0,1" nls="EN_SENSOR_TRIGGER" />
 	</editor>
@@ -73,7 +76,10 @@
 	</editor>
 	<editor id="I_MMHR">
 		<range uom="46" min="0" max="20000" prec="3" />
-	</editor>
+	</editor>	<editor id="LOGLEVEL">
+    	<range uom="25" subset="0,10,20,30,40,50" nls="EN-LOGLEVEL"/>
+    </editor>
+
 	<editor id="I_INCHES">
 		<range uom="105" min="0" max="20000" prec="3" />
 	</editor>

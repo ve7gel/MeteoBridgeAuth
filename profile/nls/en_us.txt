@@ -4,9 +4,10 @@ ND-MeteoBridgeAuth-ICON = Weather
 CMD-ctl-DISCOVER-NAME = Re-Discover
 CMD-ctl-UPDATE_PROFILE-NAME = Update Profile
 CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove Notices
+CMD-ctl-LOG_LEVEL-NAME = Set Logging Level
 ST-ctl-ST-NAME = NodeServer Online
 ST-ctl-GV0-NAME = Battery
-ST-ctl-GV1-NAME = Battery
+ST-ctl-GV1-NAME = Logging Level
 
 # mynodetype
 ND-temperature-NAME = Temperatures
@@ -127,3 +128,9 @@ EN_WIND_DIRECTION-13 = WNW
 EN_WIND_DIRECTION-14 = NW
 EN_WIND_DIRECTION-15 = NNW
 
+EN-LOGLEVEL-0 = None
+EN-LOGLEVEL-10 = Debug
+EN-LOGLEVEL-20 = Info
+EN-LOGLEVEL-30 = Error
+EN-LOGLEVEL-40 = Warning
+EN-LOGLEVEL-50 = Critical

@@ -3,10 +3,16 @@
     <sts>
       <st id="ST" editor="bool" />
       <st id="GV0" editor="I_BATTERY" />
+      <st id="GV1" editor="LOGLEVEL" />
     </sts>
     <cmds>
-      <sends />
+      <sends>
+        <cmd id= "LOG_LEVEL" />
+      </sends>
       <accepts>
+        <cmd id="LOG_LEVEL" >
+            <p id= "" editor= "LOGLEVEL" init= "GV1"/>
+        </cmd>
         <cmd id="DISCOVER" />
         <cmd id="REMOVE_NOTICES_ALL" />
         <cmd id="UPDATE_PROFILE" />

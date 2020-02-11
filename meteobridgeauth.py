@@ -8,7 +8,7 @@ Customized to use template queries from MeteoBridge by Gordon Larsen
 
 Copyright 2010 Robert Paauwe and Gordon Larsen, MIT License
 """
-#import urllib
+# import urllib
 
 try:
     import polyinterface
@@ -27,13 +27,14 @@ logs/debug.log
 You can use LOGGER.info, LOGGER.warning, LOGGER.debug, LOGGER.error levels as needed.
 """
 
+
 class MBAuthController(polyinterface.Controller):
 
     def __init__(self, polyglot):
         super(MBAuthController, self).__init__(polyglot)
         self.hb = 0
         self.name = 'MeteoBridgeAuth'
-        self.address = 'mbwxauth'
+        self.address = 'mbweather'
         self.primary = self.address
         self.password = ""
         self.username = "meteobridge"
@@ -47,8 +48,20 @@ class MBAuthController(polyinterface.Controller):
         self.light_list = {}
         self.lightning_list = {}
         self.myConfig = {}  # custom parameters
+        self.mb_url = ''
+        self.mb_handler = ''
+        self.currentloglevel = 10
+        self.loglevel = {
+            0: 'None',
+            10: 'Debug',
+            20: 'Info',
+            30: 'Error',
+            40: 'Warning',
+            50: 'Critical'
+        }
 
         self.poly.onConfig(self.process_config)
+        self.vp2plus = False
 
     def start(self):
         LOGGER.info('Started MeteoBridge Template NodeServer')
@@ -56,8 +69,6 @@ class MBAuthController(polyinterface.Controller):
         self.discover()
         self.mb_url, self.mb_handler = self.create_url()
         self.longPoll()
-
-        LOGGER.info('MeteoBridge Template Node Server Started.')
 
     def shortPoll(self):
         pass
@@ -77,7 +88,7 @@ class MBAuthController(polyinterface.Controller):
                 uom.TEMP_DRVS['main'], self.temperature
             )
             self.nodes['temperature'].setDriver(
-                uom.TEMP_DRVS['dewpoint'],self.dewpoint
+                uom.TEMP_DRVS['dewpoint'], self.dewpoint
             )
             self.nodes['temperature'].setDriver(
                 uom.TEMP_DRVS['windchill'], self.windchill
@@ -145,7 +156,7 @@ class MBAuthController(polyinterface.Controller):
                 uom.HUMD_DRVS['main'], self.rh
             )
             self.setDriver('GV0', self.battery)
-              # value 0 = Ok, 1 = Replace
+            # value 0 = Ok, 1 = Replace
 
         except:
             pass
@@ -159,7 +170,7 @@ class MBAuthController(polyinterface.Controller):
 
         LOGGER.info("Creating nodes.")
         node = TemperatureNode(self, self.address, 'temperature', 'Temperatures')
-        node.SetUnits(self.units);
+        node.SetUnits(self.units)
         for d in self.temperature_list:
             node.drivers.append(
                 {
@@ -170,29 +181,29 @@ class MBAuthController(polyinterface.Controller):
         self.addNode(node)
 
         node = HumidityNode(self, self.address, 'humidity', 'Humidity')
-        node.SetUnits(self.units);
+        node.SetUnits(self.units)
         for d in self.humidity_list:
             node.drivers.append(
-                    {
-                        'driver': uom.HUMD_DRVS[d],
-                        'value': 0,
-                        'uom': uom.UOM[self.humidity_list[d]]
-                        })
+                {
+                    'driver': uom.HUMD_DRVS[d],
+                    'value': 0,
+                    'uom': uom.UOM[self.humidity_list[d]]
+                })
         self.addNode(node)
 
         node = PressureNode(self, self.address, 'pressure', 'Barometric Pressure')
-        node.SetUnits(self.units);
+        node.SetUnits(self.units)
         for d in self.pressure_list:
             node.drivers.append(
-                    {
-                        'driver': uom.PRES_DRVS[d],
-                        'value': 0,
-                        'uom': uom.UOM[self.pressure_list[d]]
-                        })
+                {
+                    'driver': uom.PRES_DRVS[d],
+                    'value': 0,
+                    'uom': uom.UOM[self.pressure_list[d]]
+                })
         self.addNode(node)
 
         node = WindNode(self, self.address, 'wind', 'Wind')
-        node.SetUnits(self.units);
+        node.SetUnits(self.units)
         for d in self.wind_list:
             node.drivers.append(
                 {
@@ -203,25 +214,25 @@ class MBAuthController(polyinterface.Controller):
         self.addNode(node)
 
         node = PrecipitationNode(self, self.address, 'rain', 'Precipitation')
-        node.SetUnits(self.units);
+        node.SetUnits(self.units)
         for d in self.rain_list:
             node.drivers.append(
-                    {
-                        'driver': uom.RAIN_DRVS[d],
-                        'value': 0,
-                        'uom': uom.UOM[self.rain_list[d]]
-                        })
+                {
+                    'driver': uom.RAIN_DRVS[d],
+                    'value': 0,
+                    'uom': uom.UOM[self.rain_list[d]]
+                })
         self.addNode(node)
 
         node = LightNode(self, self.address, 'light', 'Illumination')
-        node.SetUnits(self.units);
+        node.SetUnits(self.units)
         for d in self.light_list:
             node.drivers.append(
-                    {
-                        'driver': uom.LITE_DRVS[d],
-                        'value': 0,
-                        'uom': uom.UOM[self.light_list[d]]
-                        })
+                {
+                    'driver': uom.LITE_DRVS[d],
+                    'value': 0,
+                    'uom': uom.UOM[self.light_list[d]]
+                })
         self.addNode(node)
 
     def delete(self):
@@ -246,7 +257,7 @@ class MBAuthController(polyinterface.Controller):
 
                 # Add notices about missing configuration
                 if self.ip == "":
-                    self.addNotice("IP address of the MeteoBridge device is required.")
+                    self.addNotice("IP address or hostname of the MeteoBridge device is required.")
 
     def check_params(self):
         self.set_configuration(self.polyConfig)
@@ -259,9 +270,22 @@ class MBAuthController(polyinterface.Controller):
             'IPAddress': self.ip,
             'Units': self.units,
             'Password': self.password,
-            })
+        })
 
         self.myConfig = self.polyConfig['customParams']
+
+        if 'Loglevel' in self.polyConfig['customData']:
+            self.currentloglevel = self.polyConfig['customData']['Loglevel']
+            self.setDriver('GV1', self.currentloglevel)
+            LOGGER.setLevel(self.currentloglevel)
+            LOGGER.info("Loglevel set to: {}".format(self.loglevel[self.currentloglevel]))
+        else:
+            self.saveCustomData({
+                'Loglevel': self.currentloglevel,  # set default loglevel to 'Debug'
+            })
+            LOGGER.setLevel(self.currentloglevel)
+            self.setDriver('GV1', self.currentloglevel)
+            LOGGER.info("Loglevel set to 10 (Debug)")
 
         # Remove all existing notices
         LOGGER.info("remove all notices")
@@ -275,7 +299,6 @@ class MBAuthController(polyinterface.Controller):
 
     def set_configuration(self, config):
         default_ip = ""
-        default_elevation = 0
 
         LOGGER.info("Check for existing configuration value")
 
@@ -297,7 +320,6 @@ class MBAuthController(polyinterface.Controller):
         return self.units
 
     def setup_nodedefs(self, units):
-        global mbstation
         # Configure the units for each node driver
         self.temperature_list['main'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
         self.temperature_list['dewpoint'] = 'I_TEMP_F' if units == 'us' else 'I_TEMP_C'
@@ -324,15 +346,14 @@ class MBAuthController(polyinterface.Controller):
         # Build the node definition
         LOGGER.info('Creating node definition profile based on config.')
         write_profile.write_profile(LOGGER, self.temperature_list,
-                self.humidity_list, self.pressure_list, self.wind_list,
-                self.rain_list, self.light_list, self.lightning_list)
+                                    self.humidity_list, self.pressure_list, self.wind_list,
+                                    self.rain_list, self.light_list, self.lightning_list)
 
         # push updated profile to ISY
         try:
             self.poly.installprofile()
         except:
             LOGGER.error('Failed to push profile to ISY')
-
 
     def remove_notices_all(self, command):
         LOGGER.info('remove_notices_all: notices={}'.format(self.poly.config['notices']))
@@ -347,9 +368,19 @@ class MBAuthController(polyinterface.Controller):
     def SetUnits(self, u):
         self.units = u
 
+    def set_loglevel(self, command):
+        LOGGER.debug("Received command {} in 'set_log_level'".format(command))
+        value = int(command.get('value'))
+        LOGGER.setLevel(value)
+        self.saveCustomData({
+            'Loglevel': value,
+        })
+        self.setDriver('GV1', value)
+        LOGGER.info("Set Logging Level to {}".format(self.loglevel[value]))
+
     id = 'MeteoBridgeAuth'
     name = 'MeteoBridgeAuth'
-    address = 'mbwxauth'
+    address = 'mbweather'
     stopping = False
     hint = 0xffffff
     units = 'metric'
@@ -358,11 +389,13 @@ class MBAuthController(polyinterface.Controller):
         'DISCOVER': discover,
         'UPDATE_PROFILE': update_profile,
         'REMOVE_NOTICES_ALL': remove_notices_all,
+        'LOG_LEVEL': set_loglevel,
     }
     # Hub status information here: battery and rssi values.
     drivers = [
         {'driver': 'ST', 'value': 1, 'uom': 2},
         {'driver': 'GV0', 'value': 0, 'uom': 25},
+        {'driver': 'GV1', 'value': 10, 'uom': 25},
     ]
 
     def create_url(self):
@@ -376,12 +409,12 @@ class MBAuthController(polyinterface.Controller):
         handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
 
         url = top_level_url + "cgi-bin/template.cgi?template="
-
+        LOGGER.debug("Meteobridge URL: {}".format(url))
         values = str(Create_Template())
 
         return url + values, handler
 
-    def getstationdata(self,url,handler):
+    def getstationdata(self, url, handler):
 
         try:
             # create "opener" (OpenerDirector instance)
@@ -390,11 +423,13 @@ class MBAuthController(polyinterface.Controller):
             # use the opener to fetch a URL
             u = opener.open(url)
             mbrdata = u.read().decode('utf-8')
-
+            LOGGER.debug("Returned mbrdata: {}".format(mbrdata))
         except urllib.error.HTTPError as e:
             LOGGER.error("Unable to connect to your MeteoBridge hub")
+            return
 
         mbrarray = mbrdata.split(" ")
+        LOGGER.debug("mbrarray: {}".format(mbrarray))
 
         try:
             self.temperature = float(mbrarray[0])
@@ -410,13 +445,20 @@ class MBAuthController(polyinterface.Controller):
             self.stn_pressure = float(mbrarray[8])
             self.sl_pressure = float(mbrarray[9])
             self.pressure_trend = float(mbrarray[10])
-            self.pressure_trend = self.pressure_trend + 1 # Meteobridge reports -1, 0, +1 for trends,converted for ISY
+            self.pressure_trend = self.pressure_trend + 1  # Meteobridge reports -1, 0, +1 for trends,converted for ISY
 
-            self.solarradiation = float(mbrarray[11])  # conversion from watt/sqm*h to Joule/sqm
-            # if solarradiation is not None:
-            #    solarradiation *= 0.0864
-            self.uv = float(mbrarray[12])
-            self.et0 = float(mbrarray[13])
+            try:
+                self.solarradiation = float(mbrarray[11])
+                self.uv = float(mbrarray[12])
+                self.et0 = float(mbrarray[13])
+                self.vp2plus = True
+
+            except:  # catch case where solar data is not available
+                self.vp2plus = False
+                self.solarradiation = 0
+                self.uv = 0
+                self.et0 = 0
+
 
             self.wind = float(mbrarray[14])
             # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
@@ -430,10 +472,9 @@ class MBAuthController(polyinterface.Controller):
             self.rain_month = float(mbrarray[21])
             self.rain_year = float(mbrarray[22])
 
-
             self.mbstation = mbrarray[23]
             self.mbstationnum = float(mbrarray[24])
-            self.battery = round(float(mbrarray[25]),0)
+            self.battery = round(float(mbrarray[25]), 0)
 
             self.timestamp = int(mbrarray[26])
 
@@ -447,53 +488,54 @@ class Create_Template():
     def __str__(self):
         mbtemplate = ""
         mbtemplatelist = [
-            "[th0temp-act]", #0, current outdoor temperature
-            "[th0temp-dmax]",  #1, max outdoor temp today
-            "[th0temp-dmin]",  #2, min outdoor temp today
-            "[th0dew-act]",  #3, current outdoor dewpoint
-            "[wind0chill-act]",  #4 current windchill as calculated by MeteoBridge
+            "[th0temp-act]",  # 0, current outdoor temperature
+            "[th0temp-dmax]",  # 1, max outdoor temp today
+            "[th0temp-dmin]",  # 2, min outdoor temp today
+            "[th0dew-act]",  # 3, current outdoor dewpoint
+            "[wind0chill-act]",  # 4 current windchill as calculated by MeteoBridge
 
-            "[th0hum-act]",  #5 current outdoor relative humidity
-            "[th0hum-dmax]",  #6 max outdoor relative humidity today
-            "[th0hum-dmin]",  #7 min outddor relative humidity today
+            "[th0hum-act]",  # 5 current outdoor relative humidity
+            "[th0hum-dmax]",  # 6 max outdoor relative humidity today
+            "[th0hum-dmin]",  # 7 min outddor relative humidity today
 
-            "[thb0press-act]", #8 current station pressure
-            "[thb0seapress-act]",  #9 current sealevel barometric pressure
-            "[thb0press-delta3h=barotrend]", #10 pressure trend
-            
-            "[sol0rad-act]",  #11 current solar radiation
-            "[uv0index-act]",  #12 current UV index
-            "[sol0evo-daysum]", #13 today's cumulative evapotranspiration - Davis Vantage only
+            "[thb0press-act]",  # 8 current station pressure
+            "[thb0seapress-act]",  # 9 current sealevel barometric pressure
+            "[thb0press-delta3h=barotrend]",  # 10 pressure trend
 
-            "[wind0avgwind-act]", #14 average wind (depends on particular station)
-            "[wind0wind-max10]", #15 10 minute wind gust
-            "[wind0dir-act]", #16 current wind direction
+            "[sol0rad-act]",  # 11 current solar radiation
+            "[uv0index-act]",  # 12 current UV index
+            "[sol0evo-daysum]",  # 13 today's cumulative evapotranspiration - Davis Vantage only
+
+            "[wind0avgwind-act]",  # 14 average wind (depends on particular station)
+            "[wind0wind-max10]",  # 15 10 minute wind gust
+            "[wind0dir-act]",  # 16 current wind direction
 
             "[rain0rate-act]",  # 17 current rate of rainfall
-            "[rain0total-daysum]", #18 rain accumulation for today
-            "[rain0total-sum24h]", #19 rain over the last 24 hours
+            "[rain0total-daysum]",  # 18 rain accumulation for today
+            "[rain0total-sum24h]",  # 19 rain over the last 24 hours
             "[rain0total-ydmax]",  # 20 total rainfall yesterday
             "[rain0total-monthsum]",  # 21 rain accumulation for this month
-            "[rain0total-yearsum]", #22 rain accumulation year-to-date
+            "[rain0total-yearsum]",  # 22 rain accumulation year-to-date
 
-            "[mbsystem-station]",  #23 station id
-            "[mbsystem-stationnum]",  #24 meteobridge station number
-            "[thb0lowbat-act]" #25 Station battery status (0=Ok, 1=Replace)
+            "[mbsystem-station]",  # 23 station id
+            "[mbsystem-stationnum]",  # 24 meteobridge station number
+            "[thb0lowbat-act]"  # 25 Station battery status (0=Ok, 1=Replace)
 
-            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  #26 current observation time
-            "[epoch]",  #27 current unix time
+            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 26 current observation time
+            "[epoch]",  # 27 current unix time
         ]
 
         for tempstr in mbtemplatelist:
-                mbtemplate = mbtemplate + tempstr + "%20"
+            mbtemplate = mbtemplate + tempstr + "%20"
 
         return mbtemplate
+
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
     hint = 0xffffff
     units = 'metric'
-    drivers = [ ]
+    drivers = []
 
     def SetUnits(self, u):
         self.units = u
@@ -504,11 +546,12 @@ class TemperatureNode(polyinterface.Node):
 
         super(TemperatureNode, self).setDriver(driver, round(value, 1), report=True, force=True)
 
+
 class PrecipitationNode(polyinterface.Node):
     id = 'precipitation'
     hint = 0xffffff
     units = 'metric'
-    drivers = [ ]
+    drivers = []
 
     def SetUnits(self, u):
         self.units = u
@@ -516,7 +559,8 @@ class PrecipitationNode(polyinterface.Node):
     def setDriver(self, driver, value):
         if (self.units == 'us'):
             value = round(value * 0.03937, 2)
-        super(PrecipitationNode, self).setDriver(driver, round(value,2), report=True, force=True)
+        super(PrecipitationNode, self).setDriver(driver, round(value, 2), report=True, force=True)
+
 
 class HumidityNode(polyinterface.Node):
     id = 'humidity'
@@ -530,11 +574,12 @@ class HumidityNode(polyinterface.Node):
     def setDriver(self, driver, value):
         super(HumidityNode, self).setDriver(driver, value, report=True, force=True)
 
+
 class PressureNode(polyinterface.Node):
     id = 'pressure'
     hint = 0xffffff
     units = 'metric'
-    drivers = [ ]
+    drivers = []
 
     def SetUnits(self, u):
         self.units = u
@@ -544,7 +589,7 @@ class PressureNode(polyinterface.Node):
     def setDriver(self, driver, value):
         if driver != 'GV1':
             if (self.units == 'us'):
-                        value = round(value * 0.02952998751, 2)
+                value = round(value * 0.02952998751, 2)
 
         super(PressureNode, self).setDriver(driver, value, report=True, force=True)
 
@@ -553,7 +598,7 @@ class WindNode(polyinterface.Node):
     id = 'wind'
     hint = 0xffffff
     units = 'metric'
-    drivers = [ ]
+    drivers = []
 
     def SetUnits(self, u):
         self.units = u
@@ -570,7 +615,7 @@ class LightNode(polyinterface.Node):
     id = 'light'
     units = 'metric'
     hint = 0xffffff
-    drivers = [ ]
+    drivers = []
 
     def SetUnits(self, u):
         self.units = u
