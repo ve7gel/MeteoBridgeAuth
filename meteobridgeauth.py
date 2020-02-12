@@ -379,11 +379,8 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info("Set Logging Level to {}".format(self.loglevel[value]))
 
     id = 'MeteoBridgeAuth'
-    #name = 'MeteoBridgeAuth'
-    #address = 'mbweather'
-    stopping = False
     hint = 0xffffff
-    units = 'metric'
+
     commands = {
         'QUERY': query,
         'DISCOVER': discover,
