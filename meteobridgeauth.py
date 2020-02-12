@@ -525,7 +525,7 @@ class Create_Template():
         for tempstr in mbtemplatelist:
             mbtemplate = mbtemplate + tempstr + "%20"
 
-        return mbtemplate
+        return mbtemplate.strip("%20")
 
 
 class TemperatureNode(polyinterface.Node):
