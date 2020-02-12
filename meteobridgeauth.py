@@ -33,7 +33,7 @@ class MBAuthController(polyinterface.Controller):
     def __init__(self, polyglot):
         super(MBAuthController, self).__init__(polyglot)
         self.hb = 0
-        self.name = 'MeteoBridgeAuth'
+        self.name = 'MeteoBridge Weather'
         self.address = 'mbweather'
         self.primary = self.address
         self.password = ""
@@ -379,8 +379,8 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info("Set Logging Level to {}".format(self.loglevel[value]))
 
     id = 'MeteoBridgeAuth'
-    name = 'MeteoBridgeAuth'
-    address = 'mbweather'
+    #name = 'MeteoBridgeAuth'
+    #address = 'mbweather'
     stopping = False
     hint = 0xffffff
     units = 'metric'
