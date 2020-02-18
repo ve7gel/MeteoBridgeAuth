@@ -46,6 +46,8 @@
       <st id="ST" editor="I_MPS" />
       <st id="GV1" editor="I_MPS" />
       <st id="GV0" editor="I_DEGREE" />
+      <st id="GV5" editor="I_KPH" />
+      <st id="GV6" editor="I_KPH" />
     </sts>
   </nodeDef>
   <nodeDef id="precipitation" nodeType="139" nls="139R">

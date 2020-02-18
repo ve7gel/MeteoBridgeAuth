@@ -72,7 +72,9 @@ WIND_DRVS = {
         'gustdir' : 'GV2',
         'lullspeed' : 'GV3',
         'avgwindspeed' : 'GV4',
-        }
+        'windspeed1': 'GV5',
+        'gustspeed1': 'GV6',
+}
 
 RAIN_DRVS = {
         'rate' : 'ST',

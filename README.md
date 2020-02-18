@@ -58,7 +58,9 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
-
+- 1.1.0 18/02/2020
+    - fix debug level settings code error
+    - display both MPS and KPH in wind data node
 - 1.0.9 12/02/2020
     - title change, minor code cleanup
     - strip trailing "%20" from MB template

@@ -2,3 +2,7 @@
 /.idea/MeteoBridgeAuth.iml
 /.idea/misc.xml
 /.idea/
+.gitignore
+.profile.zip
+.TODO.txt
+/profile/version.txt

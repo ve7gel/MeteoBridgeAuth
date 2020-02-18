@@ -56,6 +56,8 @@ ST-139W-GV1-NAME = Gust Speed
 ST-139W-GV2-NAME = Gust Direction
 ST-139W-GV3-NAME = Lull Speed
 ST-139W-GV4-NAME = Average Wind Speed
+ST-139W-GV5-NAME = Wind Speed
+ST-139W-GV6-NAME = Gust Speed
 
 ND-precipitation-NAME = Rainfall
 ND-precipitation-ICON = Input

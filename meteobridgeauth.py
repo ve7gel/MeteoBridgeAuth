@@ -50,7 +50,7 @@ class MBAuthController(polyinterface.Controller):
         self.myConfig = {}  # custom parameters
         self.mb_url = ''
         self.mb_handler = ''
-        self.currentloglevel = ""
+        self.currentloglevel = ''
         self.loglevel = {
             0: 'None',
             10: 'Debug',
@@ -66,7 +66,7 @@ class MBAuthController(polyinterface.Controller):
     def start(self):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
-        LOGGER.info( "Loglevel set to: {}".format( self.loglevel[self.currentloglevel] ) )
+        LOGGER.info( "Loglevel set to: {}".format( self.loglevel[int(self.currentloglevel)] ))
         self.setDriver( 'GV1', self.currentloglevel )
 
         self.discover()
@@ -128,6 +128,12 @@ class MBAuthController(polyinterface.Controller):
             )
             self.nodes['wind'].setDriver(
                 uom.WIND_DRVS['gustspeed'], self.wind_gust
+            )
+            self.nodes['wind'].setDriver(
+                uom.WIND_DRVS['windspeed1'], self.wind
+            )
+            self.nodes['wind'].setDriver(
+                uom.WIND_DRVS['gustspeed1'], self.wind_gust
             )
             self.nodes['light'].setDriver(
                 uom.LITE_DRVS['solar_radiation'], self.solarradiation
@@ -278,16 +284,17 @@ class MBAuthController(polyinterface.Controller):
 
         if 'Loglevel' in self.polyConfig['customData']:
             self.currentloglevel = self.polyConfig['customData']['Loglevel']
-            LOGGER.setLevel(self.currentloglevel)
             LOGGER.debug( "Custom data: {0}, currentloglevel: {1}".format( self.polyConfig['customData'], self.currentloglevel ) )
+
+            LOGGER.setLevel(int(self.currentloglevel))
 
         else:
             LOGGER.debug( "Custom data: {}".format( self.polyConfig['customData'] ) )
-            self.currentloglevel = '10'
+            self.currentloglevel = 10
             self.saveCustomData({
                 'Loglevel': self.currentloglevel,  # set default loglevel to 'Debug'
             })
-            LOGGER.setLevel(self.currentloglevel)
+            LOGGER.setLevel(int(self.currentloglevel))
 
         # Remove all existing notices
         LOGGER.info("remove all notices")
@@ -335,6 +342,10 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['windspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['winddir'] = 'I_DEGREE'
+        if units == 'metric':
+            self.wind_list['windspeed1'] = 'I_KPH'
+            self.wind_list['gustspeed1'] = 'I_KPH'
+
         self.rain_list['rate'] = 'I_MMHR' if units == 'metric' else 'I_INHR'
         self.rain_list['daily'] = 'I_MM' if units == 'metric' else 'I_INCHES'
         self.rain_list['24hour'] = 'I_MM' if units == 'metric' else 'I_INCHES'
@@ -376,7 +387,7 @@ class MBAuthController(polyinterface.Controller):
         self.saveCustomData({
             'Loglevel': self.currentloglevel,
         })
-        LOGGER.setLevel(self.currentloglevel)
+        LOGGER.setLevel(int(self.currentloglevel))
         LOGGER.info("Set Logging Level to {}".format(self.loglevel[self.currentloglevel]))
         self.setDriver('GV1', self.currentloglevel)
 
@@ -607,6 +618,10 @@ class WindNode(polyinterface.Node):
             # Metric value is meters/sec (not KPH)
             if (self.units != 'metric'):
                 value = round(value * 2.23694, 2)
+        if (driver == 'GV5' or driver == 'GV6'):
+            # Alternate metric value is KPH)
+            if (self.units == 'metric'):
+                value = round(value * 3.6, 2)
         super(WindNode, self).setDriver(driver, value, report=True, force=True)
 
 
