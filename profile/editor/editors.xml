@@ -3,7 +3,7 @@
 		<range uom="14" min="-360" max="360" prec="0" />
 	</editor>
 	<editor id="I_LAST_UPDATE">
-		<range uom="58" min="0" max="5000000000" prec="0" />
+		<range uom="0" min="0" max="5000000000" prec="0" />
 	</editor>
 	<editor id="I_TREND">
 		<range uom="25" subset="0-2" nls="EN_TREND" />

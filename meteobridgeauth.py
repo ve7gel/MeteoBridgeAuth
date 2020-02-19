@@ -19,6 +19,7 @@ import urllib.error
 import urllib.request
 import write_profile
 import uom
+import math
 
 LOGGER = polyinterface.LOGGER
 """
@@ -67,7 +68,7 @@ class MBAuthController(polyinterface.Controller):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
         LOGGER.info( "Loglevel set to: {}".format( self.loglevel[self.currentloglevel] ))
-        self.setDriver( 'GV1', self.currentloglevel )
+        self.setDriver( 'GV2', self.currentloglevel )
 
         self.discover()
         self.mb_url, self.mb_handler = self.create_url()
@@ -81,7 +82,6 @@ class MBAuthController(polyinterface.Controller):
         # read data
         if self.ip == "":
             return
-
         self.getstationdata(self.mb_url, self.mb_handler)
 
         LOGGER.info("Updated data from Meteobridge")
@@ -166,6 +166,7 @@ class MBAuthController(polyinterface.Controller):
             )
             self.setDriver('GV0', self.battery)
             # value 0 = Ok, 1 = Replace
+            self.setDriver('GV1', self.timestamp)
         except:
             pass
 
@@ -389,7 +390,7 @@ class MBAuthController(polyinterface.Controller):
         })
         LOGGER.setLevel(int(self.currentloglevel))
         LOGGER.info("Set Logging Level to {}".format(self.loglevel[self.currentloglevel]))
-        self.setDriver('GV1', self.currentloglevel)
+        self.setDriver('GV2', self.currentloglevel)
 
     id = 'MeteoBridgeAuth'
     hint = 0xffffff
@@ -405,7 +406,8 @@ class MBAuthController(polyinterface.Controller):
     drivers = [
         {'driver': 'ST', 'value': 1, 'uom': 2},
         {'driver': 'GV0', 'value': 0, 'uom': 25},
-        {'driver': 'GV1', 'value': 0, 'uom': 25},
+        {'driver': 'GV1', 'value': 0, 'uom': 0},
+        {'driver': 'GV2', 'value': 10, 'uom': 25},
     ]
 
     def create_url(self):
@@ -486,7 +488,9 @@ class MBAuthController(polyinterface.Controller):
             self.mbstationnum = float(mbrarray[24])
             self.battery = round(float(mbrarray[25]), 0)
 
-            self.timestamp = int(mbrarray[26])
+            #self.timestamp = math.trunc(int(mbrarray[26]) / 1000)
+            self.timestamp = int( mbrarray[26] )
+            LOGGER.debug("Timestamp: {}".format(self.timestamp))
 
         except:
             LOGGER.debug("Invalid value")
@@ -529,9 +533,10 @@ class Create_Template():
 
             "[mbsystem-station]",  # 23 station id
             "[mbsystem-stationnum]",  # 24 meteobridge station number
-            "[thb0lowbat-act]"  # 25 Station battery status (0=Ok, 1=Replace)
+            "[thb0lowbat-act]",  # 25 Station battery status (0=Ok, 1=Replace)
 
-            "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 26 current observation time
+            #  "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 26 current observation time
+            "[Uhh][mm][ss]",
             "[epoch]",  # 27 current unix time
         ]
 
