@@ -58,6 +58,8 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
+- 1.2.0 19/02/2020
+    - add Last observation timestamp to primary node. This field displays HHmmss in UTC.
 - 1.1.0 18/02/2020
     - display both MPS and KPH in wind data node - may require delete/add of NS
 - 1.0.9 12/02/2020
