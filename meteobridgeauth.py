@@ -50,7 +50,7 @@ class MBAuthController(polyinterface.Controller):
         self.myConfig = {}  # custom parameters
         self.mb_url = ''
         self.mb_handler = ''
-        self.currentloglevel = ''
+        self.currentloglevel = 10
         self.loglevel = {
             0: 'None',
             10: 'Debug',
@@ -66,7 +66,7 @@ class MBAuthController(polyinterface.Controller):
     def start(self):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
-        LOGGER.info( "Loglevel set to: {}".format( self.loglevel[int(self.currentloglevel)] ))
+        LOGGER.info( "Loglevel set to: {}".format( self.loglevel[self.currentloglevel] ))
         self.setDriver( 'GV1', self.currentloglevel )
 
         self.discover()
@@ -294,7 +294,7 @@ class MBAuthController(polyinterface.Controller):
             self.saveCustomData({
                 'Loglevel': self.currentloglevel,  # set default loglevel to 'Debug'
             })
-            LOGGER.setLevel(int(self.currentloglevel))
+            LOGGER.setLevel(self.currentloglevel)
 
         # Remove all existing notices
         LOGGER.info("remove all notices")
