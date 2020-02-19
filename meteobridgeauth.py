@@ -621,7 +621,7 @@ class WindNode(polyinterface.Node):
         if (driver == 'GV5' or driver == 'GV6'):
             # Alternate metric value is KPH)
             if (self.units == 'metric'):
-                value = round(value * 3.6, 2)
+                value = round(value * 3.6, 1)
         super(WindNode, self).setDriver(driver, value, report=True, force=True)
 
 
