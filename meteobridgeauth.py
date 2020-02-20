@@ -536,7 +536,7 @@ class Create_Template():
             "[thb0lowbat-act]",  # 25 Station battery status (0=Ok, 1=Replace)
 
             #  "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 26 current observation time
-            "[Uhh][mm][ss]",
+            "[hh][mm][ss]",
             "[epoch]",  # 27 current unix time
         ]
 

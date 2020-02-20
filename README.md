@@ -59,7 +59,7 @@ The MeteoBridge nodeserver keeps track of the version number and when a profile 
 
 # Release Notes
 - 1.2.0 19/02/2020
-    - add Last observation timestamp to primary node. This field displays HHmmss in UTC.
+    - add Last observation timestamp to primary node. This field displays HHmmss in local time.
 - 1.1.0 18/02/2020
     - display both MPS and KPH in wind data node - may require delete/add of NS
 - 1.0.9 12/02/2020
