@@ -40,14 +40,9 @@ The settings for this node are:
 
 ## Requirements
 
-1. Polyglot V2 itself should be run on Raspian Stretch.
-  To check your version, ```cat /etc/os-release``` and the first line should look like
-  ```PRETTY_NAME="Raspbian GNU/Linux 9 (stretch)"```. It is possible to upgrade from Jessie to
-  Stretch, but I would recommend just re-imaging the SD card.  Some helpful links:
-   * https://www.raspberrypi.org/blog/raspbian-stretch/
-   * https://linuxconfig.org/raspbian-gnu-linux-upgrade-from-jessie-to-raspbian-stretch-9
-2. This NS has been tested and verified for compatibility with UDI Polisy.
-3. This has only been tested with ISY 5.0.16b so it is not guaranteed to work with any other version.
+1. This NS has been tested and verified for compatibility with UDI Polisy.
+2. This has only been tested with ISY 5.0.16b so it is not guaranteed to work with any other version.
+3. The NS has only been tested with a Davis Vantage Pro2+ via Meteobridge, so full compatibility with other platforms is not guaranteed.
 
 # Upgrading
 
@@ -58,6 +53,8 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
+- 1.2.1 08/03/202
+    - test for UV sensor presence separately from Solar Sensor.  Apparently, there are some cases where one is installed but not the other.  The Driver displays "0" if the sensor is not available.
 - 1.2.0 19/02/2020
     - add Last observation timestamp to primary node. This field displays HHmmss in local time.
 - 1.1.0 18/02/2020

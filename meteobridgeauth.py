@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 NodeServer to extract weather data from the MeteoBridge Hub.  Designed around a DAVIS VP2+ weather station. May work
 others, not tested.  At the moment, only DAVIS stations provide ET0 readings.
@@ -63,12 +63,13 @@ class MBAuthController(polyinterface.Controller):
 
         self.poly.onConfig(self.process_config)
         self.vp2plus = False
+        self.uvpresent = False
 
     def start(self):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
-        LOGGER.info( "Loglevel set to: {}".format( self.loglevel[self.currentloglevel] ))
-        self.setDriver( 'GV2', self.currentloglevel )
+        LOGGER.info("Loglevel set to: {}".format(self.loglevel[self.currentloglevel]))
+        self.setDriver('GV2', self.currentloglevel)
 
         self.discover()
         self.mb_url, self.mb_handler = self.create_url()
@@ -138,10 +139,14 @@ class MBAuthController(polyinterface.Controller):
             self.nodes['light'].setDriver(
                 uom.LITE_DRVS['solar_radiation'], self.solarradiation
             )
-            self.nodes['light'].setDriver(
-                uom.LITE_DRVS['uv'], self.uv
-            )
-            if self.mbstation == "Vantage":
+            if self.uvpresent:
+                self.nodes['light'].setDriver(uom.LITE_DRVS['uv'], self.uv
+                                              )
+            else:
+                self.nodes['light'].setDriver(
+                    uom.LITE_DRVS['uv'], 0
+                )
+            if self.vp2plus:
                 et0_conv = self.et0
                 if self.units == 'us':
                     et0_conv = round(et0_conv / 25.4, 3)
@@ -150,7 +155,9 @@ class MBAuthController(polyinterface.Controller):
                     uom.LITE_DRVS['evapotranspiration'], et0_conv
                 )
             else:
-                LOGGER.info("Evapotranspiration not available (Davis Vantage stations only)")
+                self.nodes['light'].setDriver(uom.LITE_DRVS['evapotranspiration'], 0
+                                              )
+                LOGGER.info("Evapotranspiration not available (Davis Vantage stations with Solar Sensor only)")
 
             self.nodes['pressure'].setDriver(
                 uom.PRES_DRVS['station'], self.stn_pressure
@@ -285,12 +292,13 @@ class MBAuthController(polyinterface.Controller):
 
         if 'Loglevel' in self.polyConfig['customData']:
             self.currentloglevel = self.polyConfig['customData']['Loglevel']
-            LOGGER.debug( "Custom data: {0}, currentloglevel: {1}".format( self.polyConfig['customData'], self.currentloglevel ) )
+            LOGGER.debug(
+                "Custom data: {0}, currentloglevel: {1}".format(self.polyConfig['customData'], self.currentloglevel))
 
             LOGGER.setLevel(int(self.currentloglevel))
 
         else:
-            LOGGER.debug( "Custom data: {}".format( self.polyConfig['customData'] ) )
+            LOGGER.debug("Custom data: {}".format(self.polyConfig['customData']))
             self.currentloglevel = 10
             self.saveCustomData({
                 'Loglevel': self.currentloglevel,  # set default loglevel to 'Debug'
@@ -460,17 +468,22 @@ class MBAuthController(polyinterface.Controller):
             self.pressure_trend = self.pressure_trend + 1  # Meteobridge reports -1, 0, +1 for trends,converted for ISY
 
             try:
-                self.solarradiation = float(mbrarray[11])
                 self.uv = float(mbrarray[12])
+                self.uvpresent = True
+
+            except:  # no uv sensor
+                self.uv = 0
+                self.uvpresent = False
+
+            try:
+                self.solarradiation = float(mbrarray[11])
                 self.et0 = float(mbrarray[13])
                 self.vp2plus = True
 
             except:  # catch case where solar data is not available
                 self.vp2plus = False
                 self.solarradiation = 0
-                self.uv = 0
                 self.et0 = 0
-
 
             self.wind = float(mbrarray[14])
             # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
@@ -488,8 +501,8 @@ class MBAuthController(polyinterface.Controller):
             self.mbstationnum = float(mbrarray[24])
             self.battery = round(float(mbrarray[25]), 0)
 
-            #self.timestamp = math.trunc(int(mbrarray[26]) / 1000)
-            self.timestamp = int( mbrarray[26] )
+            # self.timestamp = math.trunc(int(mbrarray[26]) / 1000)
+            self.timestamp = int(mbrarray[26])
             LOGGER.debug("Timestamp: {}".format(self.timestamp))
 
         except:
