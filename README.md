@@ -36,14 +36,14 @@ The settings for this node are:
    *   metric - SI / metric units
    *   us     - units generally used in the U.S.
 
-
-
 ## Requirements
 
 1. This NS has been tested and verified for compatibility with UDI Polisy.
 2. This has only been tested with ISY 5.0.16b so it is not guaranteed to work with any other version.
 3. The NS has only been tested with a Davis Vantage Pro2+ via Meteobridge, so full compatibility with other platforms is not guaranteed.
 
+## Issues
+Please raise any issues on the UDI forum at "https://forum.universal-devices.com/topic/28637-new-meteobridge-weather-nodeserver/" Github is not watched.
 # Upgrading
 
 Open the Polyglot web page, go to nodeserver store and click "Update" for "MeteoBridge".
