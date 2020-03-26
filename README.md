@@ -53,7 +53,9 @@ Then restart the MeteoBridge nodeserver by selecting it in the Polyglot dashboar
 The MeteoBridge nodeserver keeps track of the version number and when a profile rebuild is necessary.  The profile/version.txt will contain the MeteoBridge profile_version which is updated in server.json when the profile should be rebuilt.
 
 # Release Notes
-- 1.2.1 08/03/202
+- 1.2.2 26/03/2020
+    - add cardinal wind direction
+- 1.2.1 08/03/2020
     - test for UV sensor presence separately from Solar Sensor.  Apparently, there are some cases where one is installed but not the other.  The Driver displays "0" if the sensor is not available.
 - 1.2.0 19/02/2020
     - add Last observation timestamp to primary node. This field displays HHmmss in local time.
