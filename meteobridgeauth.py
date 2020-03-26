@@ -157,7 +157,6 @@ class MBAuthController(polyinterface.Controller):
             self.nodes['wind'].setDriver(
                 uom.WIND_DRVS['winddircard'], self.wind_dir_cardinal
             )
-            LOGGER.debug("Wind nodes: {}".format(self.nodes['wind']))
             self.nodes['light'].setDriver(
                 uom.LITE_DRVS['solar_radiation'], self.solarradiation
             )
