@@ -9,7 +9,7 @@
     "shortPoll": "15",
     "longPoll": "600",
     "testMode": false,
-    "profile_version": "0.2.1",
+    "profile_version": "0.2.2",
     "credits": [
         {
             "title": "MeteoBridgeAuth: a NodeServer for MeteoBridge Template Integration",
