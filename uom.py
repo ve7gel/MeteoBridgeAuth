@@ -25,6 +25,7 @@ UOM = {
         'I_MPS' : 49,
         'I_BATTERY' : 25,
         'I_LAST_UPDATE': 56,
+        'I_CARDINAL': 25,
         }
 
 
@@ -68,13 +69,11 @@ PRES_DRVS = {
 
 WIND_DRVS = {
         'windspeed' : 'ST',
-        'winddir' : 'GV0',
-        'gustspeed' : 'GV1',
-        'gustdir' : 'GV2',
-        'lullspeed' : 'GV3',
-        'avgwindspeed' : 'GV4',
-        'windspeed1': 'GV5',
-        'gustspeed1': 'GV6',
+        'gustspeed' : 'GV0',
+        'winddir' : 'GV1',
+        'winddircard' : 'GV2',
+        'windspeed1': 'GV3',
+        'gustspeed1': 'GV4',
 }
 
 RAIN_DRVS = {

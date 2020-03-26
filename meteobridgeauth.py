@@ -60,6 +60,24 @@ class MBAuthController(polyinterface.Controller):
             40: 'Warning',
             50: 'Critical'
         }
+        self.wind_card_dict = {
+            'N': 0,
+            'NNE': 1,
+            'NE': 2,
+            'ENE': 3,
+            'E': 4,
+            'ESE': 5,
+            'SE': 6,
+            'SSE': 7,
+            'S': 8,
+            'SSW': 9,
+            'SW': 10,
+            'WSW': 11,
+            'W': 12,
+            'WNW': 13,
+            'NW': 14,
+            'NNW': 15
+        }
 
         self.poly.onConfig(self.process_config)
         self.vp2plus = False
@@ -136,6 +154,10 @@ class MBAuthController(polyinterface.Controller):
             self.nodes['wind'].setDriver(
                 uom.WIND_DRVS['gustspeed1'], self.wind_gust
             )
+            self.nodes['wind'].setDriver(
+                uom.WIND_DRVS['winddircard'], self.wind_dir_cardinal
+            )
+            LOGGER.debug("Wind nodes: {}".format(self.nodes['wind']))
             self.nodes['light'].setDriver(
                 uom.LITE_DRVS['solar_radiation'], self.solarradiation
             )
@@ -351,6 +373,7 @@ class MBAuthController(polyinterface.Controller):
         self.wind_list['windspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['gustspeed'] = 'I_MPS' if units == 'metric' else 'I_MPH'
         self.wind_list['winddir'] = 'I_DEGREE'
+        self.wind_list['winddircard'] = 'I_CARDINAL'
         if units == 'metric':
             self.wind_list['windspeed1'] = 'I_KPH'
             self.wind_list['gustspeed1'] = 'I_KPH'
@@ -370,7 +393,6 @@ class MBAuthController(polyinterface.Controller):
         write_profile.write_profile(LOGGER, self.temperature_list,
                                     self.humidity_list, self.pressure_list, self.wind_list,
                                     self.rain_list, self.light_list, self.lightning_list)
-
         # push updated profile to ISY
         try:
             self.poly.installprofile()
@@ -489,20 +511,21 @@ class MBAuthController(polyinterface.Controller):
             # wind = wind * 3.6 # the Meteobridge reports in mps, this is conversion to kph
             self.wind_gust = float(mbrarray[15])
             self.wind_dir = mbrarray[16]
+            self.wind_dir_cardinal = self.wind_card_dict[mbrarray[17]]
+            LOGGER.debug("mbr wind: {}, gust: {}, dir: {}, wdc: {}, wind_dir_cardinal: {}".format(self.wind, self.wind_gust, self.wind_dir, mbrarray[17], self.wind_dir_cardinal))
+            self.rain_rate = float(mbrarray[18])
+            self.rain_today = float(mbrarray[19])
+            self.rain_24hour = float(mbrarray[20])
+            self.rain_yesterday = float(mbrarray[21])
+            self.rain_month = float(mbrarray[22])
+            self.rain_year = float(mbrarray[23])
 
-            self.rain_rate = float(mbrarray[17])
-            self.rain_today = float(mbrarray[18])
-            self.rain_24hour = float(mbrarray[19])
-            self.rain_yesterday = float(mbrarray[20])
-            self.rain_month = float(mbrarray[21])
-            self.rain_year = float(mbrarray[22])
-
-            self.mbstation = mbrarray[23]
-            self.mbstationnum = float(mbrarray[24])
-            self.battery = round(float(mbrarray[25]), 0)
+            self.mbstation = mbrarray[24]
+            self.mbstationnum = float(mbrarray[25])
+            self.battery = round(float(mbrarray[26]), 0)
 
             # self.timestamp = math.trunc(int(mbrarray[26]) / 1000)
-            self.timestamp = int(mbrarray[26])
+            self.timestamp = int(mbrarray[27])
             LOGGER.debug("Timestamp: {}".format(self.timestamp))
 
         except:
@@ -536,21 +559,22 @@ class Create_Template():
             "[wind0avgwind-act]",  # 14 average wind (depends on particular station)
             "[wind0wind-max10]",  # 15 10 minute wind gust
             "[wind0dir-act]",  # 16 current wind direction
+            "[wind0dir-act=endir]", # 17 current cardinal wind direction
 
-            "[rain0rate-act]",  # 17 current rate of rainfall
-            "[rain0total-daysum]",  # 18 rain accumulation for today
-            "[rain0total-sum24h]",  # 19 rain over the last 24 hours
-            "[rain0total-ydmax]",  # 20 total rainfall yesterday
-            "[rain0total-monthsum]",  # 21 rain accumulation for this month
-            "[rain0total-yearsum]",  # 22 rain accumulation year-to-date
+            "[rain0rate-act]",  # 18 current rate of rainfall
+            "[rain0total-daysum]",  # 19 rain accumulation for today
+            "[rain0total-sum24h]",  # 20 rain over the last 24 hours
+            "[rain0total-ydmax]",  # 21 total rainfall yesterday
+            "[rain0total-monthsum]",  # 22 rain accumulation for this month
+            "[rain0total-yearsum]",  # 23 rain accumulation year-to-date
 
-            "[mbsystem-station]",  # 23 station id
-            "[mbsystem-stationnum]",  # 24 meteobridge station number
-            "[thb0lowbat-act]",  # 25 Station battery status (0=Ok, 1=Replace)
+            "[mbsystem-station]",  # 24 station id
+            "[mbsystem-stationnum]",  # 25 meteobridge station number
+            "[thb0lowbat-act]",  # 26 Station battery status (0=Ok, 1=Replace)
 
-            #  "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 26 current observation time
+            #  "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 27 current observation time
             "[hh][mm][ss]",
-            "[epoch]",  # 27 current unix time
+            "[epoch]",  # 28 current unix time
         ]
 
         for tempstr in mbtemplatelist:
