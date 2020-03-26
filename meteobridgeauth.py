@@ -149,10 +149,10 @@ class MBAuthController(polyinterface.Controller):
                 uom.WIND_DRVS['gustspeed'], self.wind_gust
             )
             self.nodes['wind'].setDriver(
-                uom.WIND_DRVS['windspeed1'], self.wind
+                uom.WIND_DRVS['windspeed1'], self.wind * 3.6
             )
             self.nodes['wind'].setDriver(
-                uom.WIND_DRVS['gustspeed1'], self.wind_gust
+                uom.WIND_DRVS['gustspeed1'], self.wind_gust * 3.6
             )
             self.nodes['wind'].setDriver(
                 uom.WIND_DRVS['winddircard'], self.wind_dir_cardinal
