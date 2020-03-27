@@ -655,11 +655,11 @@ class WindNode(polyinterface.Node):
         self.units = u
 
     def setDriver(self, driver, value):
-        if (driver == 'ST' or driver == 'GV1' or driver == 'GV3'):
+        if (driver == 'ST' or driver == 'GV0'):
             # Metric value is meters/sec (not KPH)
             if (self.units != 'metric'):
                 value = round(value * 2.23694, 2)
-        if (driver == 'GV5' or driver == 'GV6'):
+        if (driver == 'GV3' or driver == 'GV4'):
             # Alternate metric value is KPH)
             if (self.units == 'metric'):
                 value = round(value * 3.6, 1)
