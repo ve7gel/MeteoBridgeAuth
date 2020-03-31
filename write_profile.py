@@ -17,7 +17,7 @@ VERSION_FILE = "profile/version.txt"
 # the user's configuration.
 
 
-NODEDEF_TMPL = "  <nodeDef id=\"%s\" nodeType=\"139\" nls=\"%s\">\n"
+NODEDEF_TMPL = "  <nodeDef id=\"%s\" nls=\"%s\">\n"
 STATUS_TMPL = "      <st id=\"%s\" editor=\"%s\" />\n"
 
 # As long as we provide proper dictionary lists for each type of node
@@ -69,7 +69,7 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
     # and     translate temperature.extra1 into <st id="GV5" editor="TEMP_C" />
 
     if (len(temperature_list) > 0):
-        nodedef.write(NODEDEF_TMPL % ('temperature', '139T'))
+        nodedef.write(NODEDEF_TMPL % ('temperature', 'TEMP'))
         nodedef.write("    <sts>\n")
         for t in temperature_list:
             nodedef.write(STATUS_TMPL % (uom.TEMP_DRVS[t], temperature_list[t]))
@@ -77,7 +77,7 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
         nodedef.write("  </nodeDef>\n")
 
     if (len(humidity_list) > 0):
-        nodedef.write(NODEDEF_TMPL % ('humidity', '139H'))
+        nodedef.write(NODEDEF_TMPL % ('humidity', 'HUM'))
         nodedef.write("    <sts>\n")
         for t in humidity_list:
             nodedef.write(STATUS_TMPL % (uom.HUMD_DRVS[t], humidity_list[t]))
@@ -85,7 +85,7 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
         nodedef.write("  </nodeDef>\n")
 
     if (len(pressure_list) > 0):
-        nodedef.write(NODEDEF_TMPL % ('pressure', '139P'))
+        nodedef.write(NODEDEF_TMPL % ('pressure', 'PRESS'))
         nodedef.write("    <sts>\n")
         for t in pressure_list:
             nodedef.write(STATUS_TMPL % (uom.PRES_DRVS[t], pressure_list[t]))
@@ -93,7 +93,8 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
         nodedef.write("  </nodeDef>\n")
 
     if (len(wind_list) > 0):
-        nodedef.write(NODEDEF_TMPL % ('wind', '139W'))
+        nodedef.write(NODEDEF_TMPL % ('wind', 'WIND'))
+        nodedef.write("    <editors   />\n")
         nodedef.write("    <sts>\n")
         for t in wind_list:
             nodedef.write(STATUS_TMPL % (uom.WIND_DRVS[t], wind_list[t]))
@@ -101,7 +102,7 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
         nodedef.write("  </nodeDef>\n")
 
     if (len(rain_list) > 0):
-        nodedef.write(NODEDEF_TMPL % ('precipitation', '139R'))
+        nodedef.write(NODEDEF_TMPL % ('precipitation', 'RAIN'))
         nodedef.write("    <sts>\n")
         for t in rain_list:
             nodedef.write(STATUS_TMPL % (uom.RAIN_DRVS[t], rain_list[t]))
@@ -109,7 +110,7 @@ def write_profile(logger, temperature_list, humidity_list, pressure_list,
         nodedef.write("  </nodeDef>\n")
 
     if (len(light_list) > 0):
-        nodedef.write(NODEDEF_TMPL % ('light', '139L'))
+        nodedef.write(NODEDEF_TMPL % ('light', 'LIGHT'))
         nodedef.write("    <sts>\n")
         for t in light_list:
             nodedef.write(STATUS_TMPL % (uom.LITE_DRVS[t], light_list[t]))

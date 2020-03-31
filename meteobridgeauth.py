@@ -149,10 +149,10 @@ class MBAuthController(polyinterface.Controller):
                 uom.WIND_DRVS['gustspeed'], self.wind_gust
             )
             self.nodes['wind'].setDriver(
-                uom.WIND_DRVS['windspeed1'], round(self.wind * 3.6, 1)
+                uom.WIND_DRVS['windspeed1'], self.wind
             )
             self.nodes['wind'].setDriver(
-                uom.WIND_DRVS['gustspeed1'], round(self.wind_gust * 3.6, 1)
+                uom.WIND_DRVS['gustspeed1'], self.wind_gust
             )
             self.nodes['wind'].setDriver(
                 uom.WIND_DRVS['winddircard'], self.wind_dir_cardinal
@@ -249,6 +249,7 @@ class MBAuthController(polyinterface.Controller):
                     'uom': uom.UOM[self.wind_list[d]]
                 })
         self.addNode(node)
+        LOGGER.debug("Wind nodes: {}".format(node.drivers))
 
         node = PrecipitationNode(self, self.address, 'rain', 'Precipitation')
         node.SetUnits(self.units)
@@ -422,7 +423,6 @@ class MBAuthController(polyinterface.Controller):
         self.setDriver('GV2', self.currentloglevel)
 
     id = 'MeteoBridgeAuth'
-    hint = 0xffffff
 
     commands = {
         'QUERY': query,
@@ -584,7 +584,6 @@ class Create_Template():
 
 class TemperatureNode(polyinterface.Node):
     id = 'temperature'
-    hint = 0xffffff
     units = 'metric'
     drivers = []
 
@@ -600,7 +599,6 @@ class TemperatureNode(polyinterface.Node):
 
 class PrecipitationNode(polyinterface.Node):
     id = 'precipitation'
-    hint = 0xffffff
     units = 'metric'
     drivers = []
 
@@ -615,7 +613,6 @@ class PrecipitationNode(polyinterface.Node):
 
 class HumidityNode(polyinterface.Node):
     id = 'humidity'
-    hint = 0xffffff
     units = 'metric'
     drivers = [{'driver': 'ST', 'value': 0, 'uom': 22}]
 
@@ -628,7 +625,6 @@ class HumidityNode(polyinterface.Node):
 
 class PressureNode(polyinterface.Node):
     id = 'pressure'
-    hint = 0xffffff
     units = 'metric'
     drivers = []
 
@@ -647,7 +643,6 @@ class PressureNode(polyinterface.Node):
 
 class WindNode(polyinterface.Node):
     id = 'wind'
-    hint = 0xffffff
     units = 'metric'
     drivers = []
 
@@ -669,7 +664,6 @@ class WindNode(polyinterface.Node):
 class LightNode(polyinterface.Node):
     id = 'light'
     units = 'metric'
-    hint = 0xffffff
     drivers = []
 
     def SetUnits(self, u):
