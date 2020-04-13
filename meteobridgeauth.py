@@ -15,11 +15,9 @@ try:
 except ImportError:
     import pgc_interface as polyinterface
 import sys
-import urllib.error
-import urllib.request
 import write_profile
 import uom
-import math
+import requests
 
 LOGGER = polyinterface.LOGGER
 """
@@ -49,8 +47,6 @@ class MBAuthController(polyinterface.Controller):
         self.light_list = {}
         self.lightning_list = {}
         self.myConfig = {}  # custom parameters
-        self.mb_url = ''
-        self.mb_handler = ''
         self.currentloglevel = 10
         self.loglevel = {
             0: 'None',
@@ -88,10 +84,10 @@ class MBAuthController(polyinterface.Controller):
         self.check_params()
         LOGGER.info("Loglevel set to: {}".format(self.loglevel[self.currentloglevel]))
         self.setDriver('GV2', self.currentloglevel)
-
         self.discover()
-        self.mb_url, self.mb_handler = self.create_url()
-        self.longPoll()
+        if self.ip is not "":
+            self.getstationdata(self.ip, self.username, self.password)
+            self.set_drivers()
 
     def shortPoll(self):
         pass
@@ -99,12 +95,14 @@ class MBAuthController(polyinterface.Controller):
     def longPoll(self):
 
         # read data
-        if self.ip == "":
+        if self.ip is "":
             return
-        self.getstationdata(self.mb_url, self.mb_handler)
 
+        self.getstationdata(self.ip, self.username, self.password)
+        self.set_drivers()
         LOGGER.info("Updated data from Meteobridge")
 
+    def set_drivers(self):
         try:
             self.nodes['temperature'].setDriver(
                 uom.TEMP_DRVS['main'], self.temperature
@@ -294,7 +292,7 @@ class MBAuthController(polyinterface.Controller):
                 self.removeNoticesAll()
 
                 # Add notices about missing configuration
-                if self.ip == "":
+                if self.ip is "":
                     self.addNotice("IP address or hostname of the MeteoBridge device is required.")
 
     def check_params(self):
@@ -332,20 +330,19 @@ class MBAuthController(polyinterface.Controller):
         self.removeNoticesAll()
 
         # Add a notice?
-        if self.ip == "":
-            self.addNotice("IP address of the MeteoBridge device is required.")
+        if self.ip is "":
+            self.addNotice("IP address or hostname of your MeteoBridge device is required.")
         if self.password == "":
-            self.addNotice("Password for MeteoBridge is required.")
+            self.addNotice("Password for your MeteoBridge is required.")
 
     def set_configuration(self, config):
-        default_ip = ""
 
         LOGGER.info("Check for existing configuration value")
 
         if 'IPAddress' in config['customParams']:
             self.ip = config['customParams']['IPAddress']
         else:
-            self.ip = default_ip
+            self.ip = ""
 
         if 'Units' in config['customParams']:
             self.units = config['customParams']['Units'].lower()
@@ -437,36 +434,25 @@ class MBAuthController(polyinterface.Controller):
         {'driver': 'GV0', 'value': 0, 'uom': 25},
         {'driver': 'GV1', 'value': 0, 'uom': 0},
         {'driver': 'GV2', 'value': 10, 'uom': 25},
-    ]
+        ]
 
-    def create_url(self):
-        # top_level_url
-        top_level_url = "http://" + self.ip + "/"
-        # create a password manager
-        password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-
-        # Add the username and password.
-        password_mgr.add_password(None, top_level_url, self.username, self.password)
-        handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-
-        url = top_level_url + "cgi-bin/template.cgi?template="
-        LOGGER.debug("Meteobridge URL: {}".format(url))
-        values = str(Create_Template())
-
-        return url + values, handler
-
-    def getstationdata(self, url, handler):
-        LOGGER.debug("url in getstationdata: {}".format(url))
+    def getstationdata(self, ipaddr, username, password):
+        """
+            Here we assemble the url and template for the call to the Meteobridge
+            and then unpack the returned data into variables. Simplified in Version 1.2.5 to
+            streamline the basic auth method in requests.get
+        """
         try:
-            # create "opener" (OpenerDirector instance)
-            opener = urllib.request.build_opener(handler)
+            values = str(Create_Template())
+            url = 'http://' + ipaddr + '/cgi-bin/template.cgi?template='
+            LOGGER.debug( "url in getstationdata: {}".format( url ) )
 
-            # use the opener to fetch a URL
-            u = opener.open(url)
-            mbrdata = u.read().decode('utf-8')
-            LOGGER.debug("Returned mbrdata: {}".format(mbrdata))
-        except urllib.error.HTTPError as e:
-            LOGGER.error("Unable to connect to your MeteoBridge hub")
+            u = requests.get( url+values, auth=(username, password) )
+            mbrdata = u.content.decode( 'utf-8' )
+
+        except OSError as err:
+            LOGGER.error("Unable to connect to your MeteoBridge device")
+            LOGGER.error(err)
             return
 
         mbrarray = mbrdata.split(" ")
