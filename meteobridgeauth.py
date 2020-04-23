@@ -1,14 +1,13 @@
 # !/usr/bin/env python3
 """
-NodeServer to extract weather data from the MeteoBridge Hub.  Designed around a DAVIS VP2+ weather station. May work
+NodeServer to extract weather data from a Meteobridge Weather device.  Designed around a DAVIS VP2+ weather station. May work
 others, not tested.  At the moment, only DAVIS stations provide ET0 readings.
 
 Based on MeteoBridge nodeserver (meteobridgepoly) authored by Bob Paauwe
 Customized to use template queries from MeteoBridge by Gordon Larsen
 
-Copyright 2010 Robert Paauwe and Gordon Larsen, MIT License
+Copyright 2020 Robert Paauwe and Gordon Larsen, MIT License
 """
-# import urllib
 
 try:
     import polyinterface
@@ -443,7 +442,7 @@ class MBAuthController(polyinterface.Controller):
             streamline the basic auth method in requests.get
         """
         try:
-            values = str(Create_Template())
+            values = str(CreateTemplate())
             url = 'http://' + ipaddr + '/cgi-bin/template.cgi?template='
             LOGGER.debug( "url in getstationdata: {}".format( url ) )
 
@@ -518,7 +517,7 @@ class MBAuthController(polyinterface.Controller):
             LOGGER.debug(mbrarray)
 
 
-class Create_Template():
+class CreateTemplate:
 
     def __str__(self):
         mbtemplate = ""
@@ -572,6 +571,7 @@ class TemperatureNode(polyinterface.Node):
     id = 'temperature'
     units = 'metric'
     drivers = []
+    hint = [1, 0x0b, 1, 0]
 
     def SetUnits(self, u):
         self.units = u
@@ -587,7 +587,7 @@ class PrecipitationNode(polyinterface.Node):
     id = 'precipitation'
     units = 'metric'
     drivers = []
-
+    hint = [1, 0x0b, 5, 0]
     def SetUnits(self, u):
         self.units = u
 
@@ -601,7 +601,7 @@ class HumidityNode(polyinterface.Node):
     id = 'humidity'
     units = 'metric'
     drivers = [{'driver': 'ST', 'value': 0, 'uom': 22}]
-
+    hint = [1, 0x0b, 2, 0]
     def SetUnits(self, u):
         self.units = u
 
@@ -613,6 +613,7 @@ class PressureNode(polyinterface.Node):
     id = 'pressure'
     units = 'metric'
     drivers = []
+    hint = [1, 0x0b, 3, 0]
 
     def SetUnits(self, u):
         self.units = u
@@ -631,14 +632,15 @@ class WindNode(polyinterface.Node):
     id = 'wind'
     units = 'metric'
     drivers = []
+    hint = [1, 0x0b, 4, 0]
 
     def SetUnits(self, u):
         self.units = u
 
     def setDriver(self, driver, value):
-        if (driver == 'ST' or driver == 'GV0'):
+        if driver == 'ST' or driver == 'GV0':
             # Metric value is meters/sec (not KPH)
-            if (self.units != 'metric'):
+            if self.units != 'metric':
                 value = round(value * 2.23694, 2)
         if (driver == 'GV3' or driver == 'GV4'):
             # Alternate metric value is KPH)
@@ -651,6 +653,7 @@ class LightNode(polyinterface.Node):
     id = 'light'
     units = 'metric'
     drivers = []
+    hint = [1, 0x0b, 6, 0]
 
     def SetUnits(self, u):
         self.units = u
