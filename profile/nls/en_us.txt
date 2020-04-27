@@ -6,9 +6,11 @@ CMD-ctl-UPDATE_PROFILE-NAME = Update Profile
 CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove Notices
 CMD-ctl-LOG_LEVEL-NAME = Set Logging Level
 ST-ctl-ST-NAME = NodeServer Online
-ST-ctl-GV0-NAME = Battery
-ST-ctl-GV1-NAME = Last Observation Time
-ST-ctl-GV2-NAME = Logging Level
+ST-ctl-GV0-NAME = Console Battery
+ST-ctl-GV1-NAME = ISS Battery
+ST-ctl-GV2-NAME = Last Observation Time
+ST-ctl-GV3-NAME = Last Good Data
+ST-ctl-GV4-NAME = Logging Level
 
 # mynodetype
 ND-temperature-NAME = Temperatures

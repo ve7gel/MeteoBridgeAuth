@@ -77,12 +77,12 @@ class MBAuthController(polyinterface.Controller):
         self.poly.onConfig(self.process_config)
         self.vp2plus = False
         self.uvpresent = False
+        self.lastgooddata = None
 
     def start(self):
         LOGGER.info('Started MeteoBridge Template NodeServer')
         self.check_params()
-        LOGGER.info("Loglevel set to: {}".format(self.loglevel[self.currentloglevel]))
-        self.setDriver('GV2', self.currentloglevel)
+
         self.discover()
         if self.ip is not "":
             self.getstationdata(self.ip, self.username, self.password)
@@ -189,11 +189,18 @@ class MBAuthController(polyinterface.Controller):
             self.nodes['humidity'].setDriver(
                 uom.HUMD_DRVS['main'], self.rh
             )
+
+            # Update controller drivers now
+            self.setDriver('GV3', self.lastgooddata)
             self.setDriver('GV0', self.battery)
+            self.setDriver('GV1', self.issbattery)
             # value 0 = Ok, 1 = Replace
-            self.setDriver('GV1', self.timestamp)
-        except:
-            pass
+            self.setDriver('GV2', self.timestamp)
+
+            LOGGER.debug("Last good data: {} second(s) ago".format(self.lastgooddata))
+
+        except ValueError as e:
+            LOGGER.error("Error in assigning driver values from template: {}".format(e))
 
     def query(self, command=None):
         self.check_params()
@@ -315,6 +322,7 @@ class MBAuthController(polyinterface.Controller):
                 "Custom data: {0}, currentloglevel: {1}".format(self.polyConfig['customData'], self.currentloglevel))
 
             LOGGER.setLevel(int(self.currentloglevel))
+            self.setDriver('GV4', self.currentloglevel)
 
         else:
             LOGGER.debug("Custom data: {}".format(self.polyConfig['customData']))
@@ -323,6 +331,7 @@ class MBAuthController(polyinterface.Controller):
                 'Loglevel': self.currentloglevel,  # set default loglevel to 'Debug'
             })
             LOGGER.setLevel(self.currentloglevel)
+            self.setDriver('GV4', self.currentloglevel)
 
         # Remove all existing notices
         LOGGER.info("remove all notices")
@@ -409,14 +418,14 @@ class MBAuthController(polyinterface.Controller):
         self.units = u
 
     def set_loglevel(self, command):
-        LOGGER.debug("Received command {} in 'set_log_level'".format(command))
+        LOGGER.info("Received command {} in 'set_log_level'".format(command))
         self.currentloglevel = int(command.get('value'))
         self.saveCustomData({
             'Loglevel': self.currentloglevel,
         })
         LOGGER.setLevel(int(self.currentloglevel))
         LOGGER.info("Set Logging Level to {}".format(self.loglevel[self.currentloglevel]))
-        self.setDriver('GV2', self.currentloglevel)
+        self.setDriver('GV4', self.currentloglevel)
 
     id = 'MeteoBridgeAuth'
 
@@ -427,13 +436,15 @@ class MBAuthController(polyinterface.Controller):
         'REMOVE_NOTICES_ALL': remove_notices_all,
         'LOG_LEVEL': set_loglevel,
     }
-    # Hub status information here: battery and rssi values.
+    # Hub status information here: battery and data health values.
     drivers = [
         {'driver': 'ST', 'value': 1, 'uom': 2},
         {'driver': 'GV0', 'value': 0, 'uom': 25},
-        {'driver': 'GV1', 'value': 0, 'uom': 0},
-        {'driver': 'GV2', 'value': 10, 'uom': 25},
-        ]
+        {'driver': 'GV1', 'value': 0, 'uom': 25},
+        {'driver': 'GV2', 'value': 0, 'uom': 0},
+        {'driver': 'GV3', 'value': 0, 'uom': 58},
+        {'driver': 'GV4', 'value': 0, 'uom': 25},
+    ]
 
     def getstationdata(self, ipaddr, username, password):
         """
@@ -444,10 +455,10 @@ class MBAuthController(polyinterface.Controller):
         try:
             values = str(CreateTemplate())
             url = 'http://' + ipaddr + '/cgi-bin/template.cgi?template='
-            LOGGER.debug( "url in getstationdata: {}".format( url ) )
+            LOGGER.debug("url in getstationdata: {}".format(url + values))
 
-            u = requests.get( url+values, auth=(username, password) )
-            mbrdata = u.content.decode( 'utf-8' )
+            u = requests.get(url + values, auth=(username, password))
+            mbrdata = u.content.decode('utf-8')
 
         except OSError as err:
             LOGGER.error("Unable to connect to your MeteoBridge device")
@@ -496,7 +507,10 @@ class MBAuthController(polyinterface.Controller):
             self.wind_gust = float(mbrarray[15])
             self.wind_dir = mbrarray[16]
             self.wind_dir_cardinal = self.wind_card_dict[mbrarray[17]]
-            LOGGER.debug("mbr wind: {}, gust: {}, dir: {}, wdc: {}, wind_dir_cardinal: {}".format(self.wind, self.wind_gust, self.wind_dir, mbrarray[17], self.wind_dir_cardinal))
+            LOGGER.debug(
+                "mbr wind: {}, gust: {}, dir: {}, wdc: {}, wind_dir_cardinal: {}".format(self.wind, self.wind_gust,
+                                                                                         self.wind_dir, mbrarray[17],
+                                                                                         self.wind_dir_cardinal))
             self.rain_rate = float(mbrarray[18])
             self.rain_today = float(mbrarray[19])
             self.rain_24hour = float(mbrarray[20])
@@ -506,13 +520,15 @@ class MBAuthController(polyinterface.Controller):
 
             self.mbstation = mbrarray[24]
             self.mbstationnum = float(mbrarray[25])
-            self.battery = round(float(mbrarray[26]), 0)
 
-            # self.timestamp = math.trunc(int(mbrarray[26]) / 1000)
-            self.timestamp = int(mbrarray[27])
-            LOGGER.debug("Timestamp: {}".format(self.timestamp))
+            self.battery = int(float(mbrarray[26]))
+            self.issbattery = int(float(mbrarray[27]))
+            self.timestamp = int(mbrarray[28])
+            self.lastgooddata = mbrarray[30]
+            LOGGER.debug("Timestamp: {}, good data: {}".format(self.timestamp, self.lastgooddata))
 
-        except:
+        except ValueError or AttributeError as e:
+            LOGGER.error("Error in getstationdata: {}".format(e))
             LOGGER.debug("Invalid value")
             LOGGER.debug(mbrarray)
 
@@ -543,7 +559,7 @@ class CreateTemplate:
             "[wind0avgwind-act]",  # 14 average wind (depends on particular station)
             "[wind0wind-max10]",  # 15 10 minute wind gust
             "[wind0dir-act]",  # 16 current wind direction
-            "[wind0dir-act=endir]", # 17 current cardinal wind direction
+            "[wind0dir-act=endir]",  # 17 current cardinal wind direction
 
             "[rain0rate-act]",  # 18 current rate of rainfall
             "[rain0total-daysum]",  # 19 rain accumulation for today
@@ -555,10 +571,12 @@ class CreateTemplate:
             "[mbsystem-station]",  # 24 station id
             "[mbsystem-stationnum]",  # 25 meteobridge station number
             "[thb0lowbat-act]",  # 26 Station battery status (0=Ok, 1=Replace)
+            "[th0lowbat-act]",  # 27 Station battery status (0=Ok, 1=Replace)
 
-            #  "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 27 current observation time
+            #  "[UYYYY][UMM][UDD][Uhh][Umm][Uss]",  # 28 current observation time
             "[hh][mm][ss]",
-            "[epoch]",  # 28 current unix time
+            "[epoch]",  # 29 current unix time
+            "[mbsystem-lastgooddata]",  # 30 seconds since last good data received from console
         ]
 
         for tempstr in mbtemplatelist:
@@ -588,6 +606,7 @@ class PrecipitationNode(polyinterface.Node):
     units = 'metric'
     drivers = []
     hint = [1, 0x0b, 5, 0]
+
     def SetUnits(self, u):
         self.units = u
 
@@ -602,6 +621,7 @@ class HumidityNode(polyinterface.Node):
     units = 'metric'
     drivers = [{'driver': 'ST', 'value': 0, 'uom': 22}]
     hint = [1, 0x0b, 2, 0]
+
     def SetUnits(self, u):
         self.units = u
 
