@@ -7,15 +7,15 @@
     "description": "Node Server using Meteobridge Templates",
     "notice": "",
     "shortPoll": "15",
-    "longPoll": "600",
+    "longPoll": "60",
     "testMode": false,
-    "profile_version": "0.2.2",
+    "profile_version": "0.3.0",
     "credits": [
         {
             "title": "MeteoBridgeAuth: a NodeServer for MeteoBridge Template Integration",
             "author": "Gordon Larsen",
-            "version": "1.2.4",
-            "date": "March 31, 2020",
+            "version": "1.2.5",
+            "date": "April 28, 2020",
             "source": "https://github.com/ve7gel/MeteoBridgeAuth",
             "license": "https://github.com/ve7gel/MeteoBridgeAuth/blob/master/LICENSE"
         }

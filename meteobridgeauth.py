@@ -299,7 +299,7 @@ class MBAuthController(polyinterface.Controller):
 
                 # Add notices about missing configuration
                 if self.ip is "":
-                    self.addNotice("IP address or hostname of the MeteoBridge device is required.")
+                    self.addNotice("IP address or hostname of your MeteoBridge device is required.")
 
     def check_params(self):
         self.set_configuration(self.polyConfig)
